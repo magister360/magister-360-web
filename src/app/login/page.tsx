@@ -6,6 +6,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import Image from 'next/image';
 import { useState } from "react";
 import { getCredentials } from "./services/usersService";
+import { encryptString, decryptString } from "../../../security/Security";
 
 export default function Login() {
     const [userName, setUserName] = useState('');
@@ -21,12 +22,20 @@ export default function Login() {
         return <ErrorMessage message={error ?? "Error desconocido"} />
     }
 
+    const handleEncrypt = (textPlain: string) => {
+        return encryptString(textPlain);
+
+    };
 
     const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const credentialsAprove = await getCredentials(userName, password);
-            if (!credentialsAprove) {
+            const encryptedPassword = handleEncrypt(password);
+            const credentialsAprove = await getCredentials(userName, encryptedPassword);
+
+            if (credentialsAprove) {
+                console.log('Aprobado succefuld++++')
+            } else {
                 setErrorCredentials(true)
                 setTimeout(() => {
                     setErrorCredentials(false)
@@ -85,7 +94,8 @@ export default function Login() {
                                   dark:text-white dark:focus:ring-blue-500 
                                   dark:focus:border-blue-500"
                                         placeholder=""
-                                        onChange={(event) => setUserName(event.target.value)} />
+                                        onChange={(event) => setUserName(event.target.value)}
+                                        autoComplete="username" />
 
                                 </div>
                                 <div className="mt-3">
@@ -94,13 +104,17 @@ export default function Login() {
                                         type="password"
                                         name="password"
                                         id="password"
-                                        value={password}
+                                        value={
+
+                                            password}
                                         placeholder=""
                                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg 
                                             focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
                                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                                            dark:focus:border-blue-500"
-                                        onChange={(event) => setPassword(event.target.value)} />
+                                        onChange={(event) =>
+                                            setPassword(event.target.value)}
+                                        autoComplete="current-password" />
                                 </div>
                             </div>
 

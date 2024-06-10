@@ -16,7 +16,7 @@ datasource db {
 model Users {
   id    Int     @id @default(autoincrement())
   user String  @unique
-  password  String?
+  password  String?  @db.Text 
   correo String?
   foto Bytes
   estatus Int
