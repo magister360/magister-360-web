@@ -3,6 +3,7 @@ import { Sesion } from "./Sesion";
 const CLAVE_LOGGED_APP = 'loggedKhs4SddQWRPOOIcxc654g';
 
 
+
 export function saveSessionCookies(userId: number, userName: string): void {
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (sesionLocalStorage) {
@@ -18,7 +19,6 @@ export function saveSessionCookies(userId: number, userName: string): void {
 export function removeSessionFromLocalStorage(): void {
     window.localStorage.removeItem(CLAVE_LOGGED_APP);
 }
-
 
 export function loadSessionFromLocalStorage(): Sesion | null {
 
