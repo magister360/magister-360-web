@@ -86,7 +86,7 @@ export default function Login() {
                             onSubmit={handleSubmitLogin} method="POST">
                             <div className="mb-4">
                                 <div>
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuario</label>
+                                    <label htmlFor="user" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuario</label>
                                     <input
                                         type="text"
                                         name="text"
