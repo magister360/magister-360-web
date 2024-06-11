@@ -14,7 +14,7 @@ export const useEffectFetchUsers = () => {
             setLoading(true);
 
             try {
-                console.log('Se ejecuta promesa users');
+                
                 const users = await getUsers();
                 setUsers(users ?? []);
             } catch (error) {

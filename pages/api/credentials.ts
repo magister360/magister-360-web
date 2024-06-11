@@ -1,8 +1,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
-
-
+import { ResponseCredentials } from "@/app/login/services/ResponseCredentials";
 
 export default async function main(
     req: NextApiRequest,
@@ -22,7 +21,12 @@ export default async function main(
         if (!user) {
             return res.status(401).json(null);
         } else {
-            return res.status(200).json(user.password);
+            const responseCreddentials = new ResponseCredentials(
+                user.id,
+                user.password == null ? '' : user.password,
+                user.user == null ? '' : user.user);
+            // console.log('responseCreddentials ' + responseCreddentials.toString())
+            return res.status(200).json(responseCreddentials.toString());
         }
     }
 

@@ -49,6 +49,8 @@ export default function Login() {
             setTimeout(() => {
                 setErrorCredentials(false)
             }, 5000)
+            setUserName('')
+            setPassword('')
         }
     }
 
