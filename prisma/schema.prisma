@@ -19,6 +19,39 @@ model Users {
   password  String?  @db.Text 
   correo String?
   foto Bytes
-  estatus Int
+  estatus Int @default(0)
   regDate DateTime @default(now())
+  grados   Grado[] 
+  grupos   Grupo[] 
+  materias Materia[]
+}
+
+model Grado{
+  id    Int     @id @default(autoincrement())
+  grado String @unique
+  estatus Int  @default(0)
+  regDate DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   
+}
+
+model Grupo{
+  id    Int     @id @default(autoincrement())
+  grupo String @unique
+  estatus Int  @default(0)
+  regDate DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   
+}
+
+model Materia{
+  id    Int     @id @default(autoincrement())
+  materia String @unique @db.VarChar(255)
+  estatus Int  @default(0)
+  regDate DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   
 }

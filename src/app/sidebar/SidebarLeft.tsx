@@ -24,7 +24,9 @@ export default function SidebarLeft() {
         { name: 'Grado', href: 'configuration/grado', icon: '/grados.svg' },
         { name: 'Grupo', href: 'configuration/grupo', icon: '/grupos.svg' },
         { name: 'Materia', href: 'configuration/materia', icon: '/materias.svg' },
-        { name: 'Alumnos', href: 'configuration/alumnos', icon: '/grados.svg' }
+        { name: 'Alumnos', href: 'configuration/alumnos', icon: '/grados.svg' },
+        { name: 'Fechas festivas', href: 'configuration/fechas_festivas', icon: '/grados.svg' }
+
     ];
     const menuItemPlanning = [
         { name: 'Actividades', href: 'actividades', icon: '/grados.svg' }
@@ -76,9 +78,7 @@ export default function SidebarLeft() {
                     className=" pl-4 pt-3 text-sm text-black dark:text-white"
                     onClick={() => {
                         handleClickConfiguration(1);
-                    }
-
-                    }>
+                    }}>
                     Configuración
 
                     {visibleitemIndex === 1 && (
@@ -86,15 +86,13 @@ export default function SidebarLeft() {
                             {menuItemsConfiguration.map((item, index) => (
 
                                 <ol
-
                                     key={index}
                                     className={` block mr-4  rounded-lg ${selectedConfiguration === index ? 'bg-gray-600' : 'hover:bg-gray-700'}`}
                                     onClick={(e) => {
                                         handleClickSelectedConfiguration(index);
                                         e.stopPropagation();
 
-                                    }}
-                                >
+                                    }}>
 
                                     <Link
                                         className="flex items-center space-x-4 pl-4 pt-3 pb-3 pr-3 text-black dark:text-white"
@@ -115,6 +113,27 @@ export default function SidebarLeft() {
                             ))}
                         </ul>
                     )}
+                </li>
+                <li
+                    className=" pl-4 pt-3 text-sm text-black dark:text-white"
+                    onClick={() => {
+                        handleClickConfiguration(1);
+                    }}>
+                    Estadisticas
+                </li>
+                <li
+                    className=" pl-4 pt-3 text-sm text-black dark:text-white"
+                    onClick={() => {
+                        handleClickConfiguration(1);
+                    }}>
+                    Entregables
+                </li>
+                <li
+                    className=" pl-4 pt-3 text-sm text-black dark:text-white"
+                    onClick={() => {
+                        handleClickConfiguration(1);
+                    }}>
+                    Cronogramas
                 </li>
             </ul>
         </div>

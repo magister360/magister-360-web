@@ -2,7 +2,7 @@ import axios from "axios";
 import { getApiUrl } from "../../../../API";
 import { decryptString } from "../../../../security/Security";
 import { ResponseCredentials } from "./ResponseCredentials";
-import { loadSessionFromLocalStorage, saveSessionCookies } from "@/app/sesions/SesionCookies";
+import {saveSessionCookies } from "@/app/sesions/SesionCookies";
 
 
 export const getUsers = async () => {

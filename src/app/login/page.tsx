@@ -14,7 +14,7 @@ export default function Login() {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [errorCredentials, setErrorCredentials] = useState(false);
-    const { users, loading, error } = useEffectFetchUsers();
+    const {  loading, error } = useEffectFetchUsers();
 
     if (loading) {
         return <LoadingSpinner message="Cargando usuarios..." />;

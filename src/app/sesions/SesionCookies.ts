@@ -30,3 +30,4 @@ export function loadSessionFromLocalStorage(): Sesion | null {
     }
     return null;
 }
+
