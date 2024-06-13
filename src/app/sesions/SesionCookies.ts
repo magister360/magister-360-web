@@ -2,8 +2,6 @@ import { decryptString, encryptString } from "../../../security/Security";
 import { Sesion } from "./Sesion";
 const CLAVE_LOGGED_APP = 'loggedKhs4SddQWRPOOIcxc654g';
 
-
-
 export function saveSessionCookies(userId: number, userName: string): void {
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (sesionLocalStorage) {
