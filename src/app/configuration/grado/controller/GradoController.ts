@@ -1,5 +1,5 @@
-import Grado from "../page";
-import { createGradoApi } from "../services/GradoService";
+
+import { createGradoApi, getGradosApi } from "../services/GradoService";
 
 export const createGrado = async (idUser: number, grado: string, estatus: number) => {
     if (idUser <= 0
@@ -10,7 +10,20 @@ export const createGrado = async (idUser: number, grado: string, estatus: number
     }
     return createGradoApi(grado, estatus, idUser)
         .then(data => {
-            return !!data; 
+            return !!data;
 
         });;
+}
+
+export const getGrados = async (idUser: number, estatus: number) => {
+    if (idUser <= 0) {
+        return null;
+    }
+    const response = getGradosApi(idUser, estatus)
+        .then(data => {
+            return data;
+
+        });;
+
+    return response;
 }

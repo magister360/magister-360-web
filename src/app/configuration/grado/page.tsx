@@ -2,16 +2,15 @@
 
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
 import TableGrado from "./components/TablaGrado";
-import { createGradoApi } from "./services/GradoService";
 import { useForm } from "react-hook-form";
-import { createGrado } from "./controller/GradoController";
+import { createGrado, getGrados } from "./controller/GradoController";
 import { useEffect, useState } from "react";
 import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
 import { useRouter } from 'next/navigation';
 import { TypeStatusGrado } from "@/app/utils/TypeStatusGrado";
 
 export default function Grado() {
-
+    const [items, setItems] = useState([]);
     const router = useRouter();
     const {
         register,
@@ -25,9 +24,9 @@ export default function Grado() {
             alert('No inicio sesión')
             router.push('/login')
         } else {
+            const userId = sesionLocalStorage?.id ?? -1;
             const save = await createGrado(
-                sesionLocalStorage ? sesionLocalStorage.id !== null
-                    && sesionLocalStorage.id !== undefined ? sesionLocalStorage.id : -1 : -1,
+                userId,
                 data.grado,
                 TypeStatusGrado.ALTA
             );
@@ -47,18 +46,23 @@ export default function Grado() {
     useEffect(() => {
         const sesionLocalStorage = loadSessionFromLocalStorage();
         if (!sesionLocalStorage) {
-            router.push('/login')
+            router.push('/login');
+            return;
         }
 
-    }, []);
+        const fetchGrados = async () => {
+            const userId = sesionLocalStorage?.id ?? -1;
+            const grados = await getGrados(
+                userId,
+                TypeStatusGrado.ALTA);
+            if (grados) {
 
-    const itempNames = [
-        { id: 1, grado: '1' },
-        { id: 2, grado: '2' },
-        { id: 3, grado: '2' }
+                setItems(grados);
+            }
+        };
 
-    ];
-
+        fetchGrados();
+    }, [router]);
 
     return (
 
@@ -69,7 +73,7 @@ export default function Grado() {
                     onSubmit={
                         handleSubmit(onSubmit)
                     }>
-                    <TableGrado itempNames={itempNames} />
+                    <TableGrado itempNames={items} />
                     <div className="mb-4 mt-4">
                         <label htmlFor="user" className="block mb-2 text-sm font-medium 
                     text-gray-900 dark:text-white">Grado</label>

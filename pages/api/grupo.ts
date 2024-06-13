@@ -7,16 +7,16 @@ export default async function main(
 ): Promise<void> {
 
     if (req.method === 'POST') {
-        const { grado, idUsuario, estatus } = req.body;
+        const { grupo, idUsuario, estatus } = req.body;
         if (idUsuario <= 0
-            || !grado
-            || grado.length < 1
-            || grado.length >= 5) {
+            || !grupo
+            || grupo.length < 1
+            || grupo.length >= 5) {
             return res.status(401).json(null);
         }
-        const response = await prisma.grado.create({
+        const response = await prisma.grupo.create({
             data: {
-                grado,
+                grupo,
                 estatus,
                 idUsuario
             }
@@ -42,7 +42,7 @@ export default async function main(
         const idUsuarioNum = parseInt(idUsuarioStr, 10) || NaN;
 
         if (!isNaN(idUsuarioNum)) {
-            const grados = await prisma.grado.findMany({
+            const grupos = await prisma.grupo.findMany({
                 where: {
                     idUsuario: idUsuarioNum
                 }
@@ -51,8 +51,8 @@ export default async function main(
                 process.exit(1)
 
             });
-            //   console.log(grupos);
-            return res.status(200).json(grados);
+          //   console.log(grupos);
+            return res.status(200).json(grupos);
         } else {
             return res.status(401).json(null);
         }
