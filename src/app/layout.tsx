@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import SidebarTop from "./sidebar/Sidebar";
-import SidebarLeft from "./sidebar/SidebarLeft";
+import SidebarTopLeft from "./sidebar/SidebarTopLeft";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SidebarTop />
-        <SidebarLeft />
-        {children}
+      <body className={`${inter.className} flex flex-col min-h-screen`} >
+
+        <SidebarTopLeft />
+
+        <div className="flex-grow">
+          {children}
+        </div>
       </body>
     </html>
   );

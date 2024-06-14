@@ -21,11 +21,11 @@ export default function SidebarLeft() {
     };
 
     const menuItemsConfiguration = [
-        { name: 'Grado', href: 'configuration/grado', icon: '/grados.svg' },
-        { name: 'Grupo', href: 'configuration/grupo', icon: '/grupos.svg' },
-        { name: 'Materia', href: 'configuration/materia', icon: '/materias.svg' },
-        { name: 'Alumnos', href: 'configuration/alumnos', icon: '/grados.svg' },
-        { name: 'Fechas festivas', href: 'configuration/fechas_festivas', icon: '/grados.svg' }
+        { name: 'Grado', href: '/configuration/grado', icon: '/grados.svg' },
+        { name: 'Grupo', href: '/configuration/grupo', icon: '/grupos.svg' },
+        { name: 'Materia', href: '/configuration/materia', icon: '/materias.svg' },
+        { name: 'Alumnos', href: '/configuration/alumnos', icon: '/grados.svg' },
+        { name: 'Fechas festivas', href: '/configuration/fechas_festivas', icon: '/grados.svg' }
 
     ];
     const menuItemPlanning = [

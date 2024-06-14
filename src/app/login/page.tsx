@@ -36,6 +36,7 @@ export default function Login() {
             const credentialsAprove = await getCredentials(userName, encryptedPassword);
 
             if (credentialsAprove) {
+                router.refresh()
                 router.push('/sectionGGM')
             } else {
                 setErrorCredentials(true)
