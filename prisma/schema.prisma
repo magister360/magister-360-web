@@ -28,7 +28,7 @@ model Users {
 
 model Grado{
   id    Int     @id @default(autoincrement())
-  grado String @unique
+  grado String 
   estatus Int  @default(0)
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -38,7 +38,7 @@ model Grado{
 
 model Grupo{
   id    Int     @id @default(autoincrement())
-  grupo String @unique
+  grupo String 
   estatus Int  @default(0)
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -48,7 +48,7 @@ model Grupo{
 
 model Materia{
   id    Int     @id @default(autoincrement())
-  materia String @unique @db.VarChar(255)
+  materia String  @db.VarChar(255)
   estatus Int  @default(0)
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])

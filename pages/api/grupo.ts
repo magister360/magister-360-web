@@ -30,28 +30,33 @@ export default async function main(
         }
     } else if (req.method === 'GET') {
 
-        const { idUsuario } = req.query;
+        const { idUsuario, estatus } = req.query;
 
-        let idUsuarioStr;
-        if (Array.isArray(idUsuario)) {
-            idUsuarioStr = idUsuario.join();
-        } else {
-            idUsuarioStr = String(idUsuario);
+        let idUsuarioNum = NaN;
+        if (idUsuario !== undefined) {
+            idUsuarioNum = Array.isArray(idUsuario) ? parseInt(idUsuario[0], 10) : parseInt(idUsuario, 10);
         }
 
-        const idUsuarioNum = parseInt(idUsuarioStr, 10) || NaN;
 
-        if (!isNaN(idUsuarioNum)) {
+        let estatusNum = NaN;
+        if (estatus !== undefined) {
+            estatusNum = Array.isArray(estatus) ? parseInt(estatus[0], 10) : parseInt(estatus, 10);
+        }
+
+        if (!isNaN(idUsuarioNum) && !isNaN(estatusNum)) {
             const grupos = await prisma.grupo.findMany({
                 where: {
-                    idUsuario: idUsuarioNum
+                    AND: [
+                        { idUsuario: idUsuarioNum },
+                        { estatus: estatusNum }
+                    ]
                 }
             }).catch(async (e) => {
                 await prisma.$disconnect()
                 process.exit(1)
 
             });
-          //   console.log(grupos);
+            //   console.log(grupos);
             return res.status(200).json(grupos);
         } else {
             return res.status(401).json(null);

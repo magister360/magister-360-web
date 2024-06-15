@@ -1,22 +1,27 @@
 "use client"
 
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
-import TableGrado from "./components/TablaGrado";
+import TableGrado, { ItemGrado, getIdGrado, getStrGrado } from "./components/TablaGrado";
 import { useForm } from "react-hook-form";
-import { createGrado, getGrados } from "./controller/GradoController";
+import { createGrado, getGrados, removeGrado, updateGrado } from "./controller/GradoController";
 import { useEffect, useState } from "react";
 import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
 import { useRouter } from 'next/navigation';
 import { TypeStatusGrado } from "@/app/utils/TypeStatusGrado";
+import Image from 'next/image';
+
 
 export default function Grado() {
     const [items, setItems] = useState([]);
     const router = useRouter();
+    const [newModify, setNewModify] = useState(true);
+    const [idSelect, setIdSelect] = useState(-1);
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset } = useForm();
+        reset,
+        setValue } = useForm();
 
     const onSubmit = async (data: any) => {
         const sesionLocalStorage = loadSessionFromLocalStorage();
@@ -26,47 +31,94 @@ export default function Grado() {
             router.push('/login')
         } else {
             const userId = sesionLocalStorage?.id ?? -1;
-            const save = await createGrado(
-                userId,
-                data.grado,
-                TypeStatusGrado.ALTA
-            );
-            if (save === true) {
-                alert('El grado se guardo con éxito')
-                reset()
-            } else {
+            if (newModify) {
+                const save = await createGrado(
+                    userId,
+                    data.grado,
+                    TypeStatusGrado.ALTA
+                );
+                if (save === true) {
+                    fetchGrados();
+                    alert('El grado se guardo con éxito')
+                    reset()
+                } else {
 
-                alert('Error al guardar')
-                reset()
+                    alert('Error al guardar')
+                    reset()
+                }
+            } else {
+                const save = await updateGrado(
+                    idSelect,
+                    data.grado
+                );
+                if (save === true) {
+                    fetchGrados();
+                    alert('El grado se modifico con éxito')
+                    reset()
+                } else {
+                    alert('Error al guardar')
+                    reset()
+                }
+                handleClickNew()
             }
         }
 
     }
 
 
-    useEffect(() => {
+
+    const fetchGrados = async () => {
         const sesionLocalStorage = loadSessionFromLocalStorage();
         if (!sesionLocalStorage) {
             router.push('/login');
             return;
         }
+        const userId = sesionLocalStorage?.id ?? -1;
+        const grados = await getGrados(
+            userId,
+            TypeStatusGrado.ALTA);
+        if (grados) {
 
-        const fetchGrados = async () => {
-            const userId = sesionLocalStorage?.id ?? -1;
-            const grados = await getGrados(
-                userId,
-                TypeStatusGrado.ALTA);
-            if (grados) {
+            setItems(grados);
+        }
+    };
 
-                setItems(grados);
-            }
-        };
 
+    useEffect(() => {
         fetchGrados();
-    }, [router]);
+    }, []);
+
+    const handleClickRemove = async (items: ItemGrado[], index: number) => {
+        const confirmar = window.confirm("¿Está seguro de eliminar la grado?");
+        if (confirmar) {
+            const id = getIdGrado(items = items, index);
+
+            const remove = await removeGrado(id, TypeStatusGrado.REMOVE);
+            if (remove) {
+                await fetchGrados();
+            } else {
+                alert('Error no es posible eliminar')
+            }
+            handleClickNew();
+        }
+    };
+
+    const handleClickUpdate = async (items: ItemGrado[], index: number) => {
+
+        const id = getIdGrado(items = items, index);
+        const value = getStrGrado(items = items, index)
+        setIdSelect(id)
+        setValue('grado', value)
+        setNewModify(false)
+    };
+
+    const handleClickNew = () => {
+        setIdSelect(-1)
+        reset()
+        setNewModify(true)
+    };
 
     return (
-
 
         <div className="ml-72 md:mt-14 pt-2 pb-2 rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]">
@@ -74,26 +126,42 @@ export default function Grado() {
                 onSubmit={
                     handleSubmit(onSubmit)
                 }>
-                <TableGrado itempNames={items} />
+                <TableGrado items={items}
+                    handleClickRemove={handleClickRemove}
+                    handleClickUpdate={handleClickUpdate} />
                 <div className="mb-4 mt-4">
                     <label htmlFor="user" className="block mb-2 text-sm font-medium 
                     text-gray-900 dark:text-gray-300">Grado</label>
-                    <input
-                        type="text"
-                        id="text-grado"
-                        className="bg-gray-50 border border-gray-300 
+                    <div className="flex space-x-2 ">
+                        {newModify === false && (
+                            <Image
+                                onClick={() => handleClickNew()}
+                                className="dark:filter dark:invert dark:opacity-75 opacity-40 
+                                filter-none w-auto h-7"
+                                src="/add.svg"
+                                alt="add"
+                                width={28}
+                                height={28}
+
+                            />
+                        )}{<></>}
+                        <input
+                            type="text"
+                            id="text-grado"
+                            className="bg-gray-50 border border-gray-300 
                                 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 
                                 focus:border-primary-600 block w-full p-2.5 dark:bg-[#1a2c32]
                                  dark:border-gray-600 dark:placeholder-gray-400
                                   dark:text-white dark:focus:ring-blue-500 
                                   dark:focus:border-blue-500"
-                        placeholder=""
-                        {...register("grado", {
-                            required: "Grado es requerido",
-                            maxLength: { value: 5, message: "Grado no puede tener más de 5 caracteres" },
-                            minLength: { value: 1, message: "Grado no puede estar vacío" }
-                        })}
-                    />
+                            placeholder=""
+                            {...register("grado", {
+                                required: "Grado es requerido",
+                                maxLength: { value: 5, message: "Grado no puede tener más de 5 caracteres" },
+                                minLength: { value: 1, message: "Grado no puede estar vacío" }
+                            })}
+                        />
+                    </div>
                     {errors.grado && (
                         <ErrorMessageInput message={errors.grado.message + ""} />
                     )}

@@ -22,6 +22,40 @@ export const createMateriaApi = async (
     return response;
 }
 
+export const removeMateriaApi = async (
+    id: number,
+    estatus: number
+) => {
+    const apiUrl = getApiUrl('/api/removeMateria');
+    const response = await axios.post(apiUrl, {
+        id,
+        estatus,
+    }).then(r => {
+        return r.data;
+    })
+        .catch(e => {
+            return null;
+        });
+    return response;
+}
+
+export const updateMateriaApi = async (
+    id: number,
+    materia: string
+) => {
+    const apiUrl = getApiUrl('/api/updateMateria');
+    const response = await axios.post(apiUrl, {
+        id,
+        materia,
+    }).then(r => {
+        return r.data;
+    })
+        .catch(e => {
+            return null;
+        });
+    return response;
+}
+
 
 export const getMateriasApi = async (
     idUsuario: number,

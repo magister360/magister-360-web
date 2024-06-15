@@ -1,5 +1,5 @@
 
-import { createMateriaApi, getMateriasApi } from "../services/MateriaService";
+import { createMateriaApi, getMateriasApi, removeMateriaApi, updateMateriaApi } from "../services/MateriaService";
 
 export const createMateria = async (idUser: number, materia: string, estatus: number) => {
     if (idUser <= 0
@@ -13,6 +13,28 @@ export const createMateria = async (idUser: number, materia: string, estatus: nu
             return !!data;
 
         });;
+}
+
+export const removeMateria = async (id: number, estatus: number) => {
+    if (id <= 0) {
+        return false;
+    }
+    return removeMateriaApi(id, estatus)
+        .then(data => {
+            return !!data;
+
+        });;
+}
+
+export const updateMateria = async (id: number, materia: string) => {
+    if (id <= 0) {
+        return false;
+    }
+    return updateMateriaApi(id, materia)
+        .then(data => {
+            return !!data;
+
+        });
 }
 
 export const getMaterias = async (idUser: number, estatus: number) => {

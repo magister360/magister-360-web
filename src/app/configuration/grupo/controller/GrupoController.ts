@@ -1,4 +1,4 @@
-import { createGrupoApi, getGruposApi } from "../services/GrupoService";
+import { createGrupoApi, getGruposApi, removeGrupoApi, updateGrupoApi } from "../services/GrupoService";
 
 export const createGrupo = async (idUser: number, grupo: string, estatus: number) => {
     if (idUser <= 0
@@ -13,6 +13,29 @@ export const createGrupo = async (idUser: number, grupo: string, estatus: number
 
         });;
 }
+
+export const removeGrupo = async (id: number, estatus: number) => {
+    if (id <= 0) {
+        return false;
+    }
+    return removeGrupoApi(id, estatus)
+        .then(data => {
+            return !!data;
+
+        });;
+}
+
+export const updateGrupo = async (id: number, grupo: string) => {
+    if (id <= 0) {
+        return false;
+    }
+    return updateGrupoApi(id, grupo)
+        .then(data => {
+            return !!data;
+
+        });
+}
+
 
 export const getGrupos = async (idUser: number, estatus: number) => {
     if (idUser <= 0) {

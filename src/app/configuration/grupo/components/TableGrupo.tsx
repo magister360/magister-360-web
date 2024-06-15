@@ -2,17 +2,27 @@
 import React from 'react';
 import Image from 'next/image';
 
-type Item = {
+export type ItemGrupo = {
     id: number;
     grupo: string;
 
 }
 
 type Props = {
-    itempNames: Item[];
+    items: ItemGrupo[];
+    handleClickRemove: (items: ItemGrupo[], index: number) => Promise<void>;
+    handleClickUpdate: (items: ItemGrupo[], index: number) => Promise<void>;
 }
 
-export default function TableGrupos({ itempNames }: Props) {
+export function getIdGrupo(items: ItemGrupo[], index: number) {
+    return items[index].id
+}
+export function getStrGrupo(items: ItemGrupo[], index: number) {
+    return items[index].grupo
+}
+
+
+export default function TableGrupos({ items, handleClickRemove, handleClickUpdate }: Props) {
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
@@ -37,7 +47,7 @@ export default function TableGrupos({ itempNames }: Props) {
                 </thead>
                 <tbody>
 
-                    {itempNames.map((item, index) => (
+                    {items.map((item, index) => (
                         <tr key={index} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
                          dark:border-gray-700 hover:bg-[#e6e6e6] dark:hover:bg-gray-600">
 
@@ -51,6 +61,7 @@ export default function TableGrupos({ itempNames }: Props) {
                             <td className="px-6 py-4">
 
                                 <Image
+                                    onClick={() => handleClickUpdate(items = items, index = index)}
                                     className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none"
                                     src="/editar.svg"
                                     alt="editar"
@@ -63,6 +74,7 @@ export default function TableGrupos({ itempNames }: Props) {
                             <td className="px-6 py-4">
 
                                 <Image
+                                    onClick={() => handleClickRemove(items = items, index = index)}
                                     className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none"
                                     src="/remover.svg"
                                     alt="remover"

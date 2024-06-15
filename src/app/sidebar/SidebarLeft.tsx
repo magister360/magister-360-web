@@ -35,6 +35,7 @@ export default function SidebarLeft() {
     return (
         <div className="fixed top-12 left-0 h-full w-64  text-white 
         dark:bg-gray-800 dark:border-gray-700 bg-white">
+         
             <ul className="mt-4">
                 <li className="block px-4 py-2 text-sm text-black dark:text-white"
                     onClick={() => handleClickConfiguration(0)}>
@@ -56,7 +57,7 @@ export default function SidebarLeft() {
                                             key={index}
                                             href={item.href}>
                                             <Image
-                                                className="filter invert mr-3"
+                                                className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3"
                                                 src={item.icon}
                                                 width={24}
                                                 height={24}

@@ -24,6 +24,40 @@ export const createGrupoApi = async (
 
 }
 
+export const removeGrupoApi = async (
+    id: number,
+    estatus: number
+) => {
+    const apiUrl = getApiUrl('/api/removeGrupo');
+    const response = await axios.post(apiUrl, {
+        id,
+        estatus,
+    }).then(r => {
+        return r.data;
+    })
+        .catch(e => {
+            return null;
+        });
+    return response;
+}
+
+export const updateGrupoApi = async (
+    id: number,
+    grupo: string
+) => {
+    const apiUrl = getApiUrl('/api/updateGrupo');
+    const response = await axios.post(apiUrl, {
+        id,
+        grupo,
+    }).then(r => {
+        return r.data;
+    })
+        .catch(e => {
+            return null;
+        });
+    return response;
+}
+
 export const getGruposApi = async (
     idUsuario: number,
     estatus: number
