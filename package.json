@@ -17,7 +17,10 @@
     "react": "^18",
     "react-barcode": "^1.5.3",
     "react-dom": "^18",
-    "react-hook-form": "^7.51.5"
+    "react-hook-form": "^7.51.5",
+    "xlsx": "^0.18.5",
+    "xlsx-color": "^0.14.30",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",

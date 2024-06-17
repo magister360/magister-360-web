@@ -1,0 +1,9 @@
+
+
+export enum TypeIndexXlsAlumnos {
+    INDEX_NO_LISTA = 0,
+    INDEX_NOMBRE = 1,
+    INDEX_APELLIDO_PATERNO = 2,
+    INDEX_APELLIDO_MATERNO = 3,
+    INDEX_BARCODE=4
+}
