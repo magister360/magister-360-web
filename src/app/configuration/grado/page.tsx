@@ -120,9 +120,9 @@ export default function Grado() {
 
     return (
 
-        <div className="ml-72 md:mt-14 pt-2 pb-2 rounded-lg shadow  
-                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]">
-            <form className="max-w-sm mx-auto mt-10 mb-10"
+        <div className="ml-72 md:mt-14  rounded-lg shadow  
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff] p-5">
+            <form className=" "
                 onSubmit={
                     handleSubmit(onSubmit)
                 }>

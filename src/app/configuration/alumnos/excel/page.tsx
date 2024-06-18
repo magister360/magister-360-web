@@ -17,13 +17,15 @@ import { validateEncabezado } from './ValidateEncabezado';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import { TypeIndexXlsAlumnos } from './TypeIndexXlsAlumnos';
 import convertToBarcode from './ConvertBarcode';
-
+import TablesMaterias from '../components/TablesMaterias';
+import { useEffectFetchDataMateria } from './hooks/DataMateriaHook';
 
 
 export default function AlumnosExcel() {
 
     const [itemsGrados, setItemsGrados] = useState([]);
     const [itemsGrupos, setItemsGrupos] = useState([]);
+    const { materiasSinAsignar, materiasAsignadas } = useEffectFetchDataMateria();
     const [sheetNames, setSheetNames] = useState<string[]>([]);
     const [file, setFile] = useState<File | null>(null);
     const [selectedIndexHoja, setSelectedIndexHoja] = useState(0);
@@ -251,17 +253,19 @@ export default function AlumnosExcel() {
     };
 
     const updateDataAlumnos = (columnData: any[], columnIndex: number) => {
-        setDataAlumnos(prevMatrix => {
-            const newMatrix = [...prevMatrix];
-            columnData.forEach((value, rowIndex) => {
-                if (!newMatrix[rowIndex]) {
-                    newMatrix[rowIndex] = [];
-                }
-                newMatrix[rowIndex][columnIndex] = value;
-            });
+        if (columnData.length !== 0) {
+            setDataAlumnos(prevMatrix => {
+                const newMatrix = [...prevMatrix];
+                columnData.forEach((value, rowIndex) => {
+                    if (!newMatrix[rowIndex]) {
+                        newMatrix[rowIndex] = [];
+                    }
+                    newMatrix[rowIndex][columnIndex] = value;
+                });
 
-            return newMatrix;
-        });
+                return newMatrix;
+            });
+        }
     };
     useEffect(() => {
         if (!isUpdatingEncabezado && file) {
@@ -315,18 +319,22 @@ export default function AlumnosExcel() {
     }, [isUpdatingEncabezado]);
 
 
-
     const handleSelectChange = (event: { target: { selectedIndex: any; }; }) => {
         const index = event.target.selectedIndex;
         setSelectedIndexHoja(index);
     };
 
-    return (
-        <div className="mt-14 ml-72">
-            <div className="rounded-lg shadow  
-                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  pl-4 pt-4 pb-4 pr-4">
+    return (<>
+        <label className="mt-14 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2"
+            htmlFor="lbl-select-grado-grupo">
+            Alumnos en excel
+        </label>
 
-                <label className="block text-gray-700 dark:text-gray-200 font-bold mb-2"
+        <div className="mt-2 ml-72">
+            <div className="rounded-lg shadow  
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5">
+
+                <label className="block text-gray-700 dark:text-gray-200 font-bold text-sm mb-2"
                     htmlFor="lbl-select-grado-grupo">
                     Seleccione grado y grupo
                 </label>
@@ -346,7 +354,7 @@ export default function AlumnosExcel() {
                 <div>
                     <label htmlFor="lbl-grupo" className="block mb-2 text-sm font-medium 
                     text-gray-900 dark:text-white">Grupo</label>
-                    <select id="select-grupo" className="block w-full p-2 mb-6 text-sm 
+                    <select id="select-grupo" className="block w-full p-2 mb-0 text-sm 
                     text-gray-900 border border-gray-300 rounded-lg bg-gray-50 
                     focus:ring-blue-500 focus:border-blue-500 dark:bg-[#1a2c32]
                      dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
@@ -358,8 +366,8 @@ export default function AlumnosExcel() {
 
             </div>
             <div className="rounded-lg shadow  
-                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  pl-4 pt-4 pb-4 pr-4 mt-4">
-                <label className="block text-gray-700 dark:text-gray-200 font-bold mb-2"
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-4">
+                <label className="block text-gray-700 dark:text-gray-200 font-bold text-sm "
                     htmlFor="fileInput">
                     Subir archivo
                 </label>
@@ -375,8 +383,8 @@ export default function AlumnosExcel() {
 
             </div>
             <div className="rounded-lg shadow  
-                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  pl-4 pt-4 pb-4 pr-4 mt-4">
-                <label className="block text-gray-700 dark:text-gray-200 font-bold mb-2"
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-4">
+                <label className="block text-gray-700 dark:text-gray-200 font-bold text-sm mb-2"
                     htmlFor="lbl-select-grado-grupo">
                     Seleccione la hoja del archivo excel
                 </label>
@@ -411,8 +419,13 @@ export default function AlumnosExcel() {
             <TableAlumnosExcel data={dataAlumnos}
                 errorEncabezado={errorEncabezado} />
 
+            <TablesMaterias
+                materiasSinAsignar={materiasSinAsignar}
+                materiasAsignadas={materiasAsignadas}
+                errorEncabezado={errorEncabezado} />
 
         </div>
+    </>
     )
 }
 

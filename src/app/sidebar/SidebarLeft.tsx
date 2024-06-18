@@ -25,17 +25,18 @@ export default function SidebarLeft() {
         { name: 'Grupo', href: '/configuration/grupo', icon: '/grupos.svg' },
         { name: 'Materia', href: '/configuration/materia', icon: '/materias.svg' },
         { name: 'Alumnos', href: '/configuration/alumnos', icon: '/grados.svg' },
-        { name: 'Fechas festivas', href: '/configuration/fechas_festivas', icon: '/grados.svg' }
+        { name: 'Fechas', href: '/configuration/fechas', icon: '/grados.svg' },
+        { name: 'Encuadre calificación', href: '/configuration/encuadre_calificacion', icon: '/grados.svg' }
 
     ];
     const menuItemPlanning = [
-        { name: 'Actividades', href: 'actividades', icon: '/grados.svg' }
+        { name: 'Actividades', href: '/planeacion/actividades', icon: '/grados.svg' }
     ];
 
     return (
         <div className="fixed top-12 left-0 h-full w-64  text-white 
         dark:bg-gray-800 dark:border-gray-700 bg-white">
-         
+
             <ul className="mt-4">
                 <li className="block px-4 py-2 text-sm text-black dark:text-white"
                     onClick={() => handleClickConfiguration(0)}>
@@ -101,7 +102,7 @@ export default function SidebarLeft() {
                                         href={item.href}
                                     >
                                         <Image
-                                            className="filter invert mr-3"
+                                            className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3"
                                             src={item.icon}
                                             width={24}
                                             height={24}
