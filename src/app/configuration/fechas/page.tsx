@@ -2,6 +2,7 @@
 
 import TableFechasFestivas from "./components/TableFechasFestivas";
 import Image from 'next/image';
+import TablePeriodosCicloEscolar from "./components/TablePeriodosCicloEscolar";
 
 export default function Fechas() {
 
@@ -147,6 +148,15 @@ export default function Fechas() {
                            dark:focus:ring-blue-800  ">Guardar</button>
                 </div>
             </div >
+
+            <div className="flex-1 mt-2 ml-72 rounded-lg shadow  
+                    sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff]  p-5 mr-4">
+                <label className="block text-gray-700 dark:text-gray-200 font-bold pt-0"
+                    htmlFor="lbl-date-start-end">
+                    ¿Cuántos periodos de evaluación habrá durante el ciclo escolar?
+                </label>
+                <TablePeriodosCicloEscolar />
+            </div>
         </>
     )
 

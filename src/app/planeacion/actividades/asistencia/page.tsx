@@ -6,12 +6,12 @@ export default function Actividades() {
     return (
         <>
             <label className="ml-72 md:mt-14 block text-gray-700 dark:text-gray-200 
-            font-bold text-xl mb-2"
+                font-bold text-xl mb-2"
                 htmlFor="lbl-date-start-end">
                 Asistencias
             </label>
             <div className="ml-72 mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
-        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]">
+                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]">
 
                 <div className="flex space-x-2">
                     <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
