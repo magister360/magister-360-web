@@ -20,6 +20,8 @@ export default function SidebarTopLeft() {
             router.push('/');
         } else {
             setVisibleSidebar(false)
+            router.refresh()
+            router.push('/login');
         }
     }, []);
 
