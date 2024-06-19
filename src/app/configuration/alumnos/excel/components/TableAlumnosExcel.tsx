@@ -2,7 +2,6 @@ import EAN13Barcode from '@/app/components/EAN13BarcodeProps';
 import React from 'react';
 
 import { TypeIndexXlsAlumnos } from '../TypeIndexXlsAlumnos';
-import { TableAlumnosTr } from './TableAlumnoBody';
 import StatusAlumno from '../../components/StatusAlumno';
 
 type Props = {
