@@ -2,24 +2,20 @@
 import { useEffect, useState } from "react";
 
 import { useRouter } from 'next/navigation';
-import { loadSessionFromLocalStorage } from "../sesions/SesionCookies";
-import { getGrupos } from "../configuration/grupo/controller/GrupoController";
-import { TypeStatusGrupo } from "../utils/TypeStatusGrupo";
-import { getGrados } from "../configuration/grado/controller/GradoController";
-import { TypeStatusGrado } from "../utils/TypeStatusGrado";
-import { getMaterias } from "../configuration/materia/controller/MateriaController";
-import { TypeStatusMateria } from "../utils/TypeStatusMateria";
-import OptionsGrados, { filterIndexGrado } from "./components/OptionGrados";
-import OptionsGrupos, { filterIndexGrupo } from "./components/OptionsGrupos";
-import OptionsMaterias, { filterIndexMaterias } from "./components/OptionsMaterias";
+import OptionsGrados, { filterIndexGrado } from "../components/OptionGrados";
+import OptionsGrupos, { filterIndexGrupo } from "../components/OptionsGrupos";
+import OptionsMaterias, { filterIndexMaterias } from "../components/OptionsMaterias";
 import { saveSelectionGGMCookies } from "../selection/SelectionGGMCookies";
+import { useEffectFetchGradoGrupoMateria } from "../hooks/GradoGrupoMateriaHook";
 
 
 export default function SectionGGM() {
     const router = useRouter();
-    const [itemsGrados, setItemsGrados] = useState([]);
-    const [itemsGrupos, setItemsGrupos] = useState([]);
-    const [itemsMaterias, setItemsMaterias] = useState([]);
+    const {
+        itemsGrados,
+        itemsGrupos,
+        itemsMaterias }
+         = useEffectFetchGradoGrupoMateria();
     const [selectGrado, setSelectGrado] = useState({
         idGrado: -1,
         grado: ''
@@ -97,54 +93,7 @@ export default function SectionGGM() {
     };
 
 
-    useEffect(() => {
-        const sesionLocalStorage = loadSessionFromLocalStorage();
-        if (!sesionLocalStorage) {
-            router.push('/login');
-            return;
-        }
-        const userId = sesionLocalStorage?.id ?? -1;
 
-
-        const fetchGrados = async () => {
-            const grados = await getGrados(
-                userId,
-                TypeStatusGrado.ALTA
-            );
-            return grados || [];
-        };
-
-        const fetchGrupos = async () => {
-            const grupos = await getGrupos(
-                userId,
-                TypeStatusGrupo.ALTA
-            );
-            return grupos || [];
-        };
-
-        const fetchMaterias = async () => {
-            const materias = await getMaterias(
-                userId,
-                TypeStatusMateria.ALTA
-            );
-            return materias || [];
-        };
-
-        Promise.all([
-            fetchGrados(),
-            fetchGrupos(),
-            fetchMaterias()])
-            .then(([grados, grupos, materias]) => {
-                setItemsGrados(grados);
-                setItemsGrupos(grupos);
-                setItemsMaterias(materias);
-
-            })
-            .catch((error) => {
-                //console.error(error);
-            });
-
-    }, []);
 
     useEffect(() => {
         const selectElement = document.getElementById('select-grado') as HTMLSelectElement | null;;
@@ -175,7 +124,7 @@ export default function SectionGGM() {
     }, [itemsMaterias]);
 
     return (
-        
+
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto 
             md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 

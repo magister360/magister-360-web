@@ -13,7 +13,7 @@ export default function SidebarTopLeft() {
     const [visibleSidebar, setVisibleSidebar] = useState(false);
     useEffect(() => {
         const sesionLocalStorage = loadSessionFromLocalStorage();
-        console.log(sesionLocalStorage)
+       
         if (sesionLocalStorage) {
             setVisibleSidebar(true)
             router.refresh()

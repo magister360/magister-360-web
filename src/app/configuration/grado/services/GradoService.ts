@@ -1,82 +1,102 @@
 import { getApiUrl } from "../../../../../API";
 import axios from "axios";
 
-
 export const createGradoApi = async (
-    grado: string,
-    estatus: number,
-    idUsuario: number
+  grado: string,
+  estatus: number,
+  idUsuario: number
 ) => {
-    const apiUrl = getApiUrl('/api/grado');
+  const apiUrl = getApiUrl("/api/grado");
 
-    const response = await axios.post(apiUrl, {
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         grado,
         estatus,
-        idUsuario
-    }).then(r => {
-        return r.data;
+        idUsuario,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
+    .catch((error) => {
+    
+      return false;
+    });
+  return response;
+};
 
-    return response;
-
-}
-
-export const removeGradoApi = async (
-    id: number,
-    estatus: number
-) => {
-    const apiUrl = getApiUrl('/api/removeGrado');
-    const response = await axios.post(apiUrl, {
+export const removeGradoApi = async (id: number, estatus: number) => {
+  const apiUrl = getApiUrl("/api/removeGrado");
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         id,
         estatus,
-    }).then(r => {
-        return r.data;
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .catch((error) => {
+   
+      return false;
+    });
+  return response;
+};
 
-export const updateGradoApi = async (
-    id: number,
-    grado: string
-) => {
-    const apiUrl = getApiUrl('/api/updateGrado');
-    const response = await axios.post(apiUrl, {
+export const updateGradoApi = async (id: number, grado: string) => {
+  const apiUrl = getApiUrl("/api/updateGrado");
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         id,
         grado,
-    }).then(r => {
-        return r.data;
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .catch((error) => {
+    
+      return false;
+    });
+  return response;
+};
 
-export const getGradosApi = async (
-    idUsuario: number,
-    estatus: number
+export const getGradosApi = async (idUsuario: number, estatus: number) => {
+  const apiUrl = getApiUrl("/api/grado");
 
-) => {
-    const apiUrl = getApiUrl('/api/grado');
-
-    const response = await axios.get(apiUrl, {
-        params: {
-            idUsuario,
-            estatus
-
-        }
-    }).then(r => {
-
-        return r.data;
+  const response = await axios
+    .get(apiUrl, {
+      params: {
+        idUsuario,
+        estatus,
+      },
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .then((r) => {
+      return r.data;
+    })
+    .catch((e) => {
+      return null;
+    });
+  return response;
+};

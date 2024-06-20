@@ -1,81 +1,100 @@
 import { getApiUrl } from "../../../../../API";
 import axios from "axios";
 
-
 export const createMateriaApi = async (
-    materia: string,
-    estatus: number,
-    idUsuario: number
+  materia: string,
+  estatus: number,
+  idUsuario: number
 ) => {
-    const apiUrl = getApiUrl('/api/materia');
+  const apiUrl = getApiUrl("/api/materia");
 
-    const response = await axios.post(apiUrl, {
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         materia,
         estatus,
-        idUsuario
-    }).then(r => {
-        return r.data;
+        idUsuario,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .catch((error) => {
+      return false;
+    });
+  return response;
+};
 
-export const removeMateriaApi = async (
-    id: number,
-    estatus: number
-) => {
-    const apiUrl = getApiUrl('/api/removeMateria');
-    const response = await axios.post(apiUrl, {
+export const removeMateriaApi = async (id: number, estatus: number) => {
+  const apiUrl = getApiUrl("/api/removeMateria");
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         id,
         estatus,
-    }).then(r => {
-        return r.data;
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .catch((error) => {
+      return false;
+    });
+  return response;
+};
 
-export const updateMateriaApi = async (
-    id: number,
-    materia: string
-) => {
-    const apiUrl = getApiUrl('/api/updateMateria');
-    const response = await axios.post(apiUrl, {
+export const updateMateriaApi = async (id: number, materia: string) => {
+  const apiUrl = getApiUrl("/api/updateMateria");
+  const response = await axios
+    .post(
+      apiUrl,
+      {
         id,
         materia,
-    }).then(r => {
-        return r.data;
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .catch((error) => {
+      return false;
+    });
+  return response;
+};
 
+export const getMateriasApi = async (idUsuario: number, estatus: number) => {
+  const apiUrl = getApiUrl("/api/materia");
 
-export const getMateriasApi = async (
-    idUsuario: number,
-    estatus: number
-
-) => {
-    const apiUrl = getApiUrl('/api/materia');
-
-    const response = await axios.get(apiUrl, {
-        params: {
-            idUsuario,
-            estatus
-
-        }
-    }).then(r => {
-        //console.log("Respuesta de datamateria service  " + r.data)
-        return r.data;
+  const response = await axios
+    .get(apiUrl, {
+      params: {
+        idUsuario,
+        estatus,
+      },
     })
-        .catch(e => {
-            return null;
-        });
-    return response;
-}
+    .then((r) => {
+      //console.log("Respuesta de datamateria service  " + r.data)
+      return r.data;
+    })
+    .catch((e) => {
+      return null;
+    });
+  return response;
+};

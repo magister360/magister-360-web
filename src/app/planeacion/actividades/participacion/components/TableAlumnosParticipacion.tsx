@@ -1,22 +1,22 @@
-import EAN13Barcode from '@/app/components/EAN13BarcodeProps';
-import React from 'react';
-
-import { TypeIndexXlsAlumnos } from '../TypeIndexXlsAlumnos';
-import StatusAlumno from '../../components/StatusAlumno';
+'use cliente'
+import { TypeIndexXlsAlumnos } from "@/app/configuration/alumnos/excel/TypeIndexXlsAlumnos";
 
 type Props = {
     data: any[][];
     errorEncabezado: string;
 }
 
-export default function TableAlumnosExcel({ data, errorEncabezado }: Props) {
+export default function TableAlumnosParticipacion({ data, errorEncabezado }: Props) {
 
     return (
         <>
-            {errorEncabezado === '' && data.length !== 0 && (
+  
+            {errorEncabezado === '' 
+            && data.length !== 0 
+            && (
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mt-3 mr-3">
                     <div className="flex items-center justify-between flex-column flex-wrap md:flex-row 
-            space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                        space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
 
 
                     </div>
@@ -36,7 +36,10 @@ export default function TableAlumnosExcel({ data, errorEncabezado }: Props) {
                                     Código de barras
                                 </th>
                                 <th scope="col" className="px-6 py-3 min-w-[20px]">
-                                    Status
+                                    Calificacion
+                                </th>
+                                <th scope="col" className="px-6 py-3 min-w-[20px]">
+                                    Remover
                                 </th>
 
                             </tr>
@@ -67,13 +70,16 @@ export default function TableAlumnosExcel({ data, errorEncabezado }: Props) {
 
                                         <td className="w-4 p-4">
                                             <div className="flex items-center">
-                                                <EAN13Barcode value={item[TypeIndexXlsAlumnos.INDEX_BARCODE]} heightBarcode={30} />
+                                               
                                             </div>
 
                                         </td>
 
                                         <td className="px-6 py-4 min-w-[20px]">
-                                            <StatusAlumno value={0} />
+                                            10
+                                        </td>
+                                        <td className="px-6 py-4 min-w-[20px]">
+                                            a
                                         </td>
 
 

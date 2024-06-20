@@ -1,11 +1,8 @@
-type Item = {
-    id: number;
-    grupo: string;
+import { ItemGrupo } from "@/app/types/types";
 
-}
 
 type Props = {
-    itemsGrupos: Item[];
+    itemsGrupos: ItemGrupo[];
 }
 
 export default function OptionsGrupos({ itemsGrupos }: Props) {
@@ -18,6 +15,6 @@ export default function OptionsGrupos({ itemsGrupos }: Props) {
     );
 }
 
-export const filterIndexGrupo = ({ itemsGrupos }: Props, index: number): Item | undefined => {
+export const filterIndexGrupo = ({ itemsGrupos }: Props, index: number): ItemGrupo | undefined => {
     return itemsGrupos.find((_, i) => i === index);
 }

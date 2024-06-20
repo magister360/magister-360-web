@@ -1,11 +1,7 @@
-type Item = {
-    id: number;
-    materia: string;
-
-}
+import { ItemMateria } from "@/app/types/types";
 
 type Props = {
-    itemsMaterias: Item[];
+    itemsMaterias: ItemMateria[];
 }
 
 export default function OptionsMaterias({ itemsMaterias }: Props) {
@@ -18,6 +14,6 @@ export default function OptionsMaterias({ itemsMaterias }: Props) {
     );
 }
 
-export const filterIndexMaterias = ({ itemsMaterias }: Props, index: number): Item | undefined => {
+export const filterIndexMaterias = ({ itemsMaterias }: Props, index: number): ItemMateria | undefined => {
     return itemsMaterias.find((_, i) => i === index);
 }

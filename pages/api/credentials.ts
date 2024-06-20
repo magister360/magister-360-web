@@ -2,8 +2,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 import { ResponseCredentials } from "@/app/login/services/ResponseCredentials";
+import { cors } from "../../lib/corsMiddleware";
 
-export default async function main(
+
+async function main(
     req: NextApiRequest,
     res: NextApiResponse
 ): Promise<void> {
@@ -51,3 +53,5 @@ export default async function main(
         res.status(405).json({ error: 'Method not allowed.' });
     }
 }
+
+export default cors(main);

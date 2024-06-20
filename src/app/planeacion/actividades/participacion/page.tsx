@@ -1,5 +1,6 @@
 
 import Image from 'next/image';
+import TableAlumnosParticipacion from './components/TableAlumnosParticipacion';
 export default function Participacion() {
 
     return (
@@ -89,7 +90,7 @@ export default function Participacion() {
                     />
                 </div>
 
-
+                <TableAlumnosParticipacion data={[]} errorEncabezado=''/>
 
 
             </div>

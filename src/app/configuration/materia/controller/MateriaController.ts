@@ -8,33 +8,22 @@ export const createMateria = async (idUser: number, materia: string, estatus: nu
         || materia.length >= 60) {
         return false;
     }
-    return createMateriaApi(materia, estatus, idUser)
-        .then(data => {
-            return !!data;
-
-        });;
+    return createMateriaApi(materia, estatus, idUser);
 }
 
 export const removeMateria = async (id: number, estatus: number) => {
     if (id <= 0) {
         return false;
     }
-    return removeMateriaApi(id, estatus)
-        .then(data => {
-            return !!data;
-
-        });;
+    return removeMateriaApi(id, estatus);
+       
 }
 
 export const updateMateria = async (id: number, materia: string) => {
     if (id <= 0) {
         return false;
     }
-    return updateMateriaApi(id, materia)
-        .then(data => {
-            return !!data;
-
-        });
+    return updateMateriaApi(id, materia);
 }
 
 export const getMaterias = async (idUser: number, estatus: number) => {

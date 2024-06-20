@@ -2,14 +2,19 @@ import axios from "axios";
 import { getApiUrl } from "../../../../API";
 import { decryptString } from "../../../../security/Security";
 import { ResponseCredentials } from "./ResponseCredentials";
-import {saveSessionCookies } from "@/app/sesions/SesionCookies";
+import { saveSessionCookies } from "@/app/sesions/SesionCookies";
 
 
 export const getUsers = async () => {
     const apiUrl = getApiUrl('/api/users');
 
     return await axios
-        .get(apiUrl)
+        .get(apiUrl,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
         .then(response => {
             response.data;
 
@@ -27,9 +32,16 @@ export const getCredentials = async (userName: string, encryptedPassword: string
     }
     const apiUrl = getApiUrl('/api/credentials');
 
-    const response = await axios.post(apiUrl, {
-        userName
-    }).then(r => {
+    const response = await axios.post(apiUrl,
+        {
+            userName
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    ).then(r => {
         return r.data;
     })
         .catch(e => {

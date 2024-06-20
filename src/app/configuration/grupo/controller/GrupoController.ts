@@ -7,33 +7,21 @@ export const createGrupo = async (idUser: number, grupo: string, estatus: number
         || grupo.length >= 5) {
         return false;
     }
-    return createGrupoApi(grupo, estatus, idUser)
-        .then(data => {
-            return !!data;
-
-        });;
+    return createGrupoApi(grupo, estatus, idUser);
 }
 
 export const removeGrupo = async (id: number, estatus: number) => {
     if (id <= 0) {
         return false;
     }
-    return removeGrupoApi(id, estatus)
-        .then(data => {
-            return !!data;
-
-        });;
+    return removeGrupoApi(id, estatus);
 }
 
 export const updateGrupo = async (id: number, grupo: string) => {
     if (id <= 0) {
         return false;
     }
-    return updateGrupoApi(id, grupo)
-        .then(data => {
-            return !!data;
-
-        });
+    return updateGrupoApi(id, grupo);
 }
 
 

@@ -1,12 +1,9 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
+import { ItemGrado } from '@/app/types/types';
 
-export type ItemGrado = {
-    id: number;
-    grado: string;
 
-}
 
 type Props = {
     items: ItemGrado[];

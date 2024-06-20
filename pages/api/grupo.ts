@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 
-export default async function main(
+import { cors } from "../../lib/corsMiddleware";
+
+ async function main(
     req: NextApiRequest,
     res: NextApiResponse
 ): Promise<void> {
@@ -63,3 +65,5 @@ export default async function main(
         }
     }
 }
+
+export default cors(main);

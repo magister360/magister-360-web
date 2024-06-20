@@ -1,16 +1,14 @@
-type Props = {
-    indexRowEncabezados: number[];
-}
 
-export const validateEncabezado = ({ indexRowEncabezados }: Props): string => {
-    const allElementsAreEqual = (arr: number[]): boolean => {
-        if (arr.length === 0) return true;
-        const firstElement = arr[0];
-        return arr.every(element => element === firstElement);
-    };
-    const isValid = allElementsAreEqual(indexRowEncabezados);
-    if(!isValid){
-        return 'No es valido el encabezado'
+export function validateEncabezado(arr: number[]): string {
+    if (arr.length === 0) {
+        return "No es valido el encabezado";
     }
-    return '';
-};
+
+    const firstElement = arr[0];
+
+    if (firstElement === -1) {
+        return arr.every(element => element === -1) ? "No es valido el encabezado" : "";
+    } else {
+        return arr.every(element => element !== -1 && element === firstElement) ? "" : "No es valido el encabezado";
+    }
+}

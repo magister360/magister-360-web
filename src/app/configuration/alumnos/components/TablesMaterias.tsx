@@ -1,21 +1,21 @@
+import { ItemMateria } from '@/app/types/types';
 import Image from 'next/image';
 
-type ItemMateria = {
-    id: number;
-    materia: string;
-
-}
 
 type Props = {
     materiasSinAsignar: ItemMateria[];
     materiasAsignadas: ItemMateria[];
     errorEncabezado: string;
+    removeMateriaSinAsignar: (id: number, index: number) => void;
+    removeMateriaAsignar: (id: number, index: number) => void;
 }
 
 export default function TablesMaterias({
     materiasSinAsignar,
     materiasAsignadas,
-    errorEncabezado }: Props) {
+    errorEncabezado,
+    removeMateriaSinAsignar,
+    removeMateriaAsignar }: Props) {
 
     return (
         <>
@@ -60,10 +60,10 @@ export default function TablesMaterias({
                                                         <Image
                                                             className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3t"
                                                             src="/arrow-right.svg"
-                                                            alt="remover"
+                                                            alt="arrow-right"
                                                             width={28}
                                                             height={28}
-                                                            
+                                                            onClick={() => removeMateriaSinAsignar(item.id, index)}
                                                         />
 
                                                     </td>
@@ -87,7 +87,9 @@ export default function TablesMaterias({
                                             <th scope="col" className="px-6 py-3">
                                                 Materias asignadas
                                             </th>
-
+                                            <th scope="col" className="px-6 py-3 min-w-[20px] ">
+                                                Eliminar
+                                            </th>
 
                                         </tr>
 
@@ -98,7 +100,7 @@ export default function TablesMaterias({
                                             <tr key={index} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
                                              dark:border-gray-700 hover:bg-[#e6e6e6] dark:hover:bg-gray-600">
 
-                                                <td className="w-4 p-4">
+                                                <td className="px-6 py-3">
                                                     <div className="flex items-center">
                                                         {item.materia}
                                                     </div>
@@ -111,7 +113,7 @@ export default function TablesMaterias({
                                                         alt="remover"
                                                         width={28}
                                                         height={28}
-                                                        
+                                                        onClick={() => removeMateriaAsignar(item.id, index)}
                                                     />
 
                                                 </td>

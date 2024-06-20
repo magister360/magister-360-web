@@ -1,11 +1,7 @@
-type Item = {
-    id: number;
-    grado: string;
-
-}
+import { ItemGrado } from "@/app/types/types";
 
 type Props = {
-    itemsGrados: Item[];
+    itemsGrados: ItemGrado[];
 }
 
 export default function OptionsGrados({ itemsGrados }: Props) {
@@ -18,7 +14,7 @@ export default function OptionsGrados({ itemsGrados }: Props) {
     );
 }
 
-export const filterIndexGrado = ({ itemsGrados }: Props, index: number): Item | undefined => {
+export const filterIndexGrado = ({ itemsGrados }: Props, index: number): ItemGrado | undefined => {
     return itemsGrados.find((_, i) => i === index);
 }
 
