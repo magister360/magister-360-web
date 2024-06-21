@@ -444,20 +444,20 @@ export default function AlumnosExcel() {
     event.preventDefault();
     const sesionLocalStorage = loadSessionFromLocalStorage();
     const userId = sesionLocalStorage?.id ?? -1;
-    const saveResponse = await createAlumnos(
+    const createSucces = await createAlumnos(
       userId,
       selectGrado.idGrado,
       selectGrupo.idGrupo,
       dataAlumnos,
       materiasAsignadas
     );
-    if (saveResponse) {
+    if (createSucces.success) {
       setSuccessMessage("Los alumnos se guardaron co éxito");
       setIsSuccessModalOpen(true);
       setDataAlumnos([]);
-    } else {
+    } else if (!createSucces.success) {
       setErrorMessage(
-        "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
+        "Hubo un error al procesar la solicitud. " + createSucces.message
       );
       setIsErrorModalOpen(true);
     }
@@ -473,7 +473,7 @@ export default function AlumnosExcel() {
       <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={handleSuccessModal}
-        successMessage="Los alumnoss se guardaron con éxito."
+        successMessage={successMessage}
       />
       <label
         className="mt-14 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2"
@@ -487,12 +487,6 @@ export default function AlumnosExcel() {
           className="rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5"
         >
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold text-sm mb-2"
-            htmlFor="lbl-select-grado-grupo"
-          >
-            Seleccione grado y grupo
-          </label>
           <div>
             <label
               htmlFor="small"
@@ -546,12 +540,15 @@ export default function AlumnosExcel() {
             Subir archivo
           </label>
           <input
-            className="appearance-none block w-full dark:bg-[#18181B]
-                     bg-[#ffffff] dark:text-gray-200 py-3 px-4 mb-3
-                       focus:outline-none  focus:bg-white "
+            className=" bg-gray-50 border border-gray-300 
+                        text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 
+                           focus:border-primary-600 block max-w-sm p-2.5 dark:bg-[#1a2c32]
+                           dark:border-gray-600 dark:placeholder-gray-400
+                           dark:text-white dark:focus:ring-blue-500 
+                           dark:focus:border-blue-500  mt-2"
             id="fileInput"
             type="file"
-            accept=".xlsx"
+            accept=".png, .jpg, .jpeg"
             onChange={handleFileChange}
           />
         </div>

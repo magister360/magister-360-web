@@ -90,7 +90,6 @@ export const getMateriasApi = async (idUsuario: number, estatus: number) => {
       },
     })
     .then((r) => {
-      //console.log("Respuesta de datamateria service  " + r.data)
       return r.data;
     })
     .catch((e) => {

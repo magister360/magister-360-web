@@ -54,6 +54,7 @@ model Materia{
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
+  alumnos   AlumnoMateria[]
    
 }
 
@@ -73,4 +74,16 @@ model Alumno{
   idGrado Int
   grupo   Grupo   @relation(fields: [idGrupo], references: [id])
   idGrupo Int
+   materias         AlumnoMateria[]
+}
+
+model AlumnoMateria {
+  id  String @db.VarChar(255) @id  
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  materia   Materia  @relation(fields: [idMateria], references: [id])
+  idMateria Int
+  regDate   DateTime @default(now())
+
+  @@unique([idAlumno, idMateria])
 }

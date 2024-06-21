@@ -9,7 +9,7 @@ export default function OptionsGrupos({ itemsGrupos }: Props) {
     return (
         <>
             {itemsGrupos.map((item, index) => (
-                <option key={index} id={index + ''} value={item.grupo}>{item.grupo}</option>
+                <option key={index} value={item.grupo}>{item.grupo}</option>
             ))}
         </>
     );

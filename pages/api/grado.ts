@@ -46,10 +46,8 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
           },
         })
         .catch(async (e) => {
-          await prisma.$disconnect();
-          process.exit(1);
+          res.status(500).json({ error: "Error en grado" });
         });
-      //   console.log(grupos);
       return res.status(200).json(grados);
     } else {
       return res.status(401).json(null);

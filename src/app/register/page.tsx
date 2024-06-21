@@ -2,7 +2,6 @@
 
 import { Users } from "@prisma/client";
 import { useEffect, useState } from "react";
-import axios from "axios"
 import { getUsers } from "../login/services/usersService";
 
 
