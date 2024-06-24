@@ -8,7 +8,7 @@ interface EAN13BarcodeProps {
 
 const EAN13Barcode: React.FC<EAN13BarcodeProps> = ({ value, heightBarcode }) => {
     return (
-        <div className="flex flex-col items-center justify-center" >
+        <div className="flex flex-col items-center justify-center opacity-40" >
             <div className="h-16">
                 <><Barcode value={value} height={heightBarcode} /></>
             </div>

@@ -6,9 +6,15 @@ import { StudentType } from "@/app/types/types";
 
 type Props = {
   students: StudentType[];
+  handlesetNewModifyStudentOpen: (
+    studentSelect: StudentType | undefined
+  ) => void;
 };
 
-export default function TableAlumnosVisualizar({ students }: Props) {
+export default function TableAlumnosVisualizar({
+  students,
+  handlesetNewModifyStudentOpen,
+}: Props) {
   return (
     <>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mt-3 mr-3">
@@ -94,7 +100,7 @@ export default function TableAlumnosVisualizar({ students }: Props) {
                     <div className="flex items-center">
                       <EAN13Barcode
                         value={student.codigoBarras}
-                        heightBarcode={30}
+                        heightBarcode={15}
                       />
                     </div>
                   </td>
@@ -109,6 +115,7 @@ export default function TableAlumnosVisualizar({ students }: Props) {
                       width={28}
                       height={28}
                       priority
+                      onClick={() => handlesetNewModifyStudentOpen(student)}
                     />
                   </td>
                   <td className="px-6 py-4">

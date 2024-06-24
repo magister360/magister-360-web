@@ -53,7 +53,7 @@ export default function Grupo() {
       className="ml-72 md:mt-14 rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff] p-5"
     >
-      <form className="" onSubmit={handleSubmit(onSubmit)}>
+      <form className="" onSubmit={handleSubmit(onSubmit)}  method="POST">
         <TableGrupo
           items={items}
           handleClickRemove={handleClickRemove}

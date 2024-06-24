@@ -67,7 +67,7 @@ export default function TableAlumnosExcel({ data, errorEncabezado }: Props) {
 
                                         <td className="w-4 p-4">
                                             <div className="flex items-center">
-                                                <EAN13Barcode value={item[TypeIndexXlsAlumnos.INDEX_BARCODE]} heightBarcode={30} />
+                                                <EAN13Barcode value={item[TypeIndexXlsAlumnos.INDEX_BARCODE]} heightBarcode={15} />
                                             </div>
 
                                         </td>

@@ -548,7 +548,7 @@ export default function AlumnosExcel() {
                            dark:focus:border-blue-500  mt-2"
             id="fileInput"
             type="file"
-            accept=".png, .jpg, .jpeg"
+            accept=".xlsx"
             onChange={handleFileChange}
           />
         </div>

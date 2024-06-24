@@ -11,7 +11,8 @@ import { useEffect, useState } from "react";
 import { AlumnosFunctionsHook } from "./hooks/AlumnosFunctionsHook";
 import TableAlumnosVisualizar from "./components/TableAlumnosVisualizar";
 import { StudentType } from "@/app/types/types";
-import NewModifyStudent from "./components/NewModifyStudent";
+import { NewModifyStudent } from "./components/NewModifyStudent";
+import Image from "next/image";
 
 export default function AlumnosVisualizar() {
   const { itemsGrados, itemsGrupos } = useEffectFetchGradoGrupo();
@@ -20,6 +21,17 @@ export default function AlumnosVisualizar() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isNewModifyStudentOpen, setIsNewModifyStudentOpen] = useState(false);
+  const [studentSelect, setStudentSelect] = useState<StudentType>();
+  const [students, setStudents] = useState<StudentType[]>([]);
+  const [selectGrado, setSelectGrado] = useState({
+    idGrado: -1,
+    grado: "",
+  });
+  const [selectGrupo, setSelectGrupo] = useState({
+    idGrupo: -1,
+    grupo: "",
+  });
 
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
@@ -28,14 +40,25 @@ export default function AlumnosVisualizar() {
     setIsSuccessModalOpen(false);
   };
 
-  const [students, setStudents] = useState<StudentType[]>([]);
+  const handlesetNewModifyStudentOpen = (student: StudentType | undefined) => {
+    setIsNewModifyStudentOpen(true); //
+    setStudentSelect(student);
+  };
+
+  const handleCloseNewModifyStudentOpen = () => {
+    setIsNewModifyStudentOpen(false);
+  };
 
   const { handleChangeGrado, handleChangeGrupo } = AlumnosFunctionsHook(
     itemsGrados,
     filterIndexGrado,
     itemsGrupos,
     filterIndexGrupo,
-    setStudents
+    setStudents,
+    selectGrado,
+    setSelectGrado,
+    selectGrupo,
+    setSelectGrupo
   );
 
   return (
@@ -104,9 +127,42 @@ export default function AlumnosVisualizar() {
           </div>
         </div>
 
-        <TableAlumnosVisualizar students={students} />
+        <div
+          className="flex space-x-2 items-center justify-start rounded-lg shadow  
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-2"
+        >
+          <Image
+            className="dark:filter dark:invert dark:opacity-75 opacity-40 
+                                filter-none w-auto h-7"
+            src="/add.svg"
+            alt="add"
+            width={28}
+            height={28}
+            onClick={() => handlesetNewModifyStudentOpen(undefined)}
+          />
+          <label
+            htmlFor="lbl-nuevo"
+            className="block mb-2 text-sm font-medium 
+                    text-gray-900 dark:text-white"
+            onClick={() => handlesetNewModifyStudentOpen(undefined)}
+          >
+            Nuevo
+          </label>
+        </div>
 
-        <NewModifyStudent />
+        <TableAlumnosVisualizar
+          students={students}
+          handlesetNewModifyStudentOpen={handlesetNewModifyStudentOpen}
+        />
+
+        <NewModifyStudent
+          isOpen={isNewModifyStudentOpen}
+          onClose={handleCloseNewModifyStudentOpen}
+          errorMessage=""
+          studentSelect={studentSelect}
+          idGrado={selectGrado.idGrado}
+          idGrupo={selectGrupo.idGrupo}
+        />
       </div>
     </>
   );

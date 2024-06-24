@@ -10,17 +10,12 @@ export const AlumnosFunctionsHook = (
   filterIndexGrado: Function,
   itemsGrupos: ItemGrado[],
   filterIndexGrupo: Function,
-  setStudents: Function
+  setStudents: Function,
+  selectGrado: { idGrado: number; grado: string },
+  setSelectGrado: React.Dispatch<React.SetStateAction<{ idGrado: number; grado: string }>>,
+  selectGrupo: { idGrupo: number; grupo: string },
+  setSelectGrupo: React.Dispatch<React.SetStateAction<{ idGrupo: number; grupo: string }>>
 ) => {
-  const [selectGrado, setSelectGrado] = useState({
-    idGrado: -1,
-    grado: "",
-  });
-  const [selectGrupo, setSelectGrupo] = useState({
-    idGrupo: -1,
-    grupo: "",
-  });
-
   const isArrayEmpty = (array: any[]) => {
     return array.length === 0;
   };
@@ -40,7 +35,7 @@ export const AlumnosFunctionsHook = (
 
   const handleChangeGrupo = (event: { target: { selectedIndex: any } }) => {
     const selectedIndex = event.target.selectedIndex;
-    console.log("selectedIndex " + selectedIndex);
+ 
     if (!isArrayEmpty(itemsGrupos)) {
       const itemFilter = filterIndexGrupo({ itemsGrupos }, selectedIndex);
       if (itemFilter) {
@@ -97,9 +92,8 @@ export const AlumnosFunctionsHook = (
           selectGrupo.idGrupo
         );
         setStudents(students);
-      
       } catch (error) {
-       // console.error("Error fetching alumnos:", error);
+        // console.error("Error fetching alumnos:", error);
       }
     };
     if (selectGrado.idGrado !== -1 && selectGrupo.idGrupo !== -1) {
@@ -107,5 +101,5 @@ export const AlumnosFunctionsHook = (
     }
   }, [selectGrado, selectGrupo]);
 
-  return { handleChangeGrado, handleChangeGrupo };
+  return { handleChangeGrado, handleChangeGrupo, selectGrado, selectGrupo };
 };
