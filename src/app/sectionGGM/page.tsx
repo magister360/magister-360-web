@@ -66,9 +66,9 @@ export default function SectionGGM() {
         if (!isArrayEmpty(itemsGrupos)) {
             const itemFilter = filterIndexGrupo({ itemsGrupos }, selectedIndex);
             if (itemFilter) {
-                setSelectGrado({
-                    idGrado: itemFilter.id,
-                    grado: itemFilter.grupo
+                setSelectGrupo({
+                    idGrupo: itemFilter.id,
+                    grupo: itemFilter.grupo
 
                 })
             };

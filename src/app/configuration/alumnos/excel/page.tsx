@@ -469,11 +469,13 @@ export default function AlumnosExcel() {
         isOpen={isErrorModalOpen}
         onClose={handleCloseErrorModal}
         errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
       <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={handleSuccessModal}
         successMessage={successMessage}
+        setSuccessMessage={setSuccessMessage}
       />
       <label
         className="mt-14 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2"

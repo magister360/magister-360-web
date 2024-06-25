@@ -4,13 +4,17 @@ type SuccessModalProps = {
   isOpen: boolean;
   onClose: () => void;
   successMessage: string;
+  setSuccessMessage: React.Dispatch<React.SetStateAction<string>>;
+  
 };
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
   isOpen,
   onClose,
   successMessage,
+  setSuccessMessage
 }) => {
+
   return (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-70 
@@ -24,6 +28,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
           className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
           onClick={() => {
             onClose();
+            setSuccessMessage("")
           }}
         >
           Cerrar

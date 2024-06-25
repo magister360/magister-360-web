@@ -4,12 +4,14 @@ type ErrorModalProps = {
   isOpen: boolean;
   onClose: () => void;
   errorMessage: string;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ErrorModal: React.FC<ErrorModalProps> = ({
   isOpen,
   onClose,
   errorMessage,
+  setErrorMessage,
 }) => {
   return (
     <div
@@ -19,11 +21,12 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-lg font-semibold text-red-500">Error</h2>
         <p className="text-gray-700">{errorMessage}</p>
-        <button 
+        <button
           type="button"
           className="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none"
           onClick={() => {
             onClose();
+            setErrorMessage("");
           }}
         >
           Cerrar

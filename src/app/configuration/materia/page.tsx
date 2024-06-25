@@ -58,7 +58,7 @@ export default function Materia() {
       className="ml-72 md:mt-14  rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff] p-5"
     >
-      <form className="" onSubmit={handleSubmit(onSubmit)}  method="POST">
+      <form className="" onSubmit={handleSubmit(onSubmit)} method="POST">
         <TableMateria
           items={items}
           handleClickRemove={handleClickRemove}
@@ -128,11 +128,13 @@ export default function Materia() {
           isOpen={isErrorModalOpen}
           onClose={handleCloseErrorModal}
           errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
         />
         <SuccessModal
           isOpen={isSuccessModalOpen}
           onClose={handleSuccessModal}
           successMessage={successMessage}
+          setSuccessMessage={setSuccessMessage}
         />
       </form>
     </div>

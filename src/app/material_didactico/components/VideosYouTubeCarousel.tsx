@@ -65,7 +65,11 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
   });
 
   const getYouTubeThumbnail = (videoId: string) => {
-    return `https://img.youtube.com/vi/${videoId}/0.jpg`;
+    if (videoId !== undefined && videoId !== "") {
+      return `https://img.youtube.com/vi/${videoId}/0.jpg`;
+    } else {
+      return "/youtube.jpg";
+    }
   };
 
   return (
@@ -100,11 +104,7 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={
-                        slide.type === "image"
-                          ? slide.urlId
-                          : getYouTubeThumbnail(slide.urlId)
-                      }
+                      src={getYouTubeThumbnail(slide.urlId)}
                       alt={
                         slide.type === "image"
                           ? `Slide ${index}`
@@ -119,7 +119,7 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
                     <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 overflow-hidden max-h-20">
                       {slide.title}
                     </h3>
-                    <p className="text-sm text-gray-600 overflow-hidden">
+                    <p className="text-sm text-gray-600 overflow-hidden max-h-14">
                       {slide.description}
                     </p>
                   </div>

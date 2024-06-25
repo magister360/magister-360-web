@@ -8,6 +8,7 @@ import VideosCarousel from "./components/VideosCarousel";
 import DiapositivasCarousel from "./components/DiapositivasCarousel";
 import DocumentsPdfCarousel from "./components/DocumentsPdfCarousel";
 import DocumentsWordCarousel from "./components/DocumentsWordCarousel";
+import { DocumentTypeValues } from "../utils/DocumentTypeValues";
 
 export default function MaterialDidactico() {
   const scrollableRef = useRef<HTMLDivElement>(null);
@@ -69,7 +70,7 @@ export default function MaterialDidactico() {
   return (
     <div className=" max-h-full h-full">
       {selectTypeDocument.urlId !== "" &&
-        selectTypeDocument.type === "youtube" && (
+        selectTypeDocument.type === DocumentTypeValues.YOUTUBE.type && (
           <YouTubePlayer videoId={selectTypeDocument.urlId} />
         )}
       {selectTypeDocument.urlId !== "" &&

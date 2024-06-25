@@ -25,6 +25,7 @@ model Users {
   grupos   Grupo[] 
   materias Materia[]
   alumnos Alumno[]
+ 
 }
 
 model Grado{
@@ -34,7 +35,8 @@ model Grado{
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
-   alumnos Alumno[]
+  alumnos Alumno[]
+  materialDidactico MaterialDidactico[]
 }
 
 model Grupo{
@@ -44,7 +46,8 @@ model Grupo{
   regDate DateTime @default(now())
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
-   alumnos Alumno[]
+  alumnos Alumno[]
+  materialDidactico MaterialDidactico[]
 }
 
 model Materia{
@@ -55,7 +58,7 @@ model Materia{
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
   alumnos   AlumnoMateria[]
-   
+   materialDidactico MaterialDidactico[]
 }
 
 model Alumno{
@@ -86,4 +89,22 @@ model AlumnoMateria {
   regDate   DateTime @default(now())
 
   @@unique([idAlumno, idMateria])
+}
+
+model MaterialDidactico{
+  id  String @db.VarChar(255) @id 
+  tipo String  @db.VarChar(30) 
+  url String  @db.VarChar(255) 
+  titulo String  @db.VarChar(255) 
+  descripcion String @db.VarChar(255)
+  miniatura Bytes @db.Blob()
+  file Bytes      @db.Blob()
+  regDate  DateTime @default(now())
+  
+  grado   Grado   @relation(fields: [idGrado], references: [id])
+  idGrado Int
+  grupo   Grupo   @relation(fields: [idGrupo], references: [id])
+  idGrupo Int
+  materia   Materia   @relation(fields: [idMateria], references: [id])
+  idMateria Int
 }

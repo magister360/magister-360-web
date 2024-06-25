@@ -37,7 +37,7 @@ export default function SidebarLeft() {
   const menuOrganizacionGrupos = [
     {
       name: "Actividades",
-      href: "/organizacionGrupos/actividades",
+      href: "/organizacion_grupos/actividades",
       icon: "/grados.svg",
     },
   ];
@@ -61,11 +61,7 @@ export default function SidebarLeft() {
         dark:bg-gray-800 dark:border-gray-700 bg-white"
     >
       <ul className="mt-4">
-        <Link
-          className=""
-          key="mat-didactico"
-          href="/materialDidactico"
-        >
+        <Link className="" key="mat-didactico" href="/material_didactico">
           <li
             className="block px-4 py-2 text-sm text-black dark:text-white"
             onClick={() => handleClickConfiguration(0)}
@@ -177,6 +173,14 @@ export default function SidebarLeft() {
         >
           Cronogramas
         </li>
+        <Link className="" key="organizacion_material_didactico" href="/organizacion_material_didactico">
+          <li
+            className="block px-4 py-2 text-sm text-black dark:text-white"
+            onClick={() => handleClickConfiguration(0)}
+          >
+            Organización material didáctico
+          </li>
+        </Link>
       </ul>
     </div>
   );
