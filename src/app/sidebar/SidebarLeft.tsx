@@ -57,20 +57,20 @@ export default function SidebarLeft() {
 
   return (
     <div
-      className="fixed top-12 left-0 h-full w-64  text-white 
-        dark:bg-gray-800 dark:border-gray-700 bg-white"
+      className="fixed top-12 left-0 h-full w-64  text-gray-100 dark:text-white
+        dark:bg-[#1a2c32]  bg-[#356169]"
     >
       <ul className="mt-4">
         <Link className="" key="mat-didactico" href="/material_didactico">
           <li
-            className="block px-4 py-2 text-sm text-black dark:text-white"
+            className="block px-4 py-2 text-sm "
             onClick={() => handleClickConfiguration(0)}
           >
             Material didáctico
           </li>
         </Link>
         <li
-          className="block px-4 py-2 text-sm text-black dark:text-white"
+          className="block px-4 py-2 text-sm "
           onClick={() => handleClickConfiguration(0)}
         >
           Organización de mis grupos
@@ -90,7 +90,7 @@ export default function SidebarLeft() {
                   }}
                 >
                   <Link
-                    className="flex items-center space-x-4 pl-4 pt-3 pb-3 pr-3 text-black dark:text-white"
+                    className="flex items-center space-x-4 pl-4 pt-3 pb-3 pr-3 "
                     key={index}
                     href={item.href}
                   >
@@ -109,7 +109,7 @@ export default function SidebarLeft() {
           )}
         </li>
         <li
-          className=" pl-4 pt-3 text-sm text-black dark:text-white"
+          className=" pl-4 pt-3 text-sm "
           onClick={() => {
             handleClickConfiguration(1);
           }}
@@ -131,7 +131,7 @@ export default function SidebarLeft() {
                   }}
                 >
                   <Link
-                    className="flex items-center space-x-4 pl-4 pt-3 pb-3 pr-3 text-black dark:text-white"
+                    className="flex items-center space-x-4 pl-4 pt-3 pb-3 pr-3"
                     key={index}
                     href={item.href}
                   >
@@ -150,7 +150,7 @@ export default function SidebarLeft() {
           )}
         </li>
         <li
-          className=" pl-4 pt-3 text-sm text-black dark:text-white"
+          className=" pl-4 pt-3 text-sm "
           onClick={() => {
             handleClickConfiguration(1);
           }}
@@ -158,7 +158,7 @@ export default function SidebarLeft() {
           Estadisticas
         </li>
         <li
-          className=" pl-4 pt-3 text-sm text-black dark:text-white"
+          className=" pl-4 pt-3 text-sm"
           onClick={() => {
             handleClickConfiguration(1);
           }}
@@ -166,16 +166,20 @@ export default function SidebarLeft() {
           Entregables
         </li>
         <li
-          className=" pl-4 pt-3 text-sm text-black dark:text-white"
+          className=" pl-4 pt-3 text-sm "
           onClick={() => {
             handleClickConfiguration(1);
           }}
         >
           Cronogramas
         </li>
-        <Link className="" key="organizacion_material_didactico" href="/organizacion_material_didactico">
+        <Link
+          className=""
+          key="organizacion_material_didactico"
+          href="/organizacion_material_didactico"
+        >
           <li
-            className="block px-4 py-2 text-sm text-black dark:text-white"
+            className="block px-4 py-2 text-sm"
             onClick={() => handleClickConfiguration(0)}
           >
             Organización material didáctico

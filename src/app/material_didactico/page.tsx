@@ -1,14 +1,13 @@
 "use client";
 import { useRef, useState } from "react";
-import VideosYouTubeCarousel, {
-  SlideItem,
-} from "./components/VideosYouTubeCarousel";
+
 import YouTubePlayer from "./components/YouTubePlayer";
 import VideosCarousel from "./components/VideosCarousel";
 import DiapositivasCarousel from "./components/DiapositivasCarousel";
 import DocumentsPdfCarousel from "./components/DocumentsPdfCarousel";
 import DocumentsWordCarousel from "./components/DocumentsWordCarousel";
 import { DocumentTypeValues } from "../utils/DocumentTypeValues";
+import VideosYouTubeCarousel, { SlideItem } from "./components/VideosYouTubeCarousel";
 
 export default function MaterialDidactico() {
   const scrollableRef = useRef<HTMLDivElement>(null);
@@ -21,39 +20,39 @@ export default function MaterialDidactico() {
   };
   const slides: SlideItem[] = [
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "Bd7XboIfsU4",
       title: "Números de varios dígitos",
       description: "Problemas verbales de comparar números de varios dígitos",
     },
 
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "ViFfLZ21OQU",
       title: "Operaciones con fracciones",
       description: "",
     },
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "RlUZv0MoVWk",
       title: "Operaciones con números de varios dígitos",
       description:
         "Multiplica 3 y 4 dígitos por 1 dígito con la propiedad distributiva",
     },
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "RlUZv0MoVWk",
       title: "",
       description: "",
     },
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "BbA5dpS4CcI",
       title: "",
       description: "",
     },
     {
-      type: "youtube",
+      type: "Youtube",
       urlId: "Bd7XboIfsU4",
       title: "",
       description: "",
@@ -62,7 +61,7 @@ export default function MaterialDidactico() {
 
   const [selectTypeDocument, setSelectTypeDocument] = useState({
     urlId: "Bd7XboIfsU4",
-    type: "youtube",
+    type: "Youtube",
     title: "Operaciones con números de varios dígitos",
     description:
       "San Pablo Guelatao, Intendencia de Oaxaca; 21 de marzo de 1806-Ciudad de México, 18 de julio de 1872), conocido como El Benemérito de las Américas,2​ fue un jurista y político mexicano de origen indígena de la etnia zapoteca que se desempeñó como presidente de México en varias ocasiones, desde el 21 de enero de 1858 hasta el 18 de julio de 1872.3​ Es célebre su frase: «Entre los individuos, como entre las naciones, el respeto al derecho ajeno es la paz».4​.",
@@ -89,27 +88,7 @@ export default function MaterialDidactico() {
         setSelectTypeDocument={setSelectTypeDocument}
         scrollToTop={scrollToTop}
       />
-      <VideosCarousel
-        slides={slides}
-        setSelectTypeDocument={setSelectTypeDocument}
-        scrollToTop={scrollToTop}
-      />
-
-      <DiapositivasCarousel
-        slides={slides}
-        setSelectTypeDocument={setSelectTypeDocument}
-        scrollToTop={scrollToTop}
-      />
-      <DocumentsPdfCarousel
-        slides={slides}
-        setSelectTypeDocument={setSelectTypeDocument}
-        scrollToTop={scrollToTop}
-      />
-       <DocumentsWordCarousel
-        slides={slides}
-        setSelectTypeDocument={setSelectTypeDocument}
-        scrollToTop={scrollToTop}
-      />
+     
     </div>
   );
 }

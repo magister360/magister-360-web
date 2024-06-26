@@ -7,8 +7,20 @@ import ErrorMessageInput from "@/app/components/ErrorMessageInput";
 import { FieldErrors } from "react-hook-form";
 import { PreviaDocumentCarousel } from "./PreviaDocumentCarousel";
 import Image from "next/image";
+import { MaterialDidacticoType } from "@/app/types/types";
+import { useEffect } from "react";
+import ReactDOM from "react-dom";
+import { addUrlYouTubeVideoId } from "@/app/utils/URLYouTube";
+
+export const ValuesDataString = {
+  TIPO_DOCUMENT: { str: "tipo_document" },
+  URL_YOUTUBE: { str: "url_youtube" },
+  TITULO: { str: "titulo" },
+  DESCRIPCION: { str: "descripcion" },
+} as const;
 
 interface NewModifyMaterialDidacticoProps {
+  setValue: Function;
   isOpen: boolean;
   onClose: () => void;
   register: Function;
@@ -19,11 +31,13 @@ interface NewModifyMaterialDidacticoProps {
   successMessage: string;
   errorMessage: string;
   reset: Function;
+  selectMaterialDidacticoType: MaterialDidacticoType | null;
 }
 
 export const NewModifyMaterialDidactico: React.FC<
   NewModifyMaterialDidacticoProps
 > = ({
+  setValue,
   isOpen,
   onClose,
   register,
@@ -34,26 +48,45 @@ export const NewModifyMaterialDidactico: React.FC<
   successMessage,
   errorMessage,
   reset,
+  selectMaterialDidacticoType,
 }) => {
+  useEffect(() => {
+    if (
+      selectMaterialDidacticoType &&
+      selectMaterialDidacticoType != undefined
+    ) {
+      setValue(
+        ValuesDataString.TIPO_DOCUMENT.str,
+        selectMaterialDidacticoType.tipo
+      );
+      const url_youtube = addUrlYouTubeVideoId(selectMaterialDidacticoType.url);
+      setValue(ValuesDataString.URL_YOUTUBE.str, url_youtube);
+      setValue(ValuesDataString.TITULO.str, selectMaterialDidacticoType.titulo);
+      setValue(
+        ValuesDataString.DESCRIPCION.str,
+        selectMaterialDidacticoType.descripcion
+      );
+    }
+  }, [selectMaterialDidacticoType, setValue]);
+
   const values = getDocuemntTypeValues();
   const handleClose = () => {
     onClose();
     reset();
   };
-  if (successMessage !== "" || errorMessage !== "") {
+  if (isOpen && (successMessage !== "" || errorMessage !== "")) {
     handleClose();
   }
-
   return (
     <>
       <form className=" " onSubmit={handleSubmit(onSubmit)} method="POST">
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-800 dark:bg-opacity-90 bg-opacity-80 
-        transition-opacity duration-300  overflow-y-auto pt-10 ${
-          isOpen ? "visible" : "hidden"
-        }`}
+           transition-opacity duration-300 overflow-y-auto pt-10 ${
+             isOpen ? "visible" : "hidden"
+           }`}
         >
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 max-h-[90vh]">
             <div className="flex-1 mt-4 rounded-lg shadow sm:max-w-md dark:bg-[#18181B] bg-[#ffffff] p-5 relative">
               <div className="flex justify-end">
                 <Image
@@ -83,12 +116,13 @@ export const NewModifyMaterialDidactico: React.FC<
                         focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
                         dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                         dark:focus:border-blue-500 "
-                {...register("tipo_document")}
+                {...register(ValuesDataString.TIPO_DOCUMENT.str)}
               >
                 <OptionsValuesDocuments values={values} />
               </select>
 
-              {watch("tipo_document") === DocumentTypeValues.YOUTUBE.type && (
+              {watch(ValuesDataString.TIPO_DOCUMENT.str) ===
+                DocumentTypeValues.YOUTUBE.type && (
                 <>
                   <label
                     htmlFor="lbl_url-video-youtube"
@@ -107,7 +141,7 @@ export const NewModifyMaterialDidactico: React.FC<
                                   dark:text-white dark:focus:ring-blue-500 
                                   dark:focus:border-blue-500 mb-2"
                     placeholder=""
-                    {...register("url_youtube", {
+                    {...register(ValuesDataString.URL_YOUTUBE.str, {
                       required: "La url es requerida",
                       maxLength: {
                         value: 100,
@@ -135,7 +169,7 @@ export const NewModifyMaterialDidactico: React.FC<
                                   dark:text-white dark:focus:ring-blue-500 
                                   dark:focus:border-blue-500 mb-2"
                 placeholder=""
-                {...register("titulo", {
+                {...register(ValuesDataString.TITULO.str, {
                   required: "Titulo es requerido",
                   maxLength: {
                     value: 40,
@@ -165,7 +199,7 @@ export const NewModifyMaterialDidactico: React.FC<
                 cols={50}
                 placeholder="Escribe tu descripción aquí..."
                 maxLength={500}
-                {...register("descripcion", {
+                {...register(ValuesDataString.DESCRIPCION.str, {
                   maxLength: {
                     value: 500,
                     message:
@@ -180,7 +214,7 @@ export const NewModifyMaterialDidactico: React.FC<
                 {watch("tipo_document") !== DocumentTypeValues.YOUTUBE.type && (
                   <>
                     <label
-                      htmlFor="lbl_titulo"
+                      htmlFor="lbl_miniatura"
                       className="block mb-2 text-sm font-medium text-gray-900
                     dark:text-white"
                     >
@@ -217,10 +251,10 @@ export const NewModifyMaterialDidactico: React.FC<
                         sm:max-w-md    p-5"
             >
               <PreviaDocumentCarousel
-                title={watch("titulo")}
-                descripcion={watch("descripcion")}
-                urlYoutube={watch("url_youtube")}
-                type={watch("tipo_document")}
+                title={watch(ValuesDataString.TITULO.str)}
+                descripcion={watch(ValuesDataString.DESCRIPCION.str)}
+                urlYoutube={watch(ValuesDataString.URL_YOUTUBE.str)}
+                type={watch(ValuesDataString.TIPO_DOCUMENT.str)}
               />
             </div>
           </div>

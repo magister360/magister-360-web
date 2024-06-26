@@ -6,7 +6,7 @@ import { DocumentsHook } from "./hooks/DocumentsHook";
 
 const TOTAL_VIDEOS = 4;
 export interface SlideItem {
-  type: "image" | "youtube";
+  type: "image" | "Youtube";
   urlId: string;
   title: string;
   description: string;

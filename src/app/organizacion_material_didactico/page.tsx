@@ -7,13 +7,18 @@ import OptionsMaterias, {
   filterIndexMaterias,
 } from "../components/OptionsMaterias";
 import { useEffectFetchGradoGrupoMateria } from "../hooks/GradoGrupoMateriaHook";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DocumentTypeValues } from "../utils/DocumentTypeValues";
-import { DocuemntHook } from "./hooks/DocumentHook";
+
 import ErrorModal from "../components/ErrorModal ";
 import SuccessModal from "../components/SuccessModal";
 import { NewModifyMaterialDidactico } from "./components/NewModifyMaterialDidactico";
 import Image from "next/image";
+import TableMaterialDidactico from "./components/TableMaterialDidactico";
+import { MaterialDidacticoType } from "../types/types";
+import { SearchMaterialHook } from "./hooks/SearchMaterialHook";
+import { DocumentHook } from "./hooks/DocumentHook";
+import { deleteMaterialDidactico } from "./controller/DocumentController";
 
 export default function OrganizacionMaterialDidactico() {
   const { itemsGrados, itemsGrupos, itemsMaterias } =
@@ -24,6 +29,13 @@ export default function OrganizacionMaterialDidactico() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isNewMaterialDidacticoOpen, setIsNewMaterialDidacticoOpen] =
     useState(false);
+  const [materialDidacticos, setMaterialDidacticos] = useState<
+    MaterialDidacticoType[]
+  >([]);
+
+  const [selectMaterialDidacticoType, setSelectMaterialDidacticoType] =
+    useState<MaterialDidacticoType | null>(null);
+
   const handleCloseNewMaterialDidacticoOpen = () => {
     setIsNewMaterialDidacticoOpen(false);
   };
@@ -142,16 +154,58 @@ export default function OrganizacionMaterialDidactico() {
     }
   }, [itemsMaterias]);
 
-  const { onSubmit } = DocuemntHook(
-    reset,
-    setIsSuccessModalOpen,
-    setIsErrorModalOpen,
-    setErrorMessage,
-    setSuccessMessage,
+  const fetchMaterialDidacticos = SearchMaterialHook(
     selectGrado.idGrado,
     selectGrupo.idGrupo,
-    selectMateria.idMateria
+    selectMateria.idMateria,
+    setMaterialDidacticos
   );
+
+  const onSubmit = useCallback(
+    DocumentHook(
+      reset,
+      setIsSuccessModalOpen,
+      setIsErrorModalOpen,
+      setErrorMessage,
+      setSuccessMessage,
+      selectGrado.idGrado,
+      selectGrupo.idGrupo,
+      selectMateria.idMateria,
+      selectMaterialDidacticoType,
+      fetchMaterialDidacticos
+    ).onSubmit,
+    [
+      selectGrado.idGrado,
+      selectGrupo.idGrupo,
+      selectMateria.idMateria,
+      reset,
+      setIsSuccessModalOpen,
+      setIsErrorModalOpen,
+      setErrorMessage,
+      setSuccessMessage,
+      selectMaterialDidacticoType,
+      fetchMaterialDidacticos,
+    ]
+  );
+
+  const handleClickRemove = async (id: string) => {
+    const confirmar = window.confirm(
+      "¿Está seguro de eliminar el material didáctico?"
+    );
+    if (confirmar) {
+      const remove = await deleteMaterialDidactico(id);
+      if (remove === true) {
+        setSuccessMessage("El material didáctico se elimino con éxito.");
+        setIsSuccessModalOpen(true);
+        fetchMaterialDidacticos();
+      } else {
+        setErrorMessage(
+          "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
+        );
+        setIsErrorModalOpen(true);
+      }
+    }
+  };
 
   return (
     <>
@@ -167,7 +221,7 @@ export default function OrganizacionMaterialDidactico() {
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
-      <div className="mt-14 ml-72">
+      <div className="mt-14 ml-72 overflow-x-hidden">
         <h3 className="pt-2 pb-2  text-gray-700 dark:text-gray-200 font-bold text-xl ">
           Organización material didáctico
         </h3>
@@ -264,7 +318,15 @@ export default function OrganizacionMaterialDidactico() {
           </div>
         </div>
 
+        <TableMaterialDidactico
+          materialDidacticos={materialDidacticos}
+          selecttMaterialDidacticoType={setSelectMaterialDidacticoType}
+          handlesetNewMaterialDidacticoOpen={handlesetNewMaterialDidacticoOpen}
+          handleClickRemove={handleClickRemove}
+        />
+
         <NewModifyMaterialDidactico
+          setValue={setValue}
           isOpen={isNewMaterialDidacticoOpen}
           onClose={handleCloseNewMaterialDidacticoOpen}
           register={register}
@@ -275,6 +337,7 @@ export default function OrganizacionMaterialDidactico() {
           successMessage={successMessage}
           errorMessage={errorMessage}
           reset={reset}
+          selectMaterialDidacticoType={selectMaterialDidacticoType}
         />
       </div>
     </>
