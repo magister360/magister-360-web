@@ -172,8 +172,8 @@ export const NewModifyMaterialDidactico: React.FC<
                 {...register(ValuesDataString.TITULO.str, {
                   required: "Titulo es requerido",
                   maxLength: {
-                    value: 40,
-                    message: "El titulo no puede tener más de 40 caracteres",
+                    value: 60,
+                    message: "El titulo no puede tener más de 60 caracteres",
                   },
                 })}
               />

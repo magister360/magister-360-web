@@ -3,24 +3,17 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
+import { MaterialDidacticoType } from "@/app/types/types";
+import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
+import { getYouTubeThumbnail } from "@/app/utils/URLYouTube";
 
 const TOTAL_VIDEOS = 4;
-export interface SlideItem {
-  type: "image" | "youtube";
-  urlId: string;
-  title: string;
-  description: string;
-}
+
 
 interface DiapositivasCarouselProps {
-  slides: SlideItem[];
+  videosDocument: MaterialDidacticoType[];
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<{
-      urlId: string;
-      type: string;
-      title: string;
-      description: string;
-    }>
+    React.SetStateAction<MaterialDidacticoType|undefined>
   >;
 
   scrollToTop: () => void;
@@ -28,45 +21,46 @@ interface DiapositivasCarouselProps {
 
 const handleSelectVideo = (
   index: number,
-  slides: SlideItem[],
+  documents: MaterialDidacticoType[],
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<{
-      urlId: string;
-      type: string;
-      title: string;
-      description: string;
-    }>
+    React.SetStateAction<MaterialDidacticoType|undefined>
   >,
   scrollToTop: () => void
 ) => {
-  if (slides.length !== 0) {
-    const selectVideo = slides[index];
-    setSelectTypeDocument({
-      urlId: selectVideo.urlId,
-      type: selectVideo.type,
-      title: selectVideo.title,
-      description: selectVideo.description,
-    });
+  if (documents.length !== 0) {
+    const selectDocuemnt = documents[index];
+    setSelectTypeDocument(selectDocuemnt);
     scrollToTop();
   }
 };
 
+const filterTipoMaterialDidactico = (
+  materiales: MaterialDidacticoType[],
+  tipo: string
+): MaterialDidacticoType[] => {
+  return materiales.filter((material) => {
+    return material.tipo.toLowerCase() === tipo.toLowerCase();
+  });
+};
+
 const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
-  slides,
+  videosDocument,
   setSelectTypeDocument,
   scrollToTop,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const documents = filterTipoMaterialDidactico(
+    videosDocument,
+    DocumentTypeValues.VIDEO.type
+  );
+
   const { nextSlide, prevSlide } = DocumentsHook({
     setCurrentIndex,
     TOTAL_VIDEOS: TOTAL_VIDEOS,
-    slidesLength: slides.length,
+    slidesLength: documents.length,
   });
 
-  const getYouTubeThumbnail = (videoId: string) => {
-    return `https://img.youtube.com/vi/${videoId}/0.jpg`;
-  };
 
   return (
     <>
@@ -80,14 +74,14 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${currentIndex * 25}%)` }}
           >
-            {slides.map((slide, index) => (
+            {documents.map((document, index) => (
               <div
                 key={index}
                 className="w-1/4 flex-shrink-0 p-2 flex container-documents "
                 onClick={() =>
                   handleSelectVideo(
                     index,
-                    slides,
+                    documents,
                     setSelectTypeDocument,
                     scrollToTop
                   )
@@ -101,14 +95,10 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
                   <div className="h-48 overflow-hidden">
                     <Image
                       src={
-                        slide.type === "image"
-                          ? slide.urlId
-                          : getYouTubeThumbnail(slide.urlId)
+                         getYouTubeThumbnail(document.url,DocumentTypeValues.DIAPOSITIVAS.icon)
                       }
                       alt={
-                        slide.type === "image"
-                          ? `Slide ${index}`
-                          : `YouTube  ${index}`
+                        'Diapositivas'
                       }
                       width={320}
                       height={180}
@@ -117,10 +107,10 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
                   </div>
                   <div className="p-4 flex flex-col flex-grow h-50">
                     <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 overflow-hidden max-h-20">
-                      {slide.title}
+                      {document.titulo}
                     </h3>
                     <p className="text-sm text-gray-600 overflow-hidden">
-                      {slide.description}
+                      {document.descripcion}
                     </p>
                   </div>
                 </div>
@@ -138,7 +128,7 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
         <button
           onClick={nextSlide}
           className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white"
-          disabled={currentIndex === slides.length - TOTAL_VIDEOS}
+          disabled={currentIndex === documents.length - TOTAL_VIDEOS}
         >
           <ChevronRightIcon className="w-6 h-6 text-gray-800" />
         </button>

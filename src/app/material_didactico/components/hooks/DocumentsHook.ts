@@ -27,32 +27,36 @@ export const DocumentsHook = ({
   };
 
   useEffect(() => {
-    const containers = document.querySelectorAll(".container-documents");
+    const containers = document.querySelectorAll("#youtube-carousel .container-documents");
+
+    const handleMouseEnter = (event: Event) => {
+      const target = event.currentTarget as HTMLElement;
+      containers.forEach((c) => {
+        if (c !== target) {
+          c.classList.add("fade");
+        }
+      });
+    };
+
+    const handleMouseLeave = () => {
+      containers.forEach((c) => {
+        c.classList.remove("fade");
+      });
+    };
 
     containers.forEach((container) => {
-      container.addEventListener("mouseenter", () => {
-        containers.forEach((c) => {
-          if (c !== container) {
-            c.classList.add("fade");
-          }
-        });
-      });
-
-      container.addEventListener("mouseleave", () => {
-        containers.forEach((c) => {
-          c.classList.remove("fade");
-        });
-      });
+      container.addEventListener("mouseenter", handleMouseEnter);
+      container.addEventListener("mouseleave", handleMouseLeave);
     });
 
     // Limpieza
     return () => {
       containers.forEach((container) => {
-        container.removeEventListener("mouseenter", () => {});
-        container.removeEventListener("mouseleave", () => {});
+        container.removeEventListener("mouseenter", handleMouseEnter);
+        container.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, []);
+  }, [slidesLength]);
 
   return { nextSlide, prevSlide };
 };

@@ -53,3 +53,6 @@ export type MaterialDidacticoType={
   regDate: Date;
   tipo:string
 };
+
+
+

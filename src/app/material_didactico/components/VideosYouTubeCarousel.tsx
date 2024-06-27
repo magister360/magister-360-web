@@ -3,24 +3,16 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
+import { MaterialDidacticoType } from "@/app/types/types";
+import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
+import { getYouTubeThumbnail } from "@/app/utils/URLYouTube";
 
 const TOTAL_VIDEOS = 4;
-export interface SlideItem {
-  type: "image" | "Youtube";
-  urlId: string;
-  title: string;
-  description: string;
-}
 
 interface VideosYouTubeCarouselProps {
-  slides: SlideItem[];
+  videosDocument: MaterialDidacticoType[];
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<{
-      urlId: string;
-      type: string;
-      title: string;
-      description: string;
-    }>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >;
 
   scrollToTop: () => void;
@@ -28,70 +20,70 @@ interface VideosYouTubeCarouselProps {
 
 const handleSelectVideo = (
   index: number,
-  slides: SlideItem[],
+  videos: MaterialDidacticoType[],
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<{
-      urlId: string;
-      type: string;
-      title: string;
-      description: string;
-    }>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >,
   scrollToTop: () => void
 ) => {
-  if (slides.length !== 0) {
-    const selectVideo = slides[index];
-    setSelectTypeDocument({
-      urlId: selectVideo.urlId,
-      type: selectVideo.type,
-      title: selectVideo.title,
-      description: selectVideo.description,
-    });
+  if (videos.length !== 0) {
+    const selectVideo = videos[index];
+    setSelectTypeDocument(selectVideo);
     scrollToTop();
   }
 };
 
+const filterTipoMaterialDidactico = (
+  materiales: MaterialDidacticoType[],
+  tipo: string
+): MaterialDidacticoType[] => {
+  return materiales.filter((material) => {
+    return material.tipo.toLowerCase() === tipo.toLowerCase();
+  });
+};
+
 const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
-  slides,
+  videosDocument,
   setSelectTypeDocument,
   scrollToTop,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const videos = filterTipoMaterialDidactico(
+    videosDocument,
+    DocumentTypeValues.YOUTUBE.type
+  );
+
+
   const { nextSlide, prevSlide } = DocumentsHook({
     setCurrentIndex,
     TOTAL_VIDEOS: TOTAL_VIDEOS,
-    slidesLength: slides.length,
+    slidesLength: videos.length,
   });
-
-  const getYouTubeThumbnail = (videoId: string) => {
-    if (videoId !== undefined && videoId !== "") {
-      return `https://img.youtube.com/vi/${videoId}/0.jpg`;
-    } else {
-      return "/youtube.jpg";
-    }
-  };
 
   return (
     <>
-      <h3 className="mt-6 ml-80 block text-gray-700 dark:text-gray-200 font-bold text-xl ">
+      <h3 className="mt-14 ml-80 block text-gray-700 dark:text-gray-200 font-bold text-xl ">
         Videos YouTube
       </h3>
 
-      <div className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto">
+      <div
+        id="youtube-carousel"
+        className=" ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto"
+      >
         <div className="overflow-hidden rounded-lg mr-4 p-4">
           <div
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${currentIndex * 25}%)` }}
           >
-            {slides.map((slide, index) => (
+            {videos.map((video, index) => (
               <div
                 key={index}
                 className="w-1/4 flex-shrink-0 p-2 flex container-documents "
                 onClick={() =>
                   handleSelectVideo(
                     index,
-                    slides,
+                    videos,
                     setSelectTypeDocument,
                     scrollToTop
                   )
@@ -104,12 +96,11 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={getYouTubeThumbnail(slide.urlId)}
-                      alt={
-                        slide.type === "image"
-                          ? `Slide ${index}`
-                          : `YouTube  ${index}`
-                      }
+                      src={getYouTubeThumbnail(
+                        video.url,
+                        DocumentTypeValues.YOUTUBE.icon
+                      )}
+                      alt={"Youtube"}
                       width={320}
                       height={180}
                       className="w-full h-full object-cover rounded"
@@ -117,10 +108,10 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
                   </div>
                   <div className="p-4 flex flex-col flex-grow h-50">
                     <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 overflow-hidden max-h-20">
-                      {slide.title}
+                      {video.titulo}
                     </h3>
                     <p className="text-sm text-gray-600 overflow-hidden max-h-14">
-                      {slide.description}
+                      {video.descripcion}
                     </p>
                   </div>
                 </div>
@@ -138,7 +129,7 @@ const VideosYouTubeCarousel: React.FC<VideosYouTubeCarouselProps> = ({
         <button
           onClick={nextSlide}
           className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white"
-          disabled={currentIndex === slides.length - TOTAL_VIDEOS}
+          disabled={currentIndex === videos.length - TOTAL_VIDEOS}
         >
           <ChevronRightIcon className="w-6 h-6 text-gray-800" />
         </button>
