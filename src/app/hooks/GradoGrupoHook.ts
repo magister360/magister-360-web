@@ -38,7 +38,7 @@ export const useEffectFetchGradoGrupo = () => {
         Promise.all([
             fetchGrados(),
             fetchGrupos()])
-            .then(([grados, grupos, materias]) => {
+            .then(([grados, grupos]) => {
                 setItemsGrados(grados);
                 setItemsGrupos(grupos);
 
