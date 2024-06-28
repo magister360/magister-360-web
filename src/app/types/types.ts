@@ -44,15 +44,18 @@ export type ItemAlumnoMateria = {
   idMateria: number;
 };
 
-export type MaterialDidacticoType={
+export type MaterialDidacticoType = {
   id: string;
-  url:string;
-  titulo:string;
-  descripcion:string;
-  miniatura:Buffer;
+  url: string;
+  titulo: string;
+  descripcion: string;
+  miniatura: Buffer;
   regDate: Date;
-  tipo:string
+  tipo: string;
 };
 
-
-
+export type FileInfo = {
+  name: string;
+  path: string;
+  extension: string;
+};

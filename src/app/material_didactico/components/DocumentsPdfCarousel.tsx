@@ -66,7 +66,10 @@ const DocumentsPdfCarousel: React.FC<DocumentsPdfCarouselProps> = ({
         Documentos pdf
       </h3>
 
-      <div className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto">
+      <div
+        id="youtube-carousel"
+        className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto"
+      >
         <div className="overflow-hidden rounded-lg mr-4 p-4">
           <div
             className="flex transition-transform duration-500 ease-out"
@@ -92,9 +95,7 @@ const DocumentsPdfCarousel: React.FC<DocumentsPdfCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={
-                       getYouTubeThumbnail(document.url,DocumentTypeValues.DIAPOSITIVAS.icon)
-                      }
+                      src={DocumentTypeValues.PDF.icon}
                       alt={"Pdf"}
                       width={320}
                       height={180}

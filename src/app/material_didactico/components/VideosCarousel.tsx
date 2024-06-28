@@ -91,10 +91,9 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={getYouTubeThumbnail(
-                        video.url,
+                      src={
                         DocumentTypeValues.VIDEO.icon
-                      )}
+                      }
                       alt={"Video"}
                       width={320}
                       height={180}

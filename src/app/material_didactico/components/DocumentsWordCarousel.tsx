@@ -95,7 +95,7 @@ const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
                   <div className="h-48 overflow-hidden">
                     <Image
                       src={
-                         getYouTubeThumbnail(document.url,DocumentTypeValues.DIAPOSITIVAS.icon)
+                         DocumentTypeValues.WORD.icon
                       }
                       alt={
                       "Word"

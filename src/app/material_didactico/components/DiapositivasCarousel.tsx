@@ -5,15 +5,13 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
 import { MaterialDidacticoType } from "@/app/types/types";
 import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
-import { getYouTubeThumbnail } from "@/app/utils/URLYouTube";
 
-const TOTAL_VIDEOS = 4;
-
+const TOTAL_DIAPOSITIVAS = 4;
 
 interface DiapositivasCarouselProps {
   videosDocument: MaterialDidacticoType[];
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >;
 
   scrollToTop: () => void;
@@ -23,7 +21,7 @@ const handleSelectVideo = (
   index: number,
   documents: MaterialDidacticoType[],
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >,
   scrollToTop: () => void
 ) => {
@@ -49,26 +47,30 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
   scrollToTop,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log("videosDocument " + videosDocument.length);
 
   const documents = filterTipoMaterialDidactico(
     videosDocument,
-    DocumentTypeValues.VIDEO.type
+    DocumentTypeValues.DIAPOSITIVAS.type
   );
+  console.log("documents " + documents.length);
 
   const { nextSlide, prevSlide } = DocumentsHook({
     setCurrentIndex,
-    TOTAL_VIDEOS: TOTAL_VIDEOS,
+    TOTAL_VIDEOS: TOTAL_DIAPOSITIVAS,
     slidesLength: documents.length,
   });
-
 
   return (
     <>
       <h3 className="mt-6 ml-80 block text-gray-700 dark:text-gray-200 font-bold text-xl ">
-        Diapositivas 
+        Diapositivas
       </h3>
 
-      <div className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto">
+      <div
+        id="youtube-carousel"
+        className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto"
+      >
         <div className="overflow-hidden rounded-lg mr-4 p-4">
           <div
             className="flex transition-transform duration-500 ease-out"
@@ -94,12 +96,8 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={
-                         getYouTubeThumbnail(document.url,DocumentTypeValues.DIAPOSITIVAS.icon)
-                      }
-                      alt={
-                        'Diapositivas'
-                      }
+                      src={DocumentTypeValues.DIAPOSITIVAS.icon}
+                      alt={"Diapositivas"}
                       width={320}
                       height={180}
                       className="w-full h-full object-cover rounded"
@@ -128,7 +126,7 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
         <button
           onClick={nextSlide}
           className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white"
-          disabled={currentIndex === documents.length - TOTAL_VIDEOS}
+          disabled={currentIndex === documents.length - TOTAL_DIAPOSITIVAS}
         >
           <ChevronRightIcon className="w-6 h-6 text-gray-800" />
         </button>

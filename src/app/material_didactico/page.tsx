@@ -5,17 +5,19 @@ import YouTubePlayer from "./components/YouTubePlayer";
 import { DocumentTypeValues } from "../utils/DocumentTypeValues";
 
 import { loadSelectionGGMFromLocalStorage } from "../selection/SelectionGGMCookies";
-import { MaterialDidacticoType } from "../types/types";
+import { FileInfo, MaterialDidacticoType } from "../types/types";
 import VideosYouTubeCarousel from "./components/VideosYouTubeCarousel";
-import { fechSearchMaterialTitulo } from "./controller/MaterialDidacticoController";
+import {
+  fechSearchMaterialTitulo,
+  fechSearchMaterialTituloEquipo,
+} from "./controller/MaterialDidacticoController";
 import VideosCarousel from "./components/VideosCarousel";
 import DiapositivasCarousel from "./components/DiapositivasCarousel";
 import DocumentsWordCarousel from "./components/DocumentsWordCarousel";
 import DocumentsPdfCarousel from "./components/DocumentsPdfCarousel";
+import VideoPlayer from "./components/VideoPlayer";
 
 export default function MaterialDidactico() {
-
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -36,17 +38,117 @@ export default function MaterialDidactico() {
       const sesionLocalStorage = loadSelectionGGMFromLocalStorage();
 
       if (sesionLocalStorage !== null) {
-        const { idGrado, idGrupo, idMateria } = sesionLocalStorage;
+        const { idGrado, idGrupo, idMateria, grado, grupo, materia } =
+          sesionLocalStorage;
 
         try {
-          const materiales = await fechSearchMaterialTitulo(
-            idGrado,
-            idGrupo,
-            idMateria,
+          const materiales =
+            (await fechSearchMaterialTitulo(
+              idGrado,
+              idGrupo,
+              idMateria,
+              "ecuaciones"
+            )) || [];
+
+          const diapositivasEquipo = await fechSearchMaterialTituloEquipo(
+            grado,
+            grupo,
+            materia,
+            DocumentTypeValues.DIAPOSITIVAS.type,
             "ecuaciones"
           );
 
-          setMaterialDidacticoType(materiales);
+          const videosEquipo = await fechSearchMaterialTituloEquipo(
+            grado,
+            grupo,
+            materia,
+            DocumentTypeValues.VIDEO.type,
+            "TRIÁNGULO"
+          );
+
+          const wordsEquipo = await fechSearchMaterialTituloEquipo(
+            grado,
+            grupo,
+            materia,
+            DocumentTypeValues.WORD.type,
+            "ecuaciones"
+          );
+
+          const pdfEquipo = await fechSearchMaterialTituloEquipo(
+            grado,
+            grupo,
+            materia,
+            DocumentTypeValues.PDF.type,
+            "Manual"
+          );
+
+          const diapositivasEquipoConvert: MaterialDidacticoType[] | undefined =
+            diapositivasEquipo?.map((mat: FileInfo, index: number) => {
+              return {
+                id: "",
+                url: mat.path,
+                titulo: mat.name,
+                descripcion: "",
+                miniatura: Buffer.from(""),
+                regDate: new Date(),
+                tipo: DocumentTypeValues.DIAPOSITIVAS.type,
+              };
+            }) || [];
+
+          const videosEquipoConvert: MaterialDidacticoType[] | undefined =
+            videosEquipo?.map((mat: FileInfo, index: number) => {
+              return {
+                id: "",
+                url: mat.path,
+                titulo: mat.name,
+                descripcion: "",
+                miniatura: Buffer.from(""),
+                regDate: new Date(),
+                tipo: DocumentTypeValues.VIDEO.type,
+              };
+            }) || [];
+
+          const wordEquipoConvert: MaterialDidacticoType[] | undefined =
+            wordsEquipo?.map((mat: FileInfo, index: number) => {
+              return {
+                id: "",
+                url: mat.path,
+                titulo: mat.name,
+                descripcion: "",
+                miniatura: Buffer.from(""),
+                regDate: new Date(),
+                tipo: DocumentTypeValues.WORD.type,
+              };
+            }) || [];
+
+          const pdfEquipoConvert: MaterialDidacticoType[] | undefined =
+            pdfEquipo?.map((mat: FileInfo, index: number) => {
+              return {
+                id: "",
+                url: mat.path,
+                titulo: mat.name,
+                descripcion: "",
+                miniatura: Buffer.from(""),
+                regDate: new Date(),
+                tipo: DocumentTypeValues.PDF.type,
+              };
+            }) || [];
+
+          const materialesDiapositivas = [
+            ...materiales,
+            ...diapositivasEquipoConvert,
+          ];
+
+          const materialesVideos = [
+            ...materialesDiapositivas,
+            ...videosEquipoConvert,
+          ];
+
+          const materialesWords = [...materialesVideos, ...wordEquipoConvert];
+
+          const materialesPdfs = [...materialesWords, ...pdfEquipoConvert];
+
+          setMaterialDidacticoType(materialesPdfs);
         } catch (error) {}
       }
     };
@@ -89,6 +191,13 @@ export default function MaterialDidactico() {
         selectTypeDocument.tipo === DocumentTypeValues.YOUTUBE.type && (
           <YouTubePlayer videoId={selectTypeDocument.url} />
         )}
+
+      {selectTypeDocument !== undefined &&
+        selectTypeDocument.url !== "" &&
+        selectTypeDocument.tipo === DocumentTypeValues.VIDEO.type && (
+          <VideoPlayer videoPath={selectTypeDocument.url} />
+        )}
+
       {selectTypeDocument !== undefined &&
         selectTypeDocument.url !== "" &&
         selectTypeDocument.tipo !== "" &&

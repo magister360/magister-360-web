@@ -1,9 +1,9 @@
 import axios from "axios";
 import { getApiUrl } from "../../../../../../API";
-import { ItemAlumno, ItemAlumnoMateria } from "@/app/types/types";
+import { StudentType, ItemAlumnoMateria } from "@/app/types/types";
 
 export const createAlumnosApi = async (
-  alumnos: ItemAlumno[],
+  alumnos: StudentType[],
   alumnosMateria: ItemAlumnoMateria[]
 ) => {
   const apiUrl = getApiUrl("/api/alumnos");
