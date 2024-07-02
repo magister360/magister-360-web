@@ -24,11 +24,14 @@ export const GradoFunctionsHook = (
   setItems: Function,
   setIdSelect: Function,
   setValue: Function,
-  setNewModify: Function
+  setNewModify: Function,
+  setIsLoading:Function
+
 ) => {
   const router = useRouter();
 
   const fetchGrados = async () => {
+    setIsLoading(true)
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.push("/login");
@@ -39,9 +42,11 @@ export const GradoFunctionsHook = (
     if (grados) {
       setItems(grados);
     }
+    setIsLoading(false)
   };
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true)
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.refresh();
@@ -83,11 +88,13 @@ export const GradoFunctionsHook = (
         handleClickNew();
       }
     }
+    setIsLoading(false)
   };
 
   const handleClickRemove = async (items: ItemGrado[], index: number) => {
     const confirmar = window.confirm("¿Está seguro de eliminar la grado?");
     if (confirmar) {
+      setIsLoading(true)
       const id = getIdGrado((items = items), index);
 
       const remove = await removeGrado(id, TypeStatusGrado.REMOVE);
@@ -100,15 +107,18 @@ export const GradoFunctionsHook = (
         setIsErrorModalOpen(true);
       }
       handleClickNew();
+      setIsLoading(false)
     }
   };
 
   const handleClickUpdate = async (items: ItemGrado[], index: number) => {
+    setIsLoading(true)
     const id = getIdGrado((items = items), index);
     const value = getStrGrado((items = items), index);
     setIdSelect(id);
     setValue("grado", value);
     setNewModify(false);
+    setIsLoading(false)
   };
 
   const handleClickNew = () => {

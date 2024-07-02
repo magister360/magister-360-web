@@ -24,11 +24,13 @@ export const MateriaFunctionsHook = (
   setItems: Function,
   setIdSelect: Function,
   setValue: Function,
-  setNewModify: Function
+  setNewModify: Function,
+  setIsLoading:Function
 ) => {
   const router = useRouter();
 
   const fetchMaterias = async () => {
+    setIsLoading(true)
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.push("/login");
@@ -39,9 +41,11 @@ export const MateriaFunctionsHook = (
     if (materias) {
       setItems(materias);
     }
+    setIsLoading(false)
   };
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true)
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.refresh();
@@ -85,11 +89,14 @@ export const MateriaFunctionsHook = (
         handleClickNew();
       }
     }
+    setIsLoading(false)
   };
 
   const handleClickRemove = async (items: ItemMateria[], index: number) => {
+
     const confirmar = window.confirm("¿Está seguro de eliminar la materia?");
     if (confirmar) {
+      setIsLoading(true)
       const id = getIdMateria((items = items), index);
 
       const remove = await removeMateria(id, TypeStatusMateria.REMOVE);
@@ -102,6 +109,7 @@ export const MateriaFunctionsHook = (
         setIsErrorModalOpen(true);
       }
       handleClickNew();
+      setIsLoading(false)
     }
   };
 

@@ -10,19 +10,25 @@ import VideosYouTubeCarousel from "./components/VideosYouTubeCarousel";
 import {
   fechSearchMaterialTitulo,
   fechSearchMaterialTituloEquipo,
+  fetchOpenVideo,
 } from "./controller/MaterialDidacticoController";
 import VideosCarousel from "./components/VideosCarousel";
 import DiapositivasCarousel from "./components/DiapositivasCarousel";
 import DocumentsWordCarousel from "./components/DocumentsWordCarousel";
 import DocumentsPdfCarousel from "./components/DocumentsPdfCarousel";
 import VideoPlayer from "./components/VideoPlayer";
+import PDFViewer from "./components/PDFViewer";
+import Loading from "../components/Loading";
+import ProgramaAnaliticoCarousel from "./components/ProgramaAnaliticoCarousel";
 
 export default function MaterialDidactico() {
   const scrollToTop = () => {
+    setIsLoading(true);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+    setIsLoading(false);
   };
 
   const [videosDocument, setMaterialDidacticoType] = useState<
@@ -33,8 +39,11 @@ export default function MaterialDidactico() {
     MaterialDidacticoType | undefined
   >(undefined);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const fechMaterialDidactico = async () => {
+      setIsLoading(true);
       const sesionLocalStorage = loadSelectionGGMFromLocalStorage();
 
       if (sesionLocalStorage !== null) {
@@ -151,9 +160,40 @@ export default function MaterialDidactico() {
           setMaterialDidacticoType(materialesPdfs);
         } catch (error) {}
       }
+      setIsLoading(false);
     };
     fechMaterialDidactico();
   }, []);
+
+  const existProgramaAnalitico = videosDocument.some((word) =>
+    word.tipo
+      .toLowerCase()
+      .includes(DocumentTypeValues.PROGRAMA_ANALITICO.type.toLowerCase())
+  );
+
+  const existCronogramas = videosDocument.some((word) =>
+    word.tipo
+      .toLowerCase()
+      .includes(DocumentTypeValues.CRONOGRAMAS.type.toLowerCase())
+  );
+
+  const existPlaneacionDidactica = videosDocument.some((word) =>
+    word.tipo
+      .toLowerCase()
+      .includes(DocumentTypeValues.PLANEACION_DIDACTICA.type.toLowerCase())
+  );
+
+  const existProyectos = videosDocument.some((word) =>
+    word.tipo
+      .toLowerCase()
+      .includes(DocumentTypeValues.PROYECTOS.type.toLowerCase())
+  );
+
+  const existEvaluacionFormativa = videosDocument.some((word) =>
+    word.tipo
+      .toLowerCase()
+      .includes(DocumentTypeValues.EVALUACION_FORMATIVA.type.toLowerCase())
+  );
 
   const existYoutubeVideos = videosDocument.some((video) =>
     video.tipo
@@ -186,6 +226,8 @@ export default function MaterialDidactico() {
 
   return (
     <div className=" max-h-full h-full">
+      <Loading isLoading={isLoading} />
+
       {selectTypeDocument !== undefined &&
         selectTypeDocument.url !== "" &&
         selectTypeDocument.tipo === DocumentTypeValues.YOUTUBE.type && (
@@ -200,6 +242,12 @@ export default function MaterialDidactico() {
 
       {selectTypeDocument !== undefined &&
         selectTypeDocument.url !== "" &&
+        selectTypeDocument.tipo === DocumentTypeValues.PDF.type && (
+          <PDFViewer pdfPath={selectTypeDocument.url} />
+        )}
+
+      {selectTypeDocument !== undefined &&
+        selectTypeDocument.url !== "" &&
         selectTypeDocument.tipo !== "" &&
         selectTypeDocument.titulo !== "" && (
           <div className="mb-4 ml-80">
@@ -209,6 +257,47 @@ export default function MaterialDidactico() {
             <p className="text-gray-500"> {selectTypeDocument.descripcion}</p>
           </div>
         )}
+
+      {existProgramaAnalitico && (
+        <ProgramaAnaliticoCarousel
+          videosDocument={videosDocument}
+          setSelectTypeDocument={setSelectTypeDocument}
+       
+        />
+      )}
+
+      {existCronogramas && (
+        <VideosYouTubeCarousel
+          videosDocument={videosDocument}
+          setSelectTypeDocument={setSelectTypeDocument}
+          scrollToTop={scrollToTop}
+        />
+      )}
+
+      {existPlaneacionDidactica && (
+        <VideosYouTubeCarousel
+          videosDocument={videosDocument}
+          setSelectTypeDocument={setSelectTypeDocument}
+          scrollToTop={scrollToTop}
+        />
+      )}
+
+      {existProyectos && (
+        <VideosYouTubeCarousel
+          videosDocument={videosDocument}
+          setSelectTypeDocument={setSelectTypeDocument}
+          scrollToTop={scrollToTop}
+        />
+      )}
+
+      {existEvaluacionFormativa && (
+        <VideosYouTubeCarousel
+          videosDocument={videosDocument}
+          setSelectTypeDocument={setSelectTypeDocument}
+          scrollToTop={scrollToTop}
+        />
+      )}
+
       {existYoutubeVideos && (
         <VideosYouTubeCarousel
           videosDocument={videosDocument}
@@ -235,7 +324,6 @@ export default function MaterialDidactico() {
         <DocumentsWordCarousel
           videosDocument={videosDocument}
           setSelectTypeDocument={setSelectTypeDocument}
-          scrollToTop={scrollToTop}
         />
       )}
 

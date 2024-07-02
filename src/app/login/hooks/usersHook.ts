@@ -8,10 +8,11 @@ export const useEffectFetchUsers = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const refFetch = useRef<boolean>(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchDataUsers = async () => {
-            setLoading(true);
+            setIsLoading(true)
 
             try {
                 
@@ -21,7 +22,7 @@ export const useEffectFetchUsers = () => {
 
                 setError('Error al obtener los usuarios');
             } finally {
-                setLoading(false);
+                setIsLoading(false)
             }
         };
 

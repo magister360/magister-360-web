@@ -5,34 +5,16 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
 import { MaterialDidacticoType } from "@/app/types/types";
 import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
-import { getYouTubeThumbnail } from "@/app/utils/URLYouTube";
 import { fetchOpenWord } from "../controller/MaterialDidacticoController";
 
 const TOTAL_VIDEOS = 4;
 
-interface DocumentsWordCarouselProps {
+interface ProgramaAnaliticoCarouselProps {
   videosDocument: MaterialDidacticoType[];
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >;
-
-
 }
-
-const handleSelectVideo = (
-  index: number,
-  documents: MaterialDidacticoType[],
-  setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
-  >,
-  scrollToTop: () => void
-) => {
-  if (documents.length !== 0) {
-    const selectWord = documents[index];
-    setSelectTypeDocument(selectWord);
-    scrollToTop();
-  }
-};
 
 const filterTipoMaterialDidactico = (
   materiales: MaterialDidacticoType[],
@@ -43,16 +25,15 @@ const filterTipoMaterialDidactico = (
   });
 };
 
-const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
+const ProgramaAnaliticoCarousel: React.FC<ProgramaAnaliticoCarouselProps> = ({
   videosDocument,
   setSelectTypeDocument,
- 
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const openWord = async (wordPath: string) => {
     const menssage = await fetchOpenWord(wordPath);
-    setSelectTypeDocument(undefined)
+    setSelectTypeDocument(undefined);
   };
 
   const documents = filterTipoMaterialDidactico(
@@ -65,8 +46,6 @@ const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
     TOTAL_VIDEOS: TOTAL_VIDEOS,
     slidesLength: documents.length,
   });
-
- 
 
   return (
     <>
@@ -84,9 +63,7 @@ const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
               <div
                 key={index}
                 className="w-1/4 flex-shrink-0 p-2 flex container-documents "
-                onClick={() =>
-                  openWord(document.url)
-                }
+                onClick={() => openWord(document.url)}
               >
                 <div
                   className="rounded-lg overflow-hidden  shadow-md
@@ -95,12 +72,8 @@ const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
                 >
                   <div className="h-48 overflow-hidden">
                     <Image
-                      src={
-                         DocumentTypeValues.WORD.icon
-                      }
-                      alt={
-                      "Word"
-                      }
+                      src={DocumentTypeValues.WORD.icon}
+                      alt={"Word"}
                       width={320}
                       height={180}
                       className="w-full h-full object-cover rounded"
@@ -138,4 +111,4 @@ const DocumentsWordCarousel: React.FC<DocumentsWordCarouselProps> = ({
   );
 };
 
-export default DocumentsWordCarousel;
+export default ProgramaAnaliticoCarousel;

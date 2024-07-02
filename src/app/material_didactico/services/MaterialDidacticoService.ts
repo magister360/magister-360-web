@@ -38,12 +38,6 @@ export const searchMaterialTituloEquipoApi = async (
   tipo: string,
   txtSearch: string
 ) => {
-  console.log("grado " + grado);
-  console.log("grupo " + grupo);
-  console.log("materia " + materia);
-  console.log("mes " + mes);
-  console.log("tipo " + tipo);
-  console.log("txtSearch " + txtSearch);
   const endpoint = "files_content";
 
   const response = await apiSpringBoot
@@ -58,26 +52,99 @@ export const searchMaterialTituloEquipoApi = async (
       },
     })
     .then((response) => {
-      console.log("response.status " + response.status);
-      console.log("response.data  " + response.data);
       return response.status === 200 ? response.data : null;
     })
     .catch((error) => {
-      console.log("Error completo:", error);
-      if (error.response) {
-        // El servidor respondió con un código de estado fuera del rango 2xx
-        console.log("Datos de respuesta:", error.response.data);
-        console.log("Estado de respuesta:", error.response.status);
-        console.log("Cabeceras de respuesta:", error.response.headers);
-      } else if (error.request) {
-        // La solicitud se hizo pero no se recibió respuesta
-        console.log("Solicitud:", error.request);
-      } else {
-        // Algo sucedió en la configuración de la solicitud que desencadenó un error
-        console.log("Mensaje de error:", error.message);
-      }
-      console.log("Configuración de Axios:", error.config);
       return null;
     });
   return response;
+};
+
+export const fechOpenVideoApi = async (path: string) => {
+  const endpoint = "video";
+
+  const response = await apiSpringBoot
+    .get(endpoint, {
+      params: {
+        path,
+      },
+    })
+    .then((response) => {
+      return response.status === 200 ? response.data : null;
+    })
+    .catch((error) => {
+      return null;
+    });
+  return response;
+};
+
+export const fetchOpenVideoApi = async (path: string): Promise<string> => {
+  const endpoint = "video";
+
+  try {
+    const response = await apiSpringBoot.get(endpoint, {
+      params: { filepath: path },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+    return "";
+  } catch (error) {
+    console.error("Error fetching video URL:", error);
+    return "";
+  }
+};
+
+export const fetchOpenPdfApi = async (path: string): Promise<string> => {
+  const endpoint = "pdf";
+
+  try {
+    const response = await apiSpringBoot.get(endpoint, {
+      params: { filepath: path },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+    return "";
+  } catch (error) {
+    console.error("Error fetching video URL:", error);
+    return "";
+  }
+};
+
+export const fetchOpenWordApi = async (path: string): Promise<string> => {
+  const endpoint = "word";
+  console.log("word");
+  try {
+    const response = await apiSpringBoot.get(endpoint, {
+      params: { filePath: path },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+    return "";
+  } catch (error) {
+    return "";
+  }
+};
+
+
+export const fetchOpenDiapositivasApi = async (path: string): Promise<string> => {
+  const endpoint = "word";
+
+  try {
+    const response = await apiSpringBoot.get(endpoint, {
+      params: { filePath: path },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+    return "";
+  } catch (error) {
+    return "";
+  }
 };

@@ -15,7 +15,7 @@ export default function Alumno() {
   };
 
   return (
-    <div className="mt-14 ml-72 grid grid-cols-4 ">
+    <div className="mt-16 ml-72 grid grid-cols-4 ">
       <div className="grid grid-cols-subgrid gap-4 col-span-3">
         <Link href="/configuration/alumnos/excel">
           <div

@@ -13,6 +13,7 @@ import ErrorModal from "@/app/components/ErrorModal ";
 import SuccessModal from "@/app/components/SuccessModal";
 import { GradoFunctionsHook } from "./hooks/GradoFunctionsHook";
 import { ItemGrado } from "@/app/types/types";
+import Loading from "@/app/components/Loading";
 
 export default function Grado() {
   const [items, setItems] = useState<ItemGrado[]>([]);
@@ -30,6 +31,7 @@ export default function Grado() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
@@ -50,7 +52,8 @@ export default function Grado() {
       setItems,
       setIdSelect,
       setValue,
-      setNewModify
+      setNewModify,
+      setIsLoading
     );
 
   return (
@@ -58,6 +61,7 @@ export default function Grado() {
       className="ml-72 md:mt-14  rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff] p-5"
     >
+      <Loading isLoading={isLoading} />
       <form className=" " onSubmit={handleSubmit(onSubmit)} method="POST">
         <TableGrado
           items={items}

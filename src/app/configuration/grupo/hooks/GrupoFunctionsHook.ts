@@ -1,4 +1,3 @@
-
 import { useRouter } from "next/navigation";
 import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
 import {
@@ -8,7 +7,7 @@ import {
   updateGrupo,
 } from "../controller/GrupoController";
 
-import {  ItemGrupo } from "@/app/types/types";
+import { ItemGrupo } from "@/app/types/types";
 import { useEffect } from "react";
 import { getIdGrupo, getStrGrupo } from "../components/TableGrupo";
 import { TypeStatusGrupo } from "@/app/utils/TypeStatusGrupo";
@@ -24,11 +23,13 @@ export const GrupoFunctionsHook = (
   setItems: Function,
   setIdSelect: Function,
   setValue: Function,
-  setNewModify: Function
+  setNewModify: Function,
+  setIsLoading: Function
 ) => {
   const router = useRouter();
 
   const fetchGrupos = async () => {
+    setIsLoading(true);
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.push("/login");
@@ -39,9 +40,11 @@ export const GrupoFunctionsHook = (
     if (grupos) {
       setItems(grupos);
     }
+    setIsLoading(false);
   };
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     const sesionLocalStorage = loadSessionFromLocalStorage();
     if (!sesionLocalStorage) {
       router.refresh();
@@ -55,7 +58,7 @@ export const GrupoFunctionsHook = (
           TypeStatusGrupo.ALTA
         );
         if (save === true) {
-            fetchGrupos();
+          fetchGrupos();
           setSuccessMessage("El grupo se guardo con éxito.");
           setIsSuccessModalOpen(true);
           reset();
@@ -69,7 +72,7 @@ export const GrupoFunctionsHook = (
       } else {
         const save = await updateGrupo(idSelect, data.grupo);
         if (save === true) {
-            fetchGrupos();
+          fetchGrupos();
           setSuccessMessage("El grupo se modificó con éxito.");
           setIsSuccessModalOpen(true);
           reset();
@@ -83,11 +86,13 @@ export const GrupoFunctionsHook = (
         handleClickNew();
       }
     }
+    setIsLoading(false);
   };
 
   const handleClickRemove = async (items: ItemGrupo[], index: number) => {
     const confirmar = window.confirm("¿Está seguro de eliminar la grupo?");
     if (confirmar) {
+      setIsLoading(true);
       const id = getIdGrupo((items = items), index);
 
       const remove = await removeGrupo(id, TypeStatusGrupo.REMOVE);
@@ -100,15 +105,18 @@ export const GrupoFunctionsHook = (
         setIsErrorModalOpen(true);
       }
       handleClickNew();
+      setIsLoading(false);
     }
   };
 
   const handleClickUpdate = async (items: ItemGrupo[], index: number) => {
+    setIsLoading(true);
     const id = getIdGrupo((items = items), index);
     const value = getStrGrupo((items = items), index);
     setIdSelect(id);
     setValue("grupo", value);
     setNewModify(false);
+    setIsLoading(false);
   };
 
   const handleClickNew = () => {

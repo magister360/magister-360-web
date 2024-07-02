@@ -477,14 +477,11 @@ export default function AlumnosExcel() {
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
-      <label
-        className="mt-14 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2"
-        htmlFor="lbl-select-grado-grupo"
-      >
-        Alumnos en excel
-      </label>
 
-      <div className="mt-2 ml-72">
+      <div className="mt-14 ml-72">
+        <h3 className="mt-2 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2">
+          Alumnos de excel
+        </h3>
         <div
           className="rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5"
@@ -582,7 +579,7 @@ export default function AlumnosExcel() {
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
                          font-medium rounded-lg text-sm px-5 py-2.5 text-center 
                           dark:bg-[#438e96] dark:hover:bg-[#3b757f] 
-                           dark:focus:ring-blue-800 mt-3  "
+                           mt-3  "
             onClick={handleDataChange}
           >
             Cargar

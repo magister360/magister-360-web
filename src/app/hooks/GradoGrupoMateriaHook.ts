@@ -1,3 +1,5 @@
+"use client"
+
 import { loadSessionFromLocalStorage } from "../sesions/SesionCookies";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,12 +9,13 @@ import { getGrupos } from "../configuration/grupo/controller/GrupoController";
 import { getMaterias } from "../configuration/materia/controller/MateriaController";
 import { TypeStatusMateria } from "../utils/TypeStatusMateria";
 import { TypeStatusGrupo } from "../utils/TypeStatusGrupo";
+import { ItemGrado, ItemGrupo, ItemMateria } from "../types/types";
 
 
 export const useEffectFetchGradoGrupoMateria = () => {
-    const [itemsGrados, setItemsGrados] = useState([]);
-    const [itemsGrupos, setItemsGrupos] = useState([]);
-    const [itemsMaterias, setItemsMaterias] = useState([]);
+    const [itemsGrados, setItemsGrados] = useState<ItemGrado[]>([]);
+    const [itemsGrupos, setItemsGrupos] = useState<ItemGrupo[]>([]);
+    const [itemsMaterias, setItemsMaterias] = useState<ItemMateria[]>([]);
     const router = useRouter()
     useEffect(() => {
         const sesionLocalStorage = loadSessionFromLocalStorage();

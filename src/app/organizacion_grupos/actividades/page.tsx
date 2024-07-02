@@ -7,7 +7,7 @@ export default function Actividades() {
 
         <div className="mt-14 ml-72 grid grid-cols-4 ">
             <div className="grid grid-cols-subgrid gap-4 col-span-3">
-                <Link href="/planeacion/actividades/asistencia/select_fecha">
+                <Link href="/organizacion_grupos/actividades/asistencia/select_fecha">
                     <div className="bg-white dark:bg-[#18181B] rounded-lg shadow-md  p-4 
                          flex flex-col justify-end space-y-2">
 
@@ -16,10 +16,18 @@ export default function Actividades() {
 
                     </div>
                 </Link>
-                <Link href="/planeacion/actividades/participacion/select_fecha">
+                <Link href="/organizacion_grupos/actividades/participacion/select_fecha">
                     <div className="bg-white dark:bg-[#18181B] rounded-lg shadow-md  p-4 
                      flex flex-col justify-end space-y-2 ">
                         <p className="text-xl font-bold leading-none ">Participación</p>
+
+                    </div>
+                </Link>
+
+                <Link href="/paint">
+                    <div className="bg-white dark:bg-[#18181B] rounded-lg shadow-md  p-4 
+                     flex flex-col justify-end space-y-2 ">
+                        <p className="text-xl font-bold leading-none ">Paint</p>
 
                     </div>
                 </Link>

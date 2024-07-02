@@ -5,6 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
 import { MaterialDidacticoType } from "@/app/types/types";
 import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
+import { fetchOpenDiapositivas } from "../controller/MaterialDidacticoController";
 
 const TOTAL_DIAPOSITIVAS = 4;
 
@@ -61,6 +62,11 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
     slidesLength: documents.length,
   });
 
+  const openDiapositivas = async (diapositivasPath: string) => {
+    const menssage = await fetchOpenDiapositivas(diapositivasPath);
+    setSelectTypeDocument(undefined)
+  };
+
   return (
     <>
       <h3 className="mt-6 ml-80 block text-gray-700 dark:text-gray-200 font-bold text-xl ">
@@ -81,12 +87,7 @@ const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
                 key={index}
                 className="w-1/4 flex-shrink-0 p-2 flex container-documents "
                 onClick={() =>
-                  handleSelectVideo(
-                    index,
-                    documents,
-                    setSelectTypeDocument,
-                    scrollToTop
-                  )
+                  openDiapositivas(document.url)
                 }
               >
                 <div

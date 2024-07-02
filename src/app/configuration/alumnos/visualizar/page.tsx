@@ -49,17 +49,19 @@ export default function AlumnosVisualizar() {
     setIsNewModifyStudentOpen(false);
   };
 
-  const { handleChangeGrado, handleChangeGrupo } = AlumnosFunctionsHook(
-    itemsGrados,
-    filterIndexGrado,
-    itemsGrupos,
-    filterIndexGrupo,
-    setStudents,
-    selectGrado,
-    setSelectGrado,
-    selectGrupo,
-    setSelectGrupo
-  );
+  const { handleChangeGrado, handleChangeGrupo, fetchStudentsBarcode } =
+    AlumnosFunctionsHook(
+      itemsGrados,
+      filterIndexGrado,
+      itemsGrupos,
+      filterIndexGrupo,
+      setStudents,
+      selectGrado,
+      setSelectGrado,
+      selectGrupo,
+      setSelectGrupo,
+      students
+    );
 
   return (
     <>
@@ -75,13 +77,11 @@ export default function AlumnosVisualizar() {
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
-      <label
-        className="mt-14 ml-72 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2"
-        htmlFor="lbl-select-grado-grupo"
-      >
-        Alumnos
-      </label>
-      <div className="mt-2 ml-72">
+
+      <div className="mt-14 ml-72">
+        <h3 className="mt-2 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2">
+          Alumnos
+        </h3>
         <div
           className="rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5"
@@ -150,6 +150,21 @@ export default function AlumnosVisualizar() {
           >
             Nuevo
           </label>
+        </div>
+        <div
+          className="flex space-x-2 items-center justify-start rounded-lg shadow  
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-2"
+        >
+          <button
+            type="button"
+            className="w-full text-white bg-[#438e96] hover:bg-[#3b757f] 
+                        focus:ring-4 focus:outline-none 
+                         font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                          dark:bg-[#438e96] dark:hover:bg-[#3b757f] "
+            onClick={fetchStudentsBarcode}
+          >
+            Descargar PDF de alumnos con código de barras
+          </button>
         </div>
 
         <TableAlumnosVisualizar

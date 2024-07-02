@@ -19,6 +19,7 @@ import { MaterialDidacticoType } from "../types/types";
 import { SearchMaterialHook } from "./hooks/SearchMaterialHook";
 import { DocumentHook } from "./hooks/DocumentHook";
 import { deleteMaterialDidactico } from "./controller/DocumentController";
+import { fetchCreateFolder } from "./controller/FoldersDocumentsController";
 
 export default function OrganizacionMaterialDidactico() {
   const { itemsGrados, itemsGrupos, itemsMaterias } =
@@ -207,6 +208,16 @@ export default function OrganizacionMaterialDidactico() {
     }
   };
 
+  const handleCreateFolder = async () => {
+    const create = await fetchCreateFolder(itemsGrados,itemsGrupos,itemsMaterias);
+    if (create) {
+      setSuccessMessage("Las carpetas se crearon con éxito.");
+      setIsSuccessModalOpen(true);
+    } else {
+      setErrorMessage("No se crearon las carpetas.");
+      setIsErrorModalOpen(true);
+    }
+  };
   return (
     <>
       <ErrorModal
@@ -225,6 +236,22 @@ export default function OrganizacionMaterialDidactico() {
         <h3 className="pt-2 pb-2  text-gray-700 dark:text-gray-200 font-bold text-xl ">
           Organización material didáctico
         </h3>
+        <div
+          className="rounded-lg shadow  
+                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5 mb-4"
+        >
+          <button
+            type="button"
+            className="w-full text-white bg-[#438e96] hover:bg-[#3b757f] 
+                        focus:ring-4 focus:outline-none 
+                         font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                          dark:bg-[#438e96] dark:hover:bg-[#3b757f] "
+            onClick={handleCreateFolder}
+          >
+            Crear carpetas en documentos
+          </button>
+        </div>
+
         <div
           className="rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5"

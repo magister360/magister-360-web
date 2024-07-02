@@ -16,6 +16,7 @@ interface VideosCarouselProps {
   >;
 
   scrollToTop: () => void;
+
 }
 
 const handleSelectVideo = (
@@ -45,6 +46,7 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
   videosDocument,
   setSelectTypeDocument,
   scrollToTop,
+
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -58,6 +60,8 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
     TOTAL_VIDEOS: TOTAL_VIDEOS,
     slidesLength: videos.length,
   });
+
+
 
   return (
     <>

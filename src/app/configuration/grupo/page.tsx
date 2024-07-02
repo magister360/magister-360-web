@@ -8,6 +8,7 @@ import { GrupoFunctionsHook } from "./hooks/GrupoFunctionsHook";
 import ErrorModal from "@/app/components/ErrorModal ";
 import SuccessModal from "@/app/components/SuccessModal";
 import TableGrupo from "./components/TableGrupo";
+import Loading from "@/app/components/Loading";
 
 export default function Grupo() {
   const [items, setItems] = useState([]);
@@ -25,6 +26,7 @@ export default function Grupo() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
@@ -45,7 +47,8 @@ export default function Grupo() {
       setItems,
       setIdSelect,
       setValue,
-      setNewModify
+      setNewModify,
+      setIsLoading
     );
 
   return (
@@ -53,6 +56,7 @@ export default function Grupo() {
       className="ml-72 md:mt-14 rounded-lg shadow  
                         sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff] p-5"
     >
+      <Loading isLoading={isLoading} />
       <form className="" onSubmit={handleSubmit(onSubmit)} method="POST">
         <TableGrupo
           items={items}

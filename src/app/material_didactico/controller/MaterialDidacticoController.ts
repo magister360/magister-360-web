@@ -1,5 +1,9 @@
 import { FileInfo } from "@/app/types/types";
 import {
+  fetchOpenDiapositivasApi,
+  fetchOpenPdfApi,
+  fetchOpenVideoApi,
+  fetchOpenWordApi,
   searchMaterialTituloApi,
   searchMaterialTituloEquipoApi,
 } from "../services/MaterialDidacticoService";
@@ -71,4 +75,32 @@ const getCurrentMonth = (): string => {
   const currentMonth = months[currentDate.getMonth()];
 
   return currentMonth;
+};
+
+export const fetchOpenVideo = async (path: string): Promise<string > => {
+  if (path === undefined) {
+    return "";
+  }
+  return fetchOpenVideoApi(path);
+};
+
+export const fetchOpenPdf = async (path: string): Promise<string > => {
+  if (path === undefined) {
+    return "";
+  }
+  return fetchOpenPdfApi(path);
+};
+
+export const fetchOpenWord = async (path: string): Promise<string > => {
+  if (path === undefined) {
+    return "";
+  }
+  return fetchOpenWordApi(path);
+};
+
+export const fetchOpenDiapositivas = async (path: string): Promise<string > => {
+  if (path === undefined) {
+    return "";
+  }
+  return fetchOpenDiapositivasApi(path);
 };
