@@ -25,10 +25,13 @@ model Users {
   grupos   Grupo[] 
   materias Materia[]
   alumnos Alumno[]
- 
+  participaciones Participaciones[]
+  asistencias Asistencias[]
+   proyectos Proyectos[]
+   examenes Examenes[]
 }
 
-model Grado{
+model Grado {
   id    Int     @id @default(autoincrement())
   grado String 
   estatus Int  @default(0)
@@ -39,7 +42,7 @@ model Grado{
   materialDidactico MaterialDidactico[]
 }
 
-model Grupo{
+model Grupo {
   id    Int     @id @default(autoincrement())
   grupo String 
   estatus Int  @default(0)
@@ -50,7 +53,7 @@ model Grupo{
   materialDidactico MaterialDidactico[]
 }
 
-model Materia{
+model Materia {
   id    Int     @id @default(autoincrement())
   materia String  @db.VarChar(255)
   estatus Int  @default(0)
@@ -58,10 +61,14 @@ model Materia{
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
   alumnos   AlumnoMateria[]
-   materialDidactico MaterialDidactico[]
+  materialDidactico MaterialDidactico[]
+   participaciones Participaciones[] @relation("ParticipacionesToMateria")
+  asistencias Asistencias[] @relation("AsistenciasToMateria")
+   proyectos Proyectos[] @relation("ProyectosToMateria")
+   examenes Examenes[] @relation("ExamenesToMateria")
 }
 
-model Alumno{
+model Alumno {
   id  String @db.VarChar(255) @id  
   noLista Int
   nombre String
@@ -77,7 +84,11 @@ model Alumno{
   idGrado Int
   grupo   Grupo   @relation(fields: [idGrupo], references: [id])
   idGrupo Int
-   materias         AlumnoMateria[]
+  materias         AlumnoMateria[]
+  participaciones Participaciones[]
+  asistencias Asistencias[]
+  proyectos Proyectos[]
+  examenes Examenes[]
 }
 
 model AlumnoMateria {
@@ -91,7 +102,7 @@ model AlumnoMateria {
   @@unique([idAlumno, idMateria])
 }
 
-model MaterialDidactico{
+model MaterialDidactico {
   id  String @db.VarChar(255) @id 
   tipo String  @db.VarChar(30) 
   url String  @db.VarChar(255) 
@@ -107,4 +118,63 @@ model MaterialDidactico{
   idGrupo Int
   materia   Materia   @relation(fields: [idMateria], references: [id])
   idMateria Int
+}
+
+model Participaciones {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  calificacion Int
+  contenido String @db.Text
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("ParticipacionesToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
+}
+
+model Asistencias {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  asistencia String @db.VarChar(1)
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("AsistenciasToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
+}
+
+model Proyectos {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  calificacion Int
+  contenido String @db.Text
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("ProyectosToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
+}
+
+model Examenes {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  calificacion Int
+  contenido String @db.Text
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("ExamenesToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
 }

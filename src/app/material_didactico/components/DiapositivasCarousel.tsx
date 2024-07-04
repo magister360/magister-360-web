@@ -15,7 +15,7 @@ interface DiapositivasCarouselProps {
     React.SetStateAction<MaterialDidacticoType | undefined>
   >;
 
-  scrollToTop: () => void;
+
 }
 
 const handleSelectVideo = (
@@ -45,10 +45,10 @@ const filterTipoMaterialDidactico = (
 const DiapositivasCarousel: React.FC<DiapositivasCarouselProps> = ({
   videosDocument,
   setSelectTypeDocument,
-  scrollToTop,
+ 
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log("videosDocument " + videosDocument.length);
+  //console.log("videosDocument " + videosDocument.length);
 
   const documents = filterTipoMaterialDidactico(
     videosDocument,

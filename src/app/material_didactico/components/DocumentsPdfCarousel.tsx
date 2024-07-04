@@ -78,7 +78,7 @@ const DocumentsPdfCarousel: React.FC<DocumentsPdfCarouselProps> = ({
             {documents.map((document, index) => (
               <div
                 key={index}
-                className="w-1/4 flex-shrink-0 p-2 flex container-documents "
+                className="w-1/4 flex-shrink-0 p-2 flex container-documents h-80"
                 onClick={() =>
                   handleSelectVideo(
                     index,
@@ -93,7 +93,7 @@ const DocumentsPdfCarousel: React.FC<DocumentsPdfCarouselProps> = ({
                  bg-white dark:bg-[#ddeff0] flex flex-col flex-grow 
                  transition-transform duration-300  hover:scale-110 hover:z-20 hover:rounded-2xl"
                 >
-                  <div className="h-48 overflow-hidden">
+                  <div className="h-48 max-h-48 overflow-hidden">
                     <Image
                       src={DocumentTypeValues.PDF.icon}
                       alt={"Pdf"}
@@ -102,13 +102,11 @@ const DocumentsPdfCarousel: React.FC<DocumentsPdfCarouselProps> = ({
                       className="w-full h-full object-cover rounded"
                     />
                   </div>
-                  <div className="p-4 flex flex-col flex-grow h-50">
-                    <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 overflow-hidden max-h-20">
+                  <div className="p-4 flex flex-col flex-grow h-50 max-h-50">
+                    <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 overflow-hidden h-50 max-h-50">
                       {document.titulo}
                     </h3>
-                    <p className="text-sm text-gray-600 overflow-hidden">
-                      {document.descripcion}
-                    </p>
+                   
                   </div>
                 </div>
               </div>

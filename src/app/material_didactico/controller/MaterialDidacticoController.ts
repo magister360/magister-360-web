@@ -1,5 +1,6 @@
 import { FileInfo } from "@/app/types/types";
 import {
+  fetchFilesContentWordApi,
   fetchOpenDiapositivasApi,
   fetchOpenPdfApi,
   fetchOpenVideoApi,
@@ -77,30 +78,44 @@ const getCurrentMonth = (): string => {
   return currentMonth;
 };
 
-export const fetchOpenVideo = async (path: string): Promise<string > => {
+export const fetchOpenVideo = async (path: string): Promise<string> => {
   if (path === undefined) {
     return "";
   }
   return fetchOpenVideoApi(path);
 };
 
-export const fetchOpenPdf = async (path: string): Promise<string > => {
+export const fetchOpenPdf = async (path: string): Promise<string> => {
   if (path === undefined) {
     return "";
   }
   return fetchOpenPdfApi(path);
 };
 
-export const fetchOpenWord = async (path: string): Promise<string > => {
+export const fetchOpenWord = async (path: string): Promise<string> => {
   if (path === undefined) {
     return "";
   }
   return fetchOpenWordApi(path);
 };
 
-export const fetchOpenDiapositivas = async (path: string): Promise<string > => {
+export const fetchOpenDiapositivas = async (path: string): Promise<string> => {
   if (path === undefined) {
     return "";
   }
   return fetchOpenDiapositivasApi(path);
 };
+
+export const fetchFilesContentWord= async (
+  grado: string,
+  grupo: string,
+  materia: string,
+  tipos: string[]
+): Promise<FileInfo[] | null> => {
+  if (grado === undefined || grupo === undefined || materia === undefined) {
+    return null;
+  }
+  return fetchFilesContentWordApi(grado, grupo, materia, tipos);
+};
+
+

@@ -131,8 +131,9 @@ export const fetchOpenWordApi = async (path: string): Promise<string> => {
   }
 };
 
-
-export const fetchOpenDiapositivasApi = async (path: string): Promise<string> => {
+export const fetchOpenDiapositivasApi = async (
+  path: string
+): Promise<string> => {
   const endpoint = "word";
 
   try {
@@ -147,4 +148,30 @@ export const fetchOpenDiapositivasApi = async (path: string): Promise<string> =>
   } catch (error) {
     return "";
   }
+};
+
+export const fetchFilesContentWordApi = async (
+  grado: string,
+  grupo: string,
+  materia: string,
+  tipos: string[]
+) => {
+  const endpoint = "files_content-word";
+
+  const response = await apiSpringBoot
+    .get(endpoint, {
+      params: {
+        grado,
+        grupo,
+        materia,
+        tipos: tipos.join(','),
+      },
+    })
+    .then((response) => {
+      return response.status === 200 ? response.data : null;
+    })
+    .catch((error) => {
+      return null;
+    });
+  return response;
 };

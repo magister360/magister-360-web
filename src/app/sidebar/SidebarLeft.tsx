@@ -36,7 +36,7 @@ export default function SidebarLeft() {
 
   const menuOrganizacionGrupos = [
     {
-      name: "Actividades",
+      name: "Actividades de evaluación formativa ",
       href: "/organizacion_grupos/actividades",
       icon: "/grados.svg",
     },
@@ -63,25 +63,49 @@ export default function SidebarLeft() {
       <ul className="mt-4">
         <Link className="" key="contenido" href="/contenido">
           <li
-            className="block px-4 py-2 text-sm "
+            className="flex space-x-2 px-4 py-2 text-sm "
             onClick={() => handleClickConfiguration(0)}
           >
-            Contenido
+            <Image
+              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert mr-3"
+              src="/contenido.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span className="opacity-80">Contenido</span>
           </li>
         </Link>
         <Link className="" key="mat-didactico" href="/material_didactico">
           <li
-            className="block px-4 py-2 text-sm "
+            className="flex space-x-2  px-4 py-2 text-sm "
             onClick={() => handleClickConfiguration(0)}
           >
-            Material didáctico
+            <Image
+              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert mr-3"
+              src="/iconos/sidebar/mat_didactico.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span className="opacity-80">Material didáctico</span>
           </li>
         </Link>
         <li
           className="block px-4 py-2 text-sm "
           onClick={() => handleClickConfiguration(0)}
         >
-          Organización de mis grupos
+          <div className="flex space-x-2">
+            <Image
+              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+              src="/iconos/sidebar/grupos.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span className="opacity-80"> Organización de mis grupos</span>
+          </div>
+
           {visibleitemIndex === 0 && (
             <ul>
               {menuOrganizacionGrupos.map((item, index) => (
@@ -122,7 +146,17 @@ export default function SidebarLeft() {
             handleClickConfiguration(1);
           }}
         >
-          Configuración
+          <div className="flex space-x-2">
+            <Image
+              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+              src="/iconos/sidebar/configuration.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span className="opacity-80"> Configuración</span>
+          </div>
+
           {visibleitemIndex === 1 && (
             <ul>
               {menuItemsConfiguration.map((item, index) => (
@@ -157,23 +191,23 @@ export default function SidebarLeft() {
             </ul>
           )}
         </li>
-        <Link className="" key="estadisticas" href="/estadisticas">
-          <li
-            className=" pl-4 pt-3 text-sm "
-            onClick={() => {
-              //handleClickConfiguration(1);
-            }}
-          >
-            Estadisticas
-          </li>
-        </Link>
+
         <li
           className=" pl-4 pt-3 text-sm"
           onClick={() => {
             handleClickConfiguration(1);
           }}
         >
-          Entregables
+          <div className="flex space-x-2">
+            <Image
+              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+              src="/iconos/sidebar/productos.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span className="opacity-80"> Productos de evaluación formativa</span>
+          </div>
         </li>
         <Link className="" key="cronogramas" href="/cronogramas">
           <li
@@ -182,7 +216,16 @@ export default function SidebarLeft() {
               //  handleClickConfiguration(1);
             }}
           >
-            Cronogramas
+            <div className="flex space-x-2">
+              <Image
+                className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+                src="/iconos/sidebar/cronogramas.svg"
+                width={24}
+                height={24}
+                alt=""
+              />
+              <span className="opacity-80"> Cronogramas</span>
+            </div>
           </li>
         </Link>
         <Link
@@ -194,7 +237,17 @@ export default function SidebarLeft() {
             className="block px-4 py-2 text-sm"
             onClick={() => handleClickConfiguration(0)}
           >
-            Organización material didáctico
+            <div className="flex space-x-2">
+              <Image
+                className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+                src="/iconos/sidebar/organizacion.svg"
+                width={24}
+                height={24}
+                alt=""
+              />
+              <span className="opacity-80">Organización material didáctico</span>
+            </div>
+            
           </li>
         </Link>
       </ul>
