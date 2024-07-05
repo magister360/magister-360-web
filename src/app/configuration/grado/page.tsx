@@ -3,11 +3,8 @@
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
 import TableGrado, { getIdGrado, getStrGrado } from "./components/TablaGrado";
 import { useForm } from "react-hook-form";
-import { getGrados } from "./controller/GradoController";
-import { useEffect, useState } from "react";
-import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
-import { useRouter } from "next/navigation";
-import { TypeStatusGrado } from "@/app/utils/TypeStatusGrado";
+import {  useState } from "react";
+
 import Image from "next/image";
 import ErrorModal from "@/app/components/ErrorModal ";
 import SuccessModal from "@/app/components/SuccessModal";
@@ -17,7 +14,7 @@ import Loading from "@/app/components/Loading";
 
 export default function Grado() {
   const [items, setItems] = useState<ItemGrado[]>([]);
-  const router = useRouter();
+
   const [newModify, setNewModify] = useState(true);
   const [idSelect, setIdSelect] = useState(-1);
   const {

@@ -1,15 +1,26 @@
 "use client";
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
-import Link from "next/link";
+import {
+  DateFormats,
+  formatDate,
+  formatDateLocale,
+} from "@/app/utils/DateUtils";
+import { useRouter  } from "next/navigation";
+
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+
 
 export default function ParticipacionSelectFecha() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch
   } = useForm();
 
+  const router = useRouter();
   const validateDate = (value: string) => {
     const selectedDate = new Date(value);
     const currentDate = new Date();
@@ -20,7 +31,21 @@ export default function ParticipacionSelectFecha() {
 
   const onSubmit = async (data: any) => {
     console.log(" " + data.date);
+    
+   
+
+    const params = new URLSearchParams({ date: watch("date") });
+  
+    router.push(`/organizacion_grupos/actividades/participacion?${params.toString()}`);
   };
+
+
+
+  useEffect(() => {
+    const date = new Date();
+    const format = formatDate(date, DateFormats.ISO);
+    setValue("date", format);
+  }, [setValue]);
 
   return (
     <>
@@ -63,17 +88,16 @@ export default function ParticipacionSelectFecha() {
               <ErrorMessageInput message={errors.date.message + ""} />
             )}
             <div className="mt-4 mb-4 w-full">
-              <Link
-                href="/organizacion_grupos/actividades/participacion"
+              <button
                 className="w-full block  text-white bg-[#438e96] hover:bg-[#3b757f] 
                             focus:ring-4 focus:outline-none focus:ring-blue-300 
                             font-medium rounded-lg text-sm px-5 py-2.5  text-center 
                           dark:bg-[#438e96] dark:hover:bg-[#3b757f] 
                           dark:focus:ring-blue-800  "
+                type="submit"
               >
                 Continuar
-              </Link>
-              <button type="submit">Continuar</button>
+              </button>
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
 
 import { useEffect } from "react";
 import { getIdMateria, getStrMateria } from "../components/TableMateria";
@@ -12,6 +11,7 @@ import {
 } from "../controller/MateriaController";
 import { TypeStatusMateria } from "@/app/utils/TypeStatusMateria";
 import { ItemMateria } from "@/app/types/types";
+import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 export const MateriaFunctionsHook = (
   reset: Function,
@@ -28,15 +28,16 @@ export const MateriaFunctionsHook = (
   setIsLoading:Function
 ) => {
   const router = useRouter();
+  const { idUsuario } = useSidebarContext();
 
   const fetchMaterias = async () => {
     setIsLoading(true)
-    const sesionLocalStorage = loadSessionFromLocalStorage();
-    if (!sesionLocalStorage) {
+   
+    if (!idUsuario) {
       router.push("/login");
       return;
     }
-    const userId = sesionLocalStorage?.id ?? -1;
+    const userId = idUsuario ?? -1;
     const materias = await getMaterias(userId, TypeStatusMateria.ALTA);
     if (materias) {
       setItems(materias);
@@ -46,15 +47,13 @@ export const MateriaFunctionsHook = (
 
   const onSubmit = async (data: any) => {
     setIsLoading(true)
-    const sesionLocalStorage = loadSessionFromLocalStorage();
-    if (!sesionLocalStorage) {
+    if (!idUsuario) {
       router.refresh();
       router.push("/login");
     } else {
-      const userId = sesionLocalStorage?.id ?? -1;
+      const userId = idUsuario ?? -1;
       if (newModify) {
 
-        console.log('data.materia '+data.materia)
         const save = await createMateria(
           userId,
           data.materia,

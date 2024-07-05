@@ -58,5 +58,17 @@ export type FileInfo = {
   name: string;
   path: string;
   extension: string;
-  tipo:string;
+  tipo: string;
 };
+
+export interface StudentParticipacion {
+  id: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string | null;
+  noLista: number;
+}
+
+export interface ItemStudentParticipacion extends StudentParticipacion {
+  calificacion: number;
+}

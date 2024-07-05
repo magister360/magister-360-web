@@ -11,6 +11,7 @@ import { ItemGrupo } from "@/app/types/types";
 import { useEffect } from "react";
 import { getIdGrupo, getStrGrupo } from "../components/TableGrupo";
 import { TypeStatusGrupo } from "@/app/utils/TypeStatusGrupo";
+import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 export const GrupoFunctionsHook = (
   reset: Function,
@@ -27,15 +28,16 @@ export const GrupoFunctionsHook = (
   setIsLoading: Function
 ) => {
   const router = useRouter();
+  const { idUsuario } = useSidebarContext();
 
   const fetchGrupos = async () => {
     setIsLoading(true);
-    const sesionLocalStorage = loadSessionFromLocalStorage();
-    if (!sesionLocalStorage) {
+
+    if (!idUsuario) {
       router.push("/login");
       return;
     }
-    const userId = sesionLocalStorage?.id ?? -1;
+    const userId = idUsuario ?? -1;
     const grupos = await getGrupos(userId, TypeStatusGrupo.ALTA);
     if (grupos) {
       setItems(grupos);
@@ -45,12 +47,12 @@ export const GrupoFunctionsHook = (
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    const sesionLocalStorage = loadSessionFromLocalStorage();
-    if (!sesionLocalStorage) {
+
+    if (!idUsuario) {
       router.refresh();
       router.push("/login");
     } else {
-      const userId = sesionLocalStorage?.id ?? -1;
+      const userId = idUsuario ?? -1;
       if (newModify) {
         const save = await createGrupo(
           userId,

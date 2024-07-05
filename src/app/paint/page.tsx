@@ -153,16 +153,37 @@ const Paint: React.FC = () => {
     { id: 5, name: "Isabel Fernández" },
   ];
 
+  const [canvasSize, setCanvasSize] = useState({ width: 700, height: 500 });
+
+  useEffect(() => {
+    function handleResize() {
+      const screenWidth = window.innerWidth;
+      const leftMargin = 288; 
+      const topMargin = 56; 
+      const availableWidth = screenWidth - leftMargin - 40; 
+
+      const scaleFactor = Math.min(1, availableWidth / 700);
+
+
+      const newWidth = Math.floor(700 * scaleFactor);
+      const newHeight = Math.floor(500 * scaleFactor);
+
+      setCanvasSize({ width: newWidth, height: newHeight });
+    }
+
+    handleResize();  
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="mt-14 ml-72 flex ">
-     
-   
-
       <div className="flex-grow relative">
         <canvas
           ref={canvasRef}
-          width={800}
-          height={600}
+          width={canvasSize.width}
+          height={canvasSize.height}
           onMouseDown={startDrawing}
           onMouseUp={stopDrawing}
           onMouseMove={(e) => {
@@ -205,7 +226,7 @@ const Paint: React.FC = () => {
       <motion.div
         className="w-40 ml-4 p-4 rounded-lg  dark:bg-[#1a2c32]  bg-[#356169]"
         initial={{ width: 0, opacity: 0 }}
-        animate={{ width: showPalette ? 160 : 0, opacity: showPalette ? 1 : 0 }}
+        animate={{ width: showPalette ? 200 : 0, opacity: showPalette ? 1 : 0 }}
         transition={{ duration: 0.3 }}
       >
         <h2 className="text-lg font-bold mb-4 dark:text-gray-300 text-gray-200">
@@ -227,7 +248,7 @@ const Paint: React.FC = () => {
             <button
               onClick={() => {
                 setIsErasing(true);
-                setEraserWidth(20); // Establecer un grosor más ancho para el borrador
+                setEraserWidth(20);
               }}
               className={`p-2 rounded ${
                 isErasing ? "bg-blue-500" : "bg-gray-300"
@@ -236,6 +257,7 @@ const Paint: React.FC = () => {
               <Image src="/eraser.svg" alt="Borrador" width={24} height={24} />
             </button>
           </div>
+
           <div>
             <label
               htmlFor="colorPicker"
@@ -248,9 +270,10 @@ const Paint: React.FC = () => {
               type="color"
               value={color}
               onChange={(e) => setColor(e.target.value)}
-              className="w-full h-10 rounded"
+              className="w-16 h-10 rounded-full"
             />
           </div>
+
           <div>
             <label
               htmlFor="widthSlider"
