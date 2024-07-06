@@ -1,5 +1,6 @@
-import Link from "next/link";
 
+"use client"
+import Link from "next/link";
 
 export default function SeleccionFecha() {
 
@@ -14,8 +15,6 @@ export default function SeleccionFecha() {
 
             <div className="ml-72 md:mt-2 pt-2 pb-4 pl-4 pr-4  rounded-lg shadow  
                  sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]">
-
-
 
                 <label className="block text-gray-700 dark:text-gray-200 font-bold mb-2"
                     htmlFor="lbl-date-start-end">
@@ -68,7 +67,7 @@ export default function SeleccionFecha() {
                 </div>
 
                 <div className="mt-4 mb-4 w-full">
-                    <Link href='/planeacion/actividades/asistencia'
+                    <Link href='/organizacion_grupos/actividades/asistencia'
                         className="w-full block  text-white bg-[#438e96] hover:bg-[#3b757f] 
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
                          font-medium rounded-lg text-sm px-5 py-2.5  text-center 

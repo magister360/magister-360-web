@@ -192,23 +192,23 @@ export default function SidebarLeft() {
           )}
         </li>
 
-        <li
-          className=" pl-4 pt-3 text-sm"
-          onClick={() => {
-            handleClickConfiguration(1);
-          }}
-        >
-          <div className="flex space-x-2">
-            <Image
-              className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
-              src="/iconos/sidebar/productos.svg"
-              width={24}
-              height={24}
-              alt=""
-            />
-            <span className="opacity-80"> Productos de evaluación formativa</span>
-          </div>
-        </li>
+        <Link className="" key="productos_evaluacion" href="/productos_evaluacion">
+          <li className=" pl-4 pt-3 text-sm" onClick={() => {}}>
+            <div className="flex space-x-2">
+              <Image
+                className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
+                src="/iconos/sidebar/productos.svg"
+                width={24}
+                height={24}
+                alt=""
+              />
+              <span className="opacity-80">
+                {" "}
+                Productos de evaluación formativa
+              </span>
+            </div>
+          </li>
+        </Link>
         <Link className="" key="cronogramas" href="/cronogramas">
           <li
             className=" pl-4 pt-3 text-sm "
@@ -233,10 +233,7 @@ export default function SidebarLeft() {
           key="organizacion_material_didactico"
           href="/organizacion_material_didactico"
         >
-          <li
-            className="block px-4 py-2 text-sm"
-            onClick={() => handleClickConfiguration(0)}
-          >
+          <li className="block px-4 py-2 text-sm">
             <div className="flex space-x-2">
               <Image
                 className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert  mr-3"
@@ -245,9 +242,10 @@ export default function SidebarLeft() {
                 height={24}
                 alt=""
               />
-              <span className="opacity-80">Organización material didáctico</span>
+              <span className="opacity-80">
+                Organización material didáctico
+              </span>
             </div>
-            
           </li>
         </Link>
       </ul>

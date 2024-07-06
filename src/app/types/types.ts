@@ -72,3 +72,16 @@ export interface StudentParticipacion {
 export interface ItemStudentParticipacion extends StudentParticipacion {
   calificacion: number;
 }
+
+export type StudentAsitencia ={
+  id: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string | null;
+  noLista: number;
+  foto: Buffer;
+}
+
+export interface ItemStudentAsistencia extends StudentAsitencia {
+  A: string;
+}

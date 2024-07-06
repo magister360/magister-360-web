@@ -1,8 +1,8 @@
 "use client"
-import OptionsGrados from "../components/OptionGrados";
-import OptionsGrupos from "../components/OptionsGrupos";
-import OptionsMaterias from "../components/OptionsMaterias";
-import { useEffectFetchGradoGrupoMateria } from "../hooks/GradoGrupoMateriaHook";
+import OptionsGrados from "../../components/OptionGrados";
+import OptionsGrupos from "../../components/OptionsGrupos";
+import OptionsMaterias from "../../components/OptionsMaterias";
+import { useEffectFetchGradoGrupoMateria } from "../../hooks/GradoGrupoMateriaHook";
 
 export default function Estadisticas() {
   const { itemsGrados, itemsGrupos, itemsMaterias } =

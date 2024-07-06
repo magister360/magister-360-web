@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 import { cors } from "../../lib/corsMiddleware";
-import { SourceTextModule } from "vm";
 async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   switch (req.method) {
     case "POST":
