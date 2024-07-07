@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 
 import { TypeStatusAlumno } from "@/app/utils/TypeStatusAlumno";
-import { ChangeEvent, useEffect, useState } from "react";
+import {  useState } from "react";
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
 import { StudentType } from "@/app/types/types";
 import { NewModifyStudentHook } from "../hooks/NewModifyStudentHook";

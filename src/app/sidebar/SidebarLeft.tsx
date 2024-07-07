@@ -64,7 +64,7 @@ export default function SidebarLeft() {
         <Link className="" key="contenido" href="/contenido">
           <li
             className="flex space-x-2 px-4 py-2 text-sm "
-            onClick={() => handleClickConfiguration(0)}
+        
           >
             <Image
               className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert mr-3"
@@ -79,7 +79,7 @@ export default function SidebarLeft() {
         <Link className="" key="mat-didactico" href="/material_didactico">
           <li
             className="flex space-x-2  px-4 py-2 text-sm "
-            onClick={() => handleClickConfiguration(0)}
+          
           >
             <Image
               className="dark:filter dark:invert dark:opacity-75 opacity-70 filter invert mr-3"
@@ -92,7 +92,7 @@ export default function SidebarLeft() {
           </li>
         </Link>
         <li
-          className="block px-4 py-2 text-sm "
+          className="block px-4 py-2 text-sm  cursor-pointer"
           onClick={() => handleClickConfiguration(0)}
         >
           <div className="flex space-x-2">
@@ -141,7 +141,7 @@ export default function SidebarLeft() {
           )}
         </li>
         <li
-          className=" pl-4 pt-3 text-sm "
+          className=" pl-4 pt-3 text-sm cursor-pointer "
           onClick={() => {
             handleClickConfiguration(1);
           }}
