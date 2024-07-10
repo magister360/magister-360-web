@@ -1,8 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { loadSessionFromLocalStorage } from "../sesions/SesionCookies";
-import { loadSelectionGGMFromLocalStorage } from "../selection/SelectionGGMCookies";
 
 interface SidebarContextType {
   visibleSidebar: boolean;
@@ -16,6 +14,11 @@ interface SidebarContextType {
   idUsuario?: number;
   nameUser?: string;
   contenido?: string;
+  idInicioSesion?: string;
+  updateContextField: <K extends keyof SidebarContextType>(
+    field: K,
+    value: SidebarContextType[K]
+  ) => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -35,9 +38,10 @@ type SidebarProviderProps = {
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const router = useRouter();
   const [visibleSidebar, setVisibleSidebar] = useState(false);
-  const [contextData, setContextData] = useState<SidebarContextType>({
-    visibleSidebar,
-    setVisibleSidebar,
+
+  const [contextData, setContextData] = useState<SidebarContextType>(() => ({
+    visibleSidebar: visibleSidebar,
+    setVisibleSidebar: setVisibleSidebar,
     idGrado: undefined,
     idGrupo: undefined,
     idMateria: undefined,
@@ -47,48 +51,19 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
     idUsuario: undefined,
     nameUser: undefined,
     contenido: undefined,
-  });
+    idInicioSesion: undefined,
+    updateContextField: <K extends keyof SidebarContextType>(
+      field: K,
+      value: SidebarContextType[K]
+    ) => {
+      setContextData((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    },
+  }));
 
-  useEffect(() => {
-    const sessionCookie = loadSessionFromLocalStorage();
-    const selectionCookie = loadSelectionGGMFromLocalStorage();
 
-    if (sessionCookie && selectionCookie) {
-      setVisibleSidebar(true);
-      setContextData({
-        visibleSidebar: true,
-        setVisibleSidebar,
-        idGrado: selectionCookie.idGrado,
-        idGrupo: selectionCookie.idGrupo,
-        idMateria: selectionCookie.idMateria,
-        grado: selectionCookie.grado,
-        grupo: selectionCookie.grupo,
-        materia: selectionCookie.materia,
-        idUsuario: sessionCookie.id,
-        nameUser: sessionCookie.userName,
-        contenido: undefined,
-      });
-      router.refresh();
-      router.push("/");
-    } else {
-      setVisibleSidebar(false);
-      setContextData({
-        visibleSidebar: false,
-        setVisibleSidebar,
-        idGrado: undefined,
-        idGrupo: undefined,
-        idMateria: undefined,
-        grado: undefined,
-        grupo: undefined,
-        materia: undefined,
-        idUsuario: undefined,
-        nameUser: undefined,
-        contenido: undefined
-      });
-      router.refresh();
-      router.push("/login");
-    }
-  }, []);
 
   return (
     <SidebarContext.Provider value={contextData}>

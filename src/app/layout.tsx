@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import SidebarTopLeft from "./sidebar/SidebarTopLeft";
 import { SidebarProvider } from "./sidebar/SidebarContext";
+import { AuthCheck } from "./hooks/AuthCheck";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <SidebarProvider>
           <SidebarTopLeft />
+          <AuthCheck/>
           <div className="flex-grow">{children}</div>
         </SidebarProvider>
       </body>

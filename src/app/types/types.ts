@@ -85,3 +85,12 @@ export type StudentAsitencia ={
 export interface ItemStudentAsistencia extends StudentAsitencia {
   A: string;
 }
+
+export interface User {
+  user: string;
+  password: string;
+  correo?: string;
+  foto?: string;
+  cls: string;
+  estatus?: number;
+}

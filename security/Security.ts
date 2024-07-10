@@ -1,18 +1,15 @@
 
 import CryptoJS from 'crypto-js';
-
-const secretKey = '11{.~{:g{dn^))&2Mm,7Z;t!&';
-
-
+import { config } from '../config';
 
 export function encryptString(mensaje: string): string {
-    return CryptoJS.AES.encrypt(mensaje, secretKey).toString();
+    return CryptoJS.AES.encrypt(mensaje, config.getSecretKey()).toString();
 }
 
 export function decryptString(mensajeEncriptado: string): string {
     if (mensajeEncriptado.length === 0) {
         return "";
     }
-    const bytes = CryptoJS.AES.decrypt(mensajeEncriptado, secretKey);
+    const bytes = CryptoJS.AES.decrypt(mensajeEncriptado, config.getSecretKey());
     return bytes.toString(CryptoJS.enc.Utf8);
 }

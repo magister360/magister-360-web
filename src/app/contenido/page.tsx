@@ -1,3 +1,4 @@
+import { AuthCheck } from "../hooks/AuthCheck";
 import ListItemContenido from "./components/ListItemContenido";
 import ProgressBarContenido from "./components/ProgressBarContenido";
 
@@ -22,9 +23,11 @@ export default function Contenido() {
     },
     { text: "Álgebra: proporcionalidad directa e inversa", date: "19 de junio del 2024" },
   ];
+  
 
   return (
     <div className="mt-16 ml-72 mr-4">
+      <AuthCheck/>
       <div
         className=" rounded-lg shadow  
                         sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff] p-5"

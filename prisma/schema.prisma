@@ -12,23 +12,41 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
 model Users {
-  id    Int     @id @default(autoincrement())
-  user String  @unique
-  password  String?  @db.Text 
-  correo String?
-  foto Bytes
-  estatus Int @default(0)
-  regDate DateTime @default(now())
-  grados   Grado[] 
-  grupos   Grupo[] 
-  materias Materia[]
-  alumnos Alumno[]
+  id        Int      @id @default(autoincrement())
+  user      String   @unique
+  password  String   @db.Text
+  correo    String?
+  foto      Bytes?   
+  cls       String?  @db.Text 
+  estatus   Int      @default(0)
+  regDate   DateTime @default(now())
+  grados    Grado[] 
+  grupos    Grupo[] 
+  materias  Materia[]
+  alumnos   Alumno[]
   participaciones Participaciones[]
   asistencias Asistencias[]
-   proyectos Proyectos[]
-   examenes Examenes[]
+  proyectos Proyectos[]
+  examenes  Examenes[]
+  inicioSesiones  InicioSesiones[]
+  finSesiones     FinSesiones[]
+}
+
+model InicioSesiones {
+  id String  @db.VarChar(255)   @id 
+  fecha DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+  finSesiones FinSesiones[]
+}
+model FinSesiones {
+   id        Int      @id @default(autoincrement())
+  fecha DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+  inicioSesion InicioSesiones @relation(fields: [idInicioSesion], references: [id])
+  idInicioSesion String
 }
 
 model Grado {

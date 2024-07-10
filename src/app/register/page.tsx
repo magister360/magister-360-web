@@ -39,7 +39,8 @@ export default function Register() {
                         </h1>
                         <form className="space-y-4 md:space-y-6" action="#">
                             <div>
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                                <label htmlFor="email" className="block mb-2 text-sm font-medium
+                                 text-gray-900 dark:text-white">Your email</label>
                                 <input type="text" name="text" id="text"
                                     className="bg-gray-50 border border-gray-300
                                  text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 
