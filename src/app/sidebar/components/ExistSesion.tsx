@@ -1,4 +1,3 @@
-
 import { createFinSesion } from "../controller/FinSesionController";
 import { useSidebarContext } from "../SidebarContext";
 import { useRouter } from "next/navigation";
@@ -8,42 +7,45 @@ interface ExistSesionProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ExistSesion: React.FC<ExistSesionProps> = ({ modalRef,setShowModal }) => {
+const ExistSesion: React.FC<ExistSesionProps> = ({
+  modalRef,
+  setShowModal,
+}) => {
   const router = useRouter();
   const { idUsuario, idInicioSesion, updateContextField } = useSidebarContext();
 
   const handleCerrarSesion = async () => {
-    try {
-      await createFinSesion(idUsuario, idInicioSesion);
-
-      updateContextField("idUsuario", 0);
-      updateContextField("idInicioSesion", "");
-      updateContextField("grado", "");
-      updateContextField("idGrado", -1);
-      updateContextField("grupo", "");
-      updateContextField("idGrupo", -1);
-      updateContextField("materia", "");
-      updateContextField("idMateria", -1);
-      updateContextField("visibleSidebar", false);
-
-      console.log("Contexto actualizado");
-      router.push("/login");
-      setShowModal(false)
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+    await createFinSesion(idUsuario, idInicioSesion)
+      .then(() => {
+        clearCerrarSesion();
+      })
+      .catch((error) => {})
+      .finally(() => {
+        setShowModal(false);
+        router.push("/login");
+      });
+  };
+  const clearCerrarSesion = async () => {
+    updateContextField("idUsuario", 0);
+    updateContextField("idInicioSesion", "");
+    updateContextField("grado", "");
+    updateContextField("idGrado", -1);
+    updateContextField("grupo", "");
+    updateContextField("idGrupo", -1);
+    updateContextField("materia", "");
+    updateContextField("idMateria", -1);
+    updateContextField("visibleSidebar", false);
   };
 
   const handleCambiarGrupo = async () => {
     updateContextField("visibleSidebar", false);
     router.push("/sectionGGM");
-    setShowModal(false)
+    setShowModal(false);
   };
 
   const handleloginRecords = async () => {
-  
     router.push("/login_records");
-    setShowModal(false)
+    setShowModal(false);
   };
 
   return (

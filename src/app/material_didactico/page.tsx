@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import YouTubePlayer from "./components/YouTubePlayer";
 import { DocumentTypeValues } from "../utils/DocumentTypeValues";
 import { loadSelectionGGMFromLocalStorage } from "../selection/SelectionGGMCookies";
@@ -9,10 +9,8 @@ import {
   fechSearchMaterialTitulo,
   fechSearchMaterialTituloEquipo,
   fetchFilesContentWord,
-  fetchOpenVideo,
 } from "./controller/MaterialDidacticoController";
 import VideosCarousel from "./components/VideosCarousel";
-import DiapositivasCarousel from "./components/DiapositivasCarousel";
 import DocumentsPdfCarousel from "./components/DocumentsPdfCarousel";
 import VideoPlayer from "./components/VideoPlayer";
 import PDFViewer from "./components/PDFViewer";
@@ -30,9 +28,9 @@ export default function MaterialDidactico() {
     setIsLoading(false);
   };
 
-  const [videosDocument, setMaterialDidacticoType] = useState<
-    MaterialDidacticoType[]
-  >([]);
+  const [videosDocument, setVideosDocument] = useState<MaterialDidacticoType[]>(
+    []
+  );
 
   const [selectTypeDocument, setSelectTypeDocument] = useState<
     MaterialDidacticoType | undefined
@@ -191,7 +189,7 @@ export default function MaterialDidactico() {
             ...wordsMaterialEquipoConvert,
           ];
 
-          setMaterialDidacticoType(materialeswordsMaterialEquipo);
+          setVideosDocument(materialeswordsMaterialEquipo);
         } catch (error) {}
       }
       setIsLoading(false);

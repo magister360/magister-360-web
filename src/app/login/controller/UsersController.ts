@@ -1,12 +1,17 @@
 import { Licencia } from "@/app/types/TypesLicencia";
 import { encryptString } from "../../../../security/Security";
-import { getCountUsersApi, postUserApi } from "../services/usersService";
+import {
+  getCountUsersApi,
+  getUltimoUsuarioApi,
+  postUserApi,
+} from "../services/usersService";
+import { LastUser } from "@/app/types/TypesLoginRecords";
 
 const DAYS_PRUEBA = 30;
 
 export const getCountUsers = async () => {
   const countUsers = await getCountUsersApi();
- 
+
   if (countUsers === 0) {
     const fechaActual = new Date();
     const fechaActivacion: Date = fechaActual;
@@ -37,4 +42,6 @@ export const getCountUsers = async () => {
   }
 };
 
-
+export const getUltimoUser = async (): Promise<LastUser | null> => {
+  return getUltimoUsuarioApi();
+};

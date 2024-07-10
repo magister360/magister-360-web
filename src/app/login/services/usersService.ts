@@ -4,6 +4,7 @@ import { decryptString } from "../../../../security/Security";
 import { ResponseCredentials } from "./ResponseCredentials";
 import { saveSessionCookies } from "@/app/sesions/SesionCookies";
 import { User } from "@/app/types/types";
+import { LastUser } from "@/app/types/TypesLoginRecords";
 
 export const getUsers = async () => {
   const apiUrl = getApiUrl("/api/users");
@@ -71,7 +72,6 @@ export const getCredentials = async (
     saveSessionCookies(responseCredentials.id, responseCredentials.userName);
   }
 
-
   return {
     approve: compareAprove === 0,
     id: responseCredentials.id,
@@ -110,9 +110,30 @@ export const postUserApi = async (userData: User): Promise<void> => {
     });
 
     if (response.status === 200) {
-    } else {
+      return response.data;
     }
   } catch (error) {
     console.error("Error al realizar la solicitud:", error);
+  }
+};
+
+
+export const getUltimoUsuarioApi = async (): Promise<LastUser|null> => {
+  const apiUrl = getApiUrl("/api/ultimo_user");
+
+  try {
+    const response = await axios.get(apiUrl, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
   }
 };

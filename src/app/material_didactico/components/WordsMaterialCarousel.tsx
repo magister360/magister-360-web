@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
 import { MaterialDidacticoType } from "@/app/types/types";
-import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
 import { fetchOpenWord } from "../controller/MaterialDidacticoController";
+import { v4 as uuidv4 } from "uuid";
 
 const TOTAL_WORD = 4;
 
@@ -66,8 +66,8 @@ const WordsMaterialCarousel: React.FC<WordsMaterialCarouselProps> = ({
             style={{ transform: `translateX(-${currentIndex * 25}%)` }}
           >
             {documents.map((document, index) => (
-              <div
-                key={index}
+              <button
+                key={uuidv4()}
                 className="w-1/4 flex-shrink-0 p-2 flex container-documents h-80"
                 onClick={() => openWord(document.url)}
               >
@@ -94,7 +94,7 @@ const WordsMaterialCarousel: React.FC<WordsMaterialCarouselProps> = ({
                     </p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>

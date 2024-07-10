@@ -48,11 +48,7 @@ html, body {
   padding: 0;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+
 
 @layer components {
   .custom-radio {
@@ -134,3 +130,5 @@ body {
 .container-documents.fade {
   opacity: 0.5;
 }
+
+
