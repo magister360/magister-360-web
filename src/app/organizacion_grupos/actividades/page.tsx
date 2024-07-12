@@ -1,5 +1,5 @@
-"use client"
-import CardParticipaciones from "./components/CardParticipacioens";
+"use client";
+import CardParticipaciones from "./components/CardParticipaciones";
 import CardAsistencia from "./components/CardAsistencia";
 import CardProyectos from "./components/CardProyectos";
 import CardExamenes from "./components/CardExamenes";
@@ -22,6 +22,8 @@ export default function Actividades() {
         <CardProyectos />
         <CardExamenes />
         <CardTareas />
+
+      
       </div>
     </div>
   );

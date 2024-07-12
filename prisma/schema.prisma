@@ -33,6 +33,7 @@ model Users {
   asistencias Asistencias[]
   proyectos Proyectos[]
   examenes  Examenes[]
+  tareas Tareas[]
   inicioSesiones  InicioSesiones[]
   finSesiones     FinSesiones[]
 }
@@ -88,6 +89,7 @@ model Materia {
   asistencias Asistencias[] @relation("AsistenciasToMateria")
    proyectos Proyectos[] @relation("ProyectosToMateria")
    examenes Examenes[] @relation("ExamenesToMateria")
+   tareas Tareas[] @relation("TareasToMateria") 
 }
 
 model Alumno {
@@ -111,6 +113,7 @@ model Alumno {
   asistencias Asistencias[]
   proyectos Proyectos[]
   examenes Examenes[]
+  tareas Tareas[]
 }
 
 model AlumnoMateria {
@@ -146,8 +149,10 @@ model Participaciones {
   id  String @db.VarChar(255) @id  
   fecha DateTime
   fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
   calificacion Int
   contenido String @db.Text
+  estatus Int  @default(0)
   alumno    Alumno   @relation(fields: [idAlumno], references: [id])
   idAlumno  String
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -161,7 +166,9 @@ model Asistencias {
   id  String @db.VarChar(255) @id  
   fecha DateTime
   fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
   asistencia String @db.VarChar(1)
+  estatus Int  @default(0)
   alumno    Alumno   @relation(fields: [idAlumno], references: [id])
   idAlumno  String
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -175,8 +182,10 @@ model Proyectos {
   id  String @db.VarChar(255) @id  
   fecha DateTime
   fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
   calificacion Int
   contenido String @db.Text
+  estatus Int  @default(0)
   alumno    Alumno   @relation(fields: [idAlumno], references: [id])
   idAlumno  String
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -190,13 +199,32 @@ model Examenes {
   id  String @db.VarChar(255) @id  
   fecha DateTime
   fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
   calificacion Int
   contenido String @db.Text
+  estatus Int  @default(0)
   alumno    Alumno   @relation(fields: [idAlumno], references: [id])
   idAlumno  String
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
    materia   Materia   @relation("ExamenesToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
+}
+
+model Tareas {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
+  calificacion Int
+  contenido String @db.Text
+  estatus Int  @default(0)
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("TareasToMateria", fields: [idMateria], references: [id])
   idMateria Int
   @@index([idAlumno, idMateria])
 }

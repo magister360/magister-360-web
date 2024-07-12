@@ -1,4 +1,148 @@
+"use client";
+import Loading from "@/app/components/Loading";
+import OptionsGrados, { filterIndexGrado } from "@/app/components/OptionGrados";
+import OptionsGrupos, {
+  filterIndexGrupo,
+} from "@/app/components/OptionsGrupos";
+import OptionsMaterias, {
+  filterIndexMaterias,
+} from "@/app/components/OptionsMaterias";
+import SubmitButton from "@/app/components/SubmitButton";
+import { useEffectFetchGradoGrupoMateria } from "@/app/hooks/GradoGrupoMateriaHook";
+import { useEffect, useState } from "react";
+import CheckboxWithSlider from "./conponenents/CheckboxWithSlider";
+
 export default function EncuadreCalificacion() {
+  const [isLoading, setIsLoading] = useState(true);
+  const { itemsGrados, itemsGrupos, itemsMaterias, isFetch } =
+    useEffectFetchGradoGrupoMateria();
+  const [selectGrado, setSelectGrado] = useState({
+    idGrado: -1,
+    grado: "",
+  });
+  const [selectGrupo, setSelectGrupo] = useState({
+    idGrupo: -1,
+    grupo: "",
+  });
+  const [selectMateria, setSelectMateria] = useState({
+    idMateria: -1,
+    materia: "",
+  });
+
+  const [participaciones, setParticipaciones] = useState({
+    isChecked: false,
+    value: 0,
+  });
+  const [tareas, setTareas] = useState({ isChecked: false, value: 0 });
+  const [examenes, setExamenes] = useState({ isChecked: false, value: 0 });
+  const [proyectos, setProyectos] = useState({ isChecked: false, value: 0 });
+
+  const handleParticipacionesChange = (isChecked: boolean, value: number) => {
+    setParticipaciones({ isChecked, value });
+  };
+
+  const handleTareasChange = (isChecked: boolean, value: number) => {
+    setTareas({ isChecked, value });
+  };
+
+  const handleExamenesChange = (isChecked: boolean, value: number) => {
+    setExamenes({ isChecked, value });
+  };
+
+  const handleProyectosChange = (isChecked: boolean, value: number) => {
+    setProyectos({ isChecked, value });
+  };
+
+  const handleChangeGrado = (event: { target: { selectedIndex: any } }) => {
+    const selectedIndex = event.target.selectedIndex;
+    if (!isArrayEmpty(itemsGrados)) {
+      const itemFilter = filterIndexGrado({ itemsGrados }, selectedIndex);
+      if (itemFilter) {
+        setSelectGrado({
+          idGrado: itemFilter.id,
+          grado: itemFilter.grado,
+        });
+      }
+    }
+  };
+
+  const handleChangeGrupo = (event: { target: { selectedIndex: any } }) => {
+    const selectedIndex = event.target.selectedIndex;
+    if (!isArrayEmpty(itemsGrupos)) {
+      const itemFilter = filterIndexGrupo({ itemsGrupos }, selectedIndex);
+      if (itemFilter) {
+        setSelectGrupo({
+          idGrupo: itemFilter.id,
+          grupo: itemFilter.grupo,
+        });
+      }
+    }
+  };
+
+  const handleChangeMateria = (event: { target: { selectedIndex: any } }) => {
+    const selectedIndex = event.target.selectedIndex;
+    if (!isArrayEmpty(itemsGrupos)) {
+      const itemFilter = filterIndexMaterias({ itemsMaterias }, selectedIndex);
+      if (itemFilter) {
+        setSelectMateria({
+          idMateria: itemFilter.id,
+          materia: itemFilter.materia,
+        });
+      }
+    }
+  };
+  const isArrayEmpty = (array: any[]) => {
+    return array.length === 0;
+  };
+
+  useEffect(() => {
+    const selectElement = document.getElementById(
+      "select-grado"
+    ) as HTMLSelectElement | null;
+    if (selectElement) {
+      handleChangeGrado({
+        target: selectElement,
+      });
+    }
+  }, [itemsGrados]);
+
+  useEffect(() => {
+    const selectElement = document.getElementById(
+      "select-grupo"
+    ) as HTMLSelectElement | null;
+    if (selectElement) {
+      handleChangeGrupo({
+        target: selectElement,
+      });
+    }
+  }, [itemsGrupos]);
+
+  useEffect(() => {
+    const selectElement = document.getElementById(
+      "select-materia"
+    ) as HTMLSelectElement | null;
+    if (selectElement) {
+      handleChangeMateria({
+        target: selectElement,
+      });
+    }
+  }, [itemsMaterias]);
+
+  useEffect(() => {
+    if (
+      (itemsGrados.length > 0 &&
+        itemsGrupos.length > 0 &&
+        itemsMaterias.length > 0) ||
+      isFetch
+    ) {
+      setIsLoading(false);
+    }
+  }, [itemsGrados, itemsGrupos, itemsMaterias, isFetch]);
+
+  if (isLoading) {
+    return <Loading isLoading={isLoading} />;
+  }
+
   return (
     <>
       <label
@@ -28,7 +172,10 @@ export default function EncuadreCalificacion() {
                         focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
                         dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                         dark:focus:border-blue-500 "
-            ></select>
+              onChange={handleChangeGrado}
+            >
+              <OptionsGrados itemsGrados={itemsGrados} />
+            </select>
           </div>
 
           <div>
@@ -46,7 +193,10 @@ export default function EncuadreCalificacion() {
                             focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
                             dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                             dark:focus:border-blue-500 "
-            ></select>
+              onChange={handleChangeGrupo}
+            >
+              <OptionsGrupos itemsGrupos={itemsGrupos} />
+            </select>
           </div>
 
           <div>
@@ -64,232 +214,32 @@ export default function EncuadreCalificacion() {
                                   focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
                                   dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                                  dark:focus:border-blue-500 "
-            ></select>
+              onChange={handleChangeMateria}
+            >
+              <OptionsMaterias itemsMaterias={itemsMaterias} />
+            </select>
           </div>
         </div>
         <div
           className="rounded-lg shadow  
                         sm:max-w-xl  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-4"
         >
-          <div>
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                    dark:text-white"
-            >
-              Participaciones
-            </label>
-            <div className="flex items-center space-x-4 sm:max-w-full">
-              <div className="relative">
-                <input type="checkbox" id="toggle" className="sr-only" />
-                <div className="block bg-gray-300 w-14 h-8 rounded-full"></div>
-                <div
-                  className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full 
-                            transition"
-                ></div>
-              </div>
-              <div className="relative mb-6 flex-grow">
-                <input
-                  id="labels-range-input"
-                  type="range"
-                  value="50"
-                  min="0"
-                  max="100"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
-                  Min (0)
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  25
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  50
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  75
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
-                  Max (100)
-                </span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                step="2"
-                value="0"
-                name="cantitate"
-                className="border border-gray-300 p-2 rounded-lg focus:outline-none 
-                        focus:ring-2 focus:ring-blue-500 dark:bg-[#1a2c32]"
-              />
-            </div>
-          </div>
-
-          <div className="mt-2">
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                    dark:text-white"
-            >
-              Tareas
-            </label>
-            <div className="flex items-center space-x-4 sm:max-w-full">
-              <div className="relative">
-                <input type="checkbox" id="toggle" className="sr-only" />
-                <div className="block bg-gray-300 w-14 h-8 rounded-full"></div>
-                <div
-                  className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full 
-                            transition"
-                ></div>
-              </div>
-              <div className="relative mb-6 flex-grow">
-                <input
-                  id="labels-range-input"
-                  type="range"
-                  value="50"
-                  min="0"
-                  max="100"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
-                  Min (0)
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  25
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  50
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  75
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
-                  Max (100)
-                </span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                step="2"
-                value="0"
-                name="cantitate"
-                className="border border-gray-300 p-2 rounded-lg focus:outline-none 
-                        focus:ring-2 focus:ring-blue-500 dark:bg-[#1a2c32]"
-              />
-            </div>
-          </div>
-
-          <div className="mt-2">
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                    dark:text-white"
-            >
-              Examenes
-            </label>
-            <div className="flex items-center space-x-4 sm:max-w-full">
-              <div className="relative">
-                <input type="checkbox" id="toggle" className="sr-only" />
-                <div className="block bg-gray-300 w-14 h-8 rounded-full"></div>
-                <div
-                  className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full 
-                            transition"
-                ></div>
-              </div>
-              <div className="relative mb-6 flex-grow">
-                <input
-                  id="labels-range-input"
-                  type="range"
-                  value="50"
-                  min="0"
-                  max="100"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
-                  Min (0)
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  25
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  50
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  75
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
-                  Max (100)
-                </span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                step="2"
-                value="0"
-                name="cantitate"
-                className="border border-gray-300 p-2 rounded-lg focus:outline-none 
-                        focus:ring-2 focus:ring-blue-500 dark:bg-[#1a2c32]"
-              />
-            </div>
-          </div>
-
-          <div className="mt-2">
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                    dark:text-white"
-            >
-              Proyectos
-            </label>
-            <div className="flex items-center space-x-4 sm:max-w-full">
-              <div className="relative">
-                <input type="checkbox" id="toggle" className="sr-only" />
-                <div className="block bg-gray-300 w-14 h-8 rounded-full"></div>
-                <div
-                  className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full 
-                            transition"
-                ></div>
-              </div>
-              <div className="relative mb-6 flex-grow">
-                <input
-                  id="labels-range-input"
-                  type="range"
-                  value="50"
-                  min="0"
-                  max="100"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
-                  Min (0)
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  25
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  50
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  75
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
-                  Max (100)
-                </span>
-              </div>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                step="2"
-                value="0"
-                name="cantitate"
-                className="border border-gray-300 p-2 rounded-lg focus:outline-none 
-                        focus:ring-2 focus:ring-blue-500 dark:bg-[#1a2c32]"
-              />
-            </div>
-          </div>
+          <CheckboxWithSlider
+            label="Participaciones"
+            onValueChange={handleParticipacionesChange}
+          />
+          <CheckboxWithSlider
+            label="Tareas"
+            onValueChange={handleTareasChange}
+          />
+          <CheckboxWithSlider
+            label="Examenes"
+            onValueChange={handleExamenesChange}
+          />
+          <CheckboxWithSlider
+            label="Proyectos"
+            onValueChange={handleProyectosChange}
+          />
 
           <div className="mt-4 flex justify-end items-end">
             <div className="mr-4">
@@ -312,7 +262,7 @@ export default function EncuadreCalificacion() {
             </div>
           </div>
 
-          <div className="mt-2">
+          <div className="mt-2 mb-4">
             <label
               htmlFor="small"
               className="block mb-2 text-sm font-medium text-gray-900
@@ -338,27 +288,18 @@ export default function EncuadreCalificacion() {
                              bg-white w-6 h-6 rounded-full transition"
                 ></div>
               </div>
-              <div className="flex flex-col items-start -ml-4">
+              <div className="flex flex-col items-start -ml-4 ">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   Redondear al entero
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-gray-500 dark:text-gray-400 ">
                   más próximo
                 </span>
               </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            className="w-96  sm:max-w-xl mt-4 text-white bg-[#438e96] hover:bg-[#3b757f] 
-                        focus:ring-4 focus:outline-none focus:ring-blue-300 
-                        font-medium rounded-lg text-sm px-5 py-2.5  text-center 
-                      dark:bg-[#438e96] dark:hover:bg-[#3b757f] 
-                    dark:focus:ring-blue-800  "
-          >
-            Guardar
-          </button>
+          <SubmitButton buttonText="Guardar" additionalClassName=" max-w-sm" />
         </div>
       </div>
     </>

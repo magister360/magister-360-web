@@ -1,8 +1,9 @@
-import { StudentParticipacion } from "@/app/types/types";
+
+import { StudentProyecto } from "@/app/types/proyecto/TypeProyecto";
 import { getApiUrl } from "../../../../../../API";
 import axios from "axios";
 
-export const createParticipacionApi = async (
+export const createProyectoApi = async (
   id: string,
   fecha: string,
   fechaRegistro: Date,
@@ -16,7 +17,7 @@ export const createParticipacionApi = async (
   if (fecha === "") {
     return false;
   }
-  const apiUrl = getApiUrl("/api/participacion");
+  const apiUrl = getApiUrl("/api/proyecto");
 
   const response = await axios
     .post(
@@ -47,14 +48,14 @@ export const createParticipacionApi = async (
   return response;
 };
 
-export const getParticipacionesApi = async (
+export const getProyectosApi = async (
   idUsuario: number,
   idMateria: number,
   codigoBarras: string,
   fecha: string,
-  estatus:number
-): Promise<StudentParticipacion | null> => {
-  const apiUrl = getApiUrl("/api/participacion");
+  estatus:  number
+): Promise<StudentProyecto | null> => {
+  const apiUrl = getApiUrl("/api/proyecto");
 
   const response = await axios
     .get(apiUrl, {
@@ -68,12 +69,14 @@ export const getParticipacionesApi = async (
     })
     .then((r) => {
       if (r.status === 200) {
-        return r.data as StudentParticipacion;
+        return r.data as StudentProyecto;
       } else {
+        console.log(r.status)
         return null;
       }
     })
     .catch((e) => {
+  
       return null;
     });
   return response;

@@ -24,7 +24,7 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     idAlumno,
     idUsuario,
     idMateria,
-    estatus
+    estatus,
   } = req.body;
   if (
     idAlumno === undefined ||
@@ -38,7 +38,7 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   ) {
     return res.status(401).json({ error: "Parametros invalidos" });
   }
-  const response = await prisma.participaciones
+  const response = await prisma.tareas
     .create({
       data: {
         id,
@@ -49,11 +49,13 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         idAlumno,
         idUsuario,
         idMateria,
-        estatus
+        estatus,
       },
     })
     .catch((error) => {
-      return res.status(401).json({ error: "Error al guardar" });
+      console.log(error);
+
+      return res.status(401).json({ error: "Error al guardar " });
     });
 
   return res.status(200).json(response);
@@ -88,7 +90,7 @@ async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const fechaStr = Array.isArray(fecha) ? fecha[0] : fecha;
 
   try {
-    const participacionResult = await prisma.participaciones.findFirst({
+    const tareaResult = await prisma.tareas.findFirst({
       where: {
         AND: [
           { alumno: { codigoBarras: codigoBarrasStr } },
@@ -109,8 +111,8 @@ async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       },
     });
 
-    if (participacionResult) {
-      return res.status(404).json({ error: "existe participacion" });
+    if (tareaResult) {
+      return res.status(404).json({ error: "existe tarea" });
     }
 
     const alumnoResult = await prisma.alumno.findFirst({

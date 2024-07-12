@@ -1,11 +1,9 @@
 import { convertDateToISO } from "@/app/utils/DateUtils";
-import {
-  createParticipacionApi,
-  getParticipacionesApi,
-} from "../services/ParticipacionService";
-import { StudentParticipacion } from "@/app/types/types";
 
-export const createParticipacion = async (
+import { createProyectoApi, getProyectosApi } from "../service/ProyectoService";
+import { StudentProyecto } from "@/app/types/proyecto/TypeProyecto";
+
+export const createProyecto = async (
   id: string,
   fecha: string | null,
   calificacion: number,
@@ -13,8 +11,9 @@ export const createParticipacion = async (
   idAlumno: string,
   idUsuario: number,
   idMateria: number | undefined,
-  estatus:number
+  estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
+  console.log("fecha " + fecha);
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
@@ -27,14 +26,14 @@ export const createParticipacion = async (
     idUsuario <= 0 ||
     fecha === null
   ) {
-
+    console.log(idAlumno);
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
   const fechaRegistro: Date = new Date();
   const fechaISO = convertDateToISO(fecha);
 
-  return await createParticipacionApi(
+  return await createProyectoApi(
     id,
     fechaISO,
     fechaRegistro,
@@ -42,14 +41,14 @@ export const createParticipacion = async (
     contenido,
     idAlumno,
     idUsuario,
-    idMateria, 
+    idMateria,
     estatus
   )
     .then((response) => {
       if (response) {
         return {
           isSave: true,
-          message: "La participación se guardó con éxito",
+          message: "El proyecto se guardó con éxito",
         };
       } else {
         return {
@@ -64,13 +63,13 @@ export const createParticipacion = async (
     });
 };
 
-export const getParticipacion = async (
+export const getProyecto = async (
   idUsuario: number,
   idMateria: number | undefined,
   codigoBarras: string,
   fecha: string | null,
   estatus: number
-): Promise<StudentParticipacion | null> => {
+): Promise<StudentProyecto | null> => {
   if (
     codigoBarras === undefined ||
     codigoBarras.length === 0 ||
@@ -84,7 +83,7 @@ export const getParticipacion = async (
   }
   const fechaISO = convertDateToISO(fecha);
 
-  return await getParticipacionesApi(
+  return await getProyectosApi(
     idUsuario,
     idMateria,
     codigoBarras,

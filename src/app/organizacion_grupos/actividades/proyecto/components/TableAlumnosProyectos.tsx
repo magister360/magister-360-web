@@ -1,15 +1,14 @@
 "use cliente";
-import {
-  ItemStudentParticipacion,
-} from "@/app/types/types";
+
+import { ItemStudentProyecto } from "@/app/types/proyecto/TypeProyecto";
 import { v4 as uuidv4 } from "uuid";
 
 type Props = {
-  readonly alumnos: ItemStudentParticipacion[];
+  readonly alumnos: ItemStudentProyecto[];
   readonly errorEncabezado: string;
 };
 
-export default function TableAlumnosParticipacion({
+export default function TableAlumnosProyecto({
   alumnos,
   errorEncabezado,
 }: Props) {
@@ -66,7 +65,10 @@ export default function TableAlumnosParticipacion({
                     <td className="px-6 py-4 w-1/6">{alumno.calificacion}</td>
                   </tr>
                 ) : (
-                  <div key={uuidv4()} className=" items-center text-justify justify-center">
+                  <div
+                    key={uuidv4()}
+                    className=" items-center text-justify justify-center"
+                  >
                     No existen datos
                   </div>
                 )

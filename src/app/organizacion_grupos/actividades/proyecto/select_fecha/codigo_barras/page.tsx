@@ -1,5 +1,6 @@
 "use client";
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
+import SubmitButton from "@/app/components/SubmitButton";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import { DateFormats, formatDate } from "@/app/utils/DateUtils";
 import { useRouter } from "next/navigation";
@@ -27,12 +28,12 @@ export default function ProyectoSelectFecha() {
   };
 
   const onSubmit = async (data: any) => {
-    console.log(" " + data.date);
+
 
     const params = new URLSearchParams({ date: watch("date") });
 
     router.push(
-      `/organizacion_grupos/actividades/participacion?${params.toString()}`
+      `/organizacion_grupos/actividades/proyecto?${params.toString()}`
     );
   };
 
@@ -86,16 +87,7 @@ export default function ProyectoSelectFecha() {
               <ErrorMessageInput message={errors.date.message + ""} />
             )}
             <div className="mt-4 mb-4 w-full">
-              <button
-                className="w-full block  text-white bg-[#438e96] hover:bg-[#3b757f] 
-                            focus:ring-4 focus:outline-none focus:ring-blue-300 
-                            font-medium rounded-lg text-sm px-5 py-2.5  text-center 
-                          dark:bg-[#438e96] dark:hover:bg-[#3b757f] 
-                          dark:focus:ring-blue-800  "
-                type="submit"
-              >
-                Continuar
-              </button>
+              <SubmitButton buttonText="Continuar" />
             </div>
           </div>
         </div>

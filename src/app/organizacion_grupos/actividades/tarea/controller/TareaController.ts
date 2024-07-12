@@ -1,11 +1,8 @@
 import { convertDateToISO } from "@/app/utils/DateUtils";
-import {
-  createParticipacionApi,
-  getParticipacionesApi,
-} from "../services/ParticipacionService";
-import { StudentParticipacion } from "@/app/types/types";
+import { createTareaApi, getTareasApi } from "../service/TareaService";
+import { StudentTarea } from "@/app/types/tarea/TypeTarea";
 
-export const createParticipacion = async (
+export const createTarea = async (
   id: string,
   fecha: string | null,
   calificacion: number,
@@ -13,8 +10,9 @@ export const createParticipacion = async (
   idAlumno: string,
   idUsuario: number,
   idMateria: number | undefined,
-  estatus:number
+  estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
+  console.log("fecha " + fecha);
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
@@ -27,14 +25,13 @@ export const createParticipacion = async (
     idUsuario <= 0 ||
     fecha === null
   ) {
-
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
   const fechaRegistro: Date = new Date();
   const fechaISO = convertDateToISO(fecha);
 
-  return await createParticipacionApi(
+  return await createTareaApi(
     id,
     fechaISO,
     fechaRegistro,
@@ -42,14 +39,14 @@ export const createParticipacion = async (
     contenido,
     idAlumno,
     idUsuario,
-    idMateria, 
+    idMateria,
     estatus
   )
     .then((response) => {
       if (response) {
         return {
           isSave: true,
-          message: "La participación se guardó con éxito",
+          message: "La tarea se guardó con éxito",
         };
       } else {
         return {
@@ -64,13 +61,13 @@ export const createParticipacion = async (
     });
 };
 
-export const getParticipacion = async (
+export const getTarea = async (
   idUsuario: number,
   idMateria: number | undefined,
   codigoBarras: string,
   fecha: string | null,
   estatus: number
-): Promise<StudentParticipacion | null> => {
+): Promise<StudentTarea | null> => {
   if (
     codigoBarras === undefined ||
     codigoBarras.length === 0 ||
@@ -84,7 +81,7 @@ export const getParticipacion = async (
   }
   const fechaISO = convertDateToISO(fecha);
 
-  return await getParticipacionesApi(
+  return await getTareasApi(
     idUsuario,
     idMateria,
     codigoBarras,

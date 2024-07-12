@@ -1,25 +1,20 @@
 "use client";
 import Image from "next/image";
-import TableAlumnosParticipacion from "./components/TableAlumnosParticipacion";
+
 import { useSearchParams } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  createParticipacion,
-  getParticipacion,
-} from "./controller/ParticipacionController";
 import { v4 as uuidv4 } from "uuid";
 import ErrorModal from "@/app/components/ErrorModal ";
-import SuccessNameModal from "./components/SuccessNameModal";
-import {
-  ItemStudentParticipacion,
-  StudentParticipacion,
-} from "@/app/types/types";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
+import SuccessNameModal from "../participacion/components/SuccessNameModal";
+import TableAlumnosTarea from "./components/TableAlumnosTareas";
 
+import { ItemStudentTarea, StudentTarea } from "@/app/types/tarea/TypeTarea";
+import { createTarea, getTarea } from "./controller/TareaController";
+import { EstatusTareaType } from "@/app/estatus/EstatusType";
 
-export default function Participacion() {
+export default function Tarea() {
   const { isMenuVisible } = useSidebarContext();
   const searchParams = useSearchParams();
   const [date, setDate] = useState<string | null>(null);
@@ -32,8 +27,9 @@ export default function Participacion() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
   const [nombre, setNombre] = useState("");
-  const [alumnos, setAlumnos] = useState<ItemStudentParticipacion[]>([]);
+  const [alumnos, setAlumnos] = useState<ItemStudentTarea[]>([]);
   const [calificacion, setCalificacion] = useState(10);
   const barcodeInputRef = useRef<HTMLInputElement>(null);
 
@@ -48,48 +44,48 @@ export default function Participacion() {
     setBarcode(event.target.value);
   };
 
-  function addStudent(studentParticipacion: StudentParticipacion) {
-    if (studentParticipacion) {
-      const newStudent: ItemStudentParticipacion = {
-        ...studentParticipacion,
+  function addStudent(studentTarea: StudentTarea) {
+    if (studentTarea) {
+      const newStudent: ItemStudentTarea = {
+        ...studentTarea,
         calificacion: calificacion,
       };
       setAlumnos((prevAlumnos) => [...prevAlumnos, newStudent]);
     }
   }
 
-  const handleKeyPress = async (
+  const handleKeyDown = async (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       const UUID = uuidv4();
       const userId = idUsuario ?? -1;
-      const studentParticipacion = await getParticipacion(
+      const studentTarea = await getTarea(
         userId,
         idMateria,
         barcode,
         date,
-        EstatusParticipacionType.OK
+        EstatusTareaType.OK
       );
-      if (!studentParticipacion) {
-        setErrorMessage("Error al guardar la participación");
+      if (!studentTarea) {
+        setErrorMessage("Error al guardar la tarea");
         setIsErrorModalOpen(true);
       } else {
-        addStudent(studentParticipacion);
+        addStudent(studentTarea);
         setNombre(
-          `${studentParticipacion.nombre} 
-          ${studentParticipacion.apellidoPaterno} 
-          ${studentParticipacion.apellidoMaterno}`
+          `${studentTarea.nombre} 
+          ${studentTarea.apellidoPaterno} 
+          ${studentTarea.apellidoMaterno}`
         );
-        const save = await createParticipacion(
+        const save = await createTarea(
           UUID,
           date,
           calificacion,
           contenido ?? "",
-          studentParticipacion.id,
+          studentTarea.id,
           userId,
           idMateria,
-          EstatusParticipacionType.OK
+          EstatusTareaType.OK
         );
         if (save.isSave) {
           setSuccessMessage(save.message);
@@ -131,6 +127,7 @@ export default function Participacion() {
       />
     );
   }
+
   if (isSuccessModalOpen) {
     return (
       <SuccessNameModal
@@ -142,21 +139,22 @@ export default function Participacion() {
       />
     );
   }
-
   return (
     <div
       className={`mt-16 mr-4  
-    ${isMenuVisible ? "ml-72" : "ml-4"}`}
+                ${isMenuVisible ? "ml-72" : "ml-4"}`}
     >
-      <h3
+      <label
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
+        htmlFor="lbl-date-start-end"
       >
-        Participación
-      </h3>
+        Tarea
+      </label>
+
       <div
-        className={` mr-4  pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
-                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]`}
+        className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
+                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]"
       >
         <div className="flex space-x-2">
           <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
@@ -200,10 +198,15 @@ export default function Participacion() {
           className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
                  sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]"
         >
-          <div>
-            Contenido
-            <h2 className="font-light text-base">{contenido}</h2>
-          </div>
+          <label
+            className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
+            htmlFor="lbl-f"
+          >
+            <div>
+              Contenido
+              <h2 className="font-light text-base">{contenido}</h2>
+            </div>
+          </label>
         </div>
       )}
       <div
@@ -229,7 +232,7 @@ export default function Participacion() {
           </div>
           <input
             type="text"
-            id="text-grado"
+            id="text-codigo-barras"
             ref={barcodeInputRef}
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm
              rounded-lg block w-full pl-14 p-2.5 
@@ -241,11 +244,11 @@ export default function Participacion() {
             placeholder=""
             value={barcode}
             onChange={handleChange}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleKeyDown}
           />
         </div>
 
-        <TableAlumnosParticipacion alumnos={alumnos} errorEncabezado="" />
+        <TableAlumnosTarea alumnos={alumnos} errorEncabezado="" />
       </div>
     </div>
   );

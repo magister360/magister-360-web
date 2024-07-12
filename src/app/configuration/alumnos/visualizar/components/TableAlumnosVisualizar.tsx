@@ -1,12 +1,13 @@
 import EAN13Barcode from "@/app/components/EAN13BarcodeProps";
 import StatusAlumno from "../../components/StatusAlumno";
+import { v4 as uuidv4 } from "uuid";
 
 import Image from "next/image";
 import { StudentType } from "@/app/types/types";
 
 type Props = {
-  students: StudentType[];
-  handlesetNewModifyStudentOpen: (
+  readonly students: StudentType[];
+  readonly handlesetNewModifyStudentOpen: (
     studentSelect: StudentType | undefined
   ) => void;
 };
@@ -16,7 +17,7 @@ export default function TableAlumnosVisualizar({
   handlesetNewModifyStudentOpen,
 }: Props) {
   return (
-    <>
+    
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mt-3 mr-3">
         <div
           className="flex items-center justify-between flex-column flex-wrap md:flex-row 
@@ -55,7 +56,7 @@ export default function TableAlumnosVisualizar({
             {students && students.length > 0 ? (
               students.map((student, index) => (
                 <tr
-                  key={index}
+                  key={uuidv4()}
                   className="border-b dark:bg-[#1a2c32] bg-[#ffffff] dark:border-gray-700 hover:bg-[#e6e6e6] dark:hover:bg-gray-600"
                 >
                   <td className="w-4 p-4">
@@ -136,6 +137,6 @@ export default function TableAlumnosVisualizar({
           </tbody>
         </table>
       </div>
-    </>
+    
   );
 }
