@@ -6,6 +6,7 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   switch (req.method) {
     case "POST":
       return await post(req, res);
+
     default:
       res.status(405).json({ error: "Método no permitido" });
       return;
@@ -18,7 +19,7 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (!user || !password || !cls) {
     return res.status(401).json({ error: "Parametros invalidos" });
   }
-  const estatusInt = parseInt(estatus, 10); 
+  const estatusInt = parseInt(estatus, 10);
 
   try {
     const response = await prisma.users.create({
@@ -33,7 +34,7 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     });
     return res.status(200).json(response);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(401).json({ error: "Error al guardar" });
   }
 }

@@ -1,10 +1,9 @@
 import axios from "axios";
 import { getApiUrl } from "../../../../API";
-import { decryptString } from "../../../../security/Security";
+import { decryptString } from "../../security/Security";
 import { ResponseCredentials } from "./ResponseCredentials";
-import { saveSessionCookies } from "@/app/sesions/SesionCookies";
 import { User } from "@/app/types/types";
-import { LastUser } from "@/app/types/TypesLoginRecords";
+import { LastUser, UserLogeado } from "@/app/types/TypesLoginRecords";
 
 export const getUsers = async () => {
   const apiUrl = getApiUrl("/api/users");
@@ -16,7 +15,11 @@ export const getUsers = async () => {
       },
     })
     .then((response) => {
-      response.data;
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        return null;
+      }
     })
     .catch((e) => {
       return null;
@@ -27,6 +30,7 @@ interface CredentialResult {
   approve: boolean;
   id: number;
   userName: string;
+  cls: string;
 }
 
 export const getCredentials = async (
@@ -38,6 +42,7 @@ export const getCredentials = async (
       approve: false,
       id: 0,
       userName: "",
+      cls: "",
     };
   }
   const apiUrl = getApiUrl("/api/credentials");
@@ -63,19 +68,16 @@ export const getCredentials = async (
   const decryptStringInput = decryptString(encryptedPassword);
 
   const responseCredentials = ResponseCredentials.fromStringToJson(response);
-  const decryptStringBD = decryptString(
-    responseCredentials.password === null ? "" : responseCredentials.password
-  );
+  const decryptStringBD = decryptString(responseCredentials.password ?? "");
+
   const compareAprove: number =
     decryptStringInput.localeCompare(decryptStringBD);
-  if (responseCredentials !== null && compareAprove === 0) {
-    saveSessionCookies(responseCredentials.id, responseCredentials.userName);
-  }
 
   return {
     approve: compareAprove === 0,
     id: responseCredentials.id,
     userName: responseCredentials.userName,
+    cls: responseCredentials.cls,
   };
 };
 
@@ -117,14 +119,35 @@ export const postUserApi = async (userData: User): Promise<void> => {
   }
 };
 
-
-export const getUltimoUsuarioApi = async (): Promise<LastUser|null> => {
+export const getUltimoUsuarioApi = async (): Promise<LastUser | null> => {
   const apiUrl = getApiUrl("/api/ultimo_user");
 
   try {
     const response = await axios.get(apiUrl, {
       headers: {
         "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    return null;
+  }
+};
+
+export const getUserLogeadoApi = async (
+  id: number
+): Promise<UserLogeado | null> => {
+  const apiUrl = getApiUrl("/api/user_logeado");
+
+  try {
+    const response = await axios.get(apiUrl, {
+      params: {
+        id: id,
       },
     });
 

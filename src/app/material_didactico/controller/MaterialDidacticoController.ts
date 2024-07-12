@@ -10,10 +10,10 @@ import {
 } from "../services/MaterialDidacticoService";
 
 export const fechSearchMaterialTitulo = async (
-  idGrado: number,
-  idGrupo: number,
-  idMateria: number,
-  textSearch: string
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
+  idMateria: number | undefined,
+  textSearch: string | undefined
 ) => {
   if (
     idGrado === undefined ||
@@ -21,7 +21,8 @@ export const fechSearchMaterialTitulo = async (
     idGrupo === undefined ||
     idGrupo <= 0 ||
     idMateria === undefined ||
-    idMateria <= 0
+    idMateria <= 0 ||
+    textSearch === undefined
   ) {
     return null;
   }
@@ -37,13 +38,18 @@ export const fechSearchMaterialTitulo = async (
 };
 
 export const fechSearchMaterialTituloEquipo = async (
-  grado: string,
-  grupo: string,
-  materia: string,
+  grado: string | undefined,
+  grupo: string | undefined,
+  materia: string | undefined,
   tipo: string,
-  txtSearch: string
+  txtSearch: string | undefined
 ): Promise<FileInfo[] | null> => {
-  if (grado === undefined || grupo === undefined || materia === undefined) {
+  if (
+    grado === undefined ||
+    grupo === undefined ||
+    materia === undefined ||
+    txtSearch === undefined
+  ) {
     return null;
   }
   const currentMonth = getCurrentMonth();
@@ -106,10 +112,10 @@ export const fetchOpenDiapositivas = async (path: string): Promise<string> => {
   return fetchOpenDiapositivasApi(path);
 };
 
-export const fetchFilesContentWord= async (
-  grado: string,
-  grupo: string,
-  materia: string,
+export const fetchFilesContentWord = async (
+  grado: string | undefined,
+  grupo: string | undefined,
+  materia: string | undefined,
   tipos: string[]
 ): Promise<FileInfo[] | null> => {
   if (grado === undefined || grupo === undefined || materia === undefined) {
@@ -117,5 +123,3 @@ export const fetchFilesContentWord= async (
   }
   return fetchFilesContentWordApi(grado, grupo, materia, tipos);
 };
-
-

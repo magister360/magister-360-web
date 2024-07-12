@@ -1,4 +1,4 @@
-import { decryptString, encryptString } from "../../../security/Security";
+import { decryptString, encryptString } from "../security/Security";
 import { SelectionGGM } from "./SelectionGGM";
 
 const CLAVE_SELECTION_APP = 'selectionGGM4545dYU34515za';

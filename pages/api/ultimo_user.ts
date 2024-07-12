@@ -16,6 +16,7 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         usuario: {
           select: {
             id: true,
+            
             foto: true,
           },
         },

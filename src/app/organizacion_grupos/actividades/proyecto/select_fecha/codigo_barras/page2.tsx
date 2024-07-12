@@ -1,23 +1,26 @@
 "use client";
 import Image from "next/image";
-import TableAlumnosParticipacion from "./components/TableAlumnosParticipacion";
-import { useSearchParams } from "next/navigation";
+
+import { useSearchParams, usePathname } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import React, { useState, useEffect } from "react";
-import {
-  createParticipacion,
-  getParticipacion,
-} from "./controller/ParticipacionController";
+import React, { useState, KeyboardEvent, useEffect, useRef } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import ErrorModal from "@/app/components/ErrorModal ";
-import SuccessNameModal from "./components/SuccessNameModal";
+
 import {
   ItemStudentParticipacion,
   StudentParticipacion,
 } from "@/app/types/types";
+import {
+  createParticipacion,
+  getParticipacion,
+} from "../../../participacion/controller/ParticipacionController";
+import SuccessNameModal from "../../../participacion/components/SuccessNameModal";
+import TableAlumnosParticipacion from "../../../participacion/components/TableAlumnosParticipacion";
 
-export default function Participacion() {
+export default function Proyecto() {
   const { isMenuVisible } = useSidebarContext();
   const searchParams = useSearchParams();
   const [date, setDate] = useState<string | null>(null);
@@ -82,7 +85,7 @@ export default function Participacion() {
           UUID,
           date,
           calificacion,
-          contenido ?? "",
+          contenido ? contenido : "",
           studentParticipacion.id,
           userId,
           idMateria
@@ -111,18 +114,14 @@ export default function Participacion() {
     }
   }, [searchParams]);
 
-  if (isErrorModalOpen) {
-    return (
+  return (
+    <>
       <ErrorModal
         isOpen={isErrorModalOpen}
         onClose={handleCloseErrorModal}
         errorMessage={errorMessage}
         setErrorMessage={setErrorMessage}
       />
-    );
-  }
-  if (isSuccessModalOpen) {
-    return (
       <SuccessNameModal
         isOpen={isSuccessModalOpen}
         onClose={handleSuccessModal}
@@ -130,24 +129,22 @@ export default function Participacion() {
         setSuccessMessage={setSuccessMessage}
         name={nombre}
       />
-    );
-  }
 
-  return (
-    <>
       <div
         className={`mt-16 mr-4  
     ${isMenuVisible ? "ml-72" : "ml-4"}`}
       >
-        <h3
+        <label
           className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
+          htmlFor="lbl-date-start-end"
         >
-          Participación
-        </h3>
+          Proyecto
+        </label>
+
         <div
-          className={` mr-4  pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
-                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]`}
+          className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
+                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]"
         >
           <div className="flex space-x-2">
             <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
@@ -188,17 +185,22 @@ export default function Participacion() {
         </div>
         {contenido && (
           <div
-            className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
+            className="ml-72 mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
                  sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]"
           >
-            <div>
-              Contenido
-              <h2 className="font-light text-base">{contenido}</h2>
-            </div>
+            <label
+              className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
+              htmlFor="lbl-f"
+            >
+              <>
+                Contenido
+                <h2 className="font-light text-base">{contenido}</h2>
+              </>
+            </label>
           </div>
         )}
         <div
-          className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
+          className="ml-72 mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
                  sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff] mr-4"
         >
           <label
@@ -231,7 +233,7 @@ export default function Participacion() {
               placeholder=""
               value={barcode}
               onChange={handleChange}
-              onKeyDown={handleKeyPress}
+              onKeyPress={handleKeyPress}
             />
           </div>
 

@@ -39,6 +39,7 @@ export const searchMaterialTituloEquipoApi = async (
   txtSearch: string
 ) => {
   const endpoint = "files_content";
+ 
 
   const response = await apiSpringBoot
     .get(endpoint, {

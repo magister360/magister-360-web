@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export default function ProyectoSelectFecha() {
+export default function ParticipacionSelectFecha() {
   const { isMenuVisible } = useSidebarContext();
   const {
     register,
@@ -53,7 +53,7 @@ export default function ProyectoSelectFecha() {
             font-bold text-xl mb-2"
           htmlFor="lbl-date-start-end"
         >
-          Proyecto
+          Participación
         </label>
 
         <div

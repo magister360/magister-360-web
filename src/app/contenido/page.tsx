@@ -1,14 +1,21 @@
+"use client"
 import { AuthCheck } from "../hooks/AuthCheck";
+import { useSidebarContext } from "../sidebar/SidebarContext";
 import ListItemContenido from "./components/ListItemContenido";
 import ProgressBarContenido from "./components/ProgressBarContenido";
 
+
 export default function Contenido() {
+  const { isMenuVisible } = useSidebarContext();
   const items = [
     {
       text: "Maximo común divisor y mínimo común múltiplo",
       date: "19 de junio del 2024",
     },
-    { text: "Números: operaciones con números enteros", date: "19 de junio del 2024" },
+    {
+      text: "Números: operaciones con números enteros",
+      date: "19 de junio del 2024",
+    },
     {
       text: "Números: fracciones equivalente y adición y sustracción",
       date: "19 de junio del 2024",
@@ -21,13 +28,18 @@ export default function Contenido() {
       text: "Números: expresiones fraccionarias, decimales y porcentuale",
       date: "19 de junio del 2024",
     },
-    { text: "Álgebra: proporcionalidad directa e inversa", date: "19 de junio del 2024" },
+    {
+      text: "Álgebra: proporcionalidad directa e inversa",
+      date: "19 de junio del 2024",
+    },
   ];
-  
 
   return (
-    <div className="mt-16 ml-72 mr-4">
-      <AuthCheck/>
+    <div
+      className={`mt-16 mr-4
+      ${isMenuVisible ? "ml-72" : "ml-4"}`}
+    >
+      <AuthCheck />
       <div
         className=" rounded-lg shadow  
                         sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff] p-5"

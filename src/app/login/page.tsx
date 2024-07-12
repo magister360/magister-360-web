@@ -5,12 +5,13 @@ import ErrorMessage from "../components/ErrorMessage";
 import Image from "next/image";
 import { useState } from "react";
 import { getCredentials } from "./services/usersService";
-import { encryptString } from "../../../security/Security";
+import { decryptString, encryptString } from "../security/Security";
 import { useRouter } from "next/navigation";
 import Loading from "../components/Loading";
 import { createInicioSesion } from "./controller/InicioSesionController";
 import { useSidebarContext } from "../sidebar/SidebarContext";
 import { v4 as uuidv4 } from "uuid";
+import { Licencia } from "../types/TypesLicencia";
 
 export default function Login() {
   const router = useRouter();
@@ -46,9 +47,17 @@ export default function Login() {
         updateContextField("idUsuario", credentialsAprove.id);
         updateContextField("nameUser", credentialsAprove.userName);
         updateContextField("idInicioSesion", id);
+        updateContextField("cls", credentialsAprove.cls);
         await createInicioSesion(id, credentialsAprove.id);
-        router.refresh();
-        router.push("/sectionGGM");
+        const validLicencia = await compareLicencia(credentialsAprove.cls);
+        if (validLicencia) {
+          router.refresh();
+          router.push("/sectionGGM");
+        } else {
+          router.refresh();
+          router.push("/licencia");
+        }
+  
       } else if (!credentialsAprove.approve) {
         setErrorCredentials(true);
         setTimeout(() => {
@@ -65,6 +74,28 @@ export default function Login() {
       }, 5000);
       setUserName("");
       setPassword("");
+    }
+  };
+  const compareLicencia = async (cls: string) => {
+    if (cls === undefined) {
+      return false;
+    }
+    const clsDesencript = decryptString(cls);
+
+    try {
+      const licenciaObj = JSON.parse(clsDesencript);
+
+      const licencia: Licencia = {
+        fechaActivacion: new Date(licenciaObj.fechaActivacion),
+        fechaVencimiento: new Date(licenciaObj.fechaVencimiento),
+        idUsuario: licenciaObj.idUsuario,
+        tipo: licenciaObj.tipo,
+      };
+      const fechaActual = new Date();
+
+      return fechaActual <= licencia.fechaVencimiento;
+    } catch (error) {
+      return false;
     }
   };
 

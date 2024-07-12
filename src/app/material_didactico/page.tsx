@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import YouTubePlayer from "./components/YouTubePlayer";
 import { DocumentTypeValues } from "../utils/DocumentTypeValues";
-import { loadSelectionGGMFromLocalStorage } from "../selection/SelectionGGMCookies";
 import { FileInfo, MaterialDidacticoType } from "../types/types";
 import VideosYouTubeCarousel from "./components/VideosYouTubeCarousel";
 import {
@@ -17,8 +16,12 @@ import PDFViewer from "./components/PDFViewer";
 import Loading from "../components/Loading";
 import WordsMaterialCarousel from "./components/WordsMaterialCarousel";
 import { TextMaterialDidactico } from "../constants/texts_material_diadctico/TextMaterialDidactico";
+import { useSidebarContext } from "../sidebar/SidebarContext";
 
 export default function MaterialDidactico() {
+  const { idGrado, idGrupo, idMateria, grado, grupo, materia, isMenuVisible } =
+    useSidebarContext();
+  const [isLoading, setIsLoading] = useState(false);
   const scrollToTop = () => {
     setIsLoading(true);
     window.scrollTo({
@@ -36,164 +39,155 @@ export default function MaterialDidactico() {
     MaterialDidacticoType | undefined
   >(undefined);
 
-  const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     const fechMaterialDidactico = async () => {
       setIsLoading(true);
-      const sesionLocalStorage = loadSelectionGGMFromLocalStorage();
 
-      if (sesionLocalStorage !== null) {
-        const { idGrado, idGrupo, idMateria, grado, grupo, materia } =
-          sesionLocalStorage;
+      try {
+        const materiales =
+          (await fechSearchMaterialTitulo(
+            idGrado,
+            idGrupo,
+            idMateria,
+            "react"
+          )) || [];
 
-        try {
-          const materiales =
-            (await fechSearchMaterialTitulo(
-              idGrado,
-              idGrupo,
-              idMateria,
-              "ecuaciones"
-            )) || [];
+        const diapositivasEquipo = await fechSearchMaterialTituloEquipo(
+          grado,
+          grupo,
+          materia,
+          DocumentTypeValues.DIAPOSITIVAS.type,
+          "ecuaciones"
+        );
 
-          const diapositivasEquipo = await fechSearchMaterialTituloEquipo(
-            grado,
-            grupo,
-            materia,
-            DocumentTypeValues.DIAPOSITIVAS.type,
-            "ecuaciones"
-          );
+        const videosEquipo = await fechSearchMaterialTituloEquipo(
+          grado,
+          grupo,
+          materia,
+          DocumentTypeValues.VIDEO.type,
+          "TRIÁNGULO"
+        );
 
-          const videosEquipo = await fechSearchMaterialTituloEquipo(
-            grado,
-            grupo,
-            materia,
-            DocumentTypeValues.VIDEO.type,
-            "TRIÁNGULO"
-          );
+        const wordsEquipo = await fechSearchMaterialTituloEquipo(
+          grado,
+          grupo,
+          materia,
+          DocumentTypeValues.WORD.type,
+          "ecuaciones"
+        );
 
-          const wordsEquipo = await fechSearchMaterialTituloEquipo(
-            grado,
-            grupo,
-            materia,
-            DocumentTypeValues.WORD.type,
-            "ecuaciones"
-          );
+        const pdfEquipo = await fechSearchMaterialTituloEquipo(
+          grado,
+          grupo,
+          materia,
+          DocumentTypeValues.PDF.type,
+          "Manual"
+        );
 
-          const pdfEquipo = await fechSearchMaterialTituloEquipo(
-            grado,
-            grupo,
-            materia,
-            DocumentTypeValues.PDF.type,
-            "Manual"
-          );
+        const arrayTypesWords = [
+          DocumentTypeValues.PROGRAMA_ANALITICO.type,
+          DocumentTypeValues.CRONOGRAMAS.type,
+          DocumentTypeValues.PLANEACION_DIDACTICA.type,
+          DocumentTypeValues.PROYECTOS.type,
+          DocumentTypeValues.EVALUACION_FORMATIVA.type,
+        ];
+        const wordsMaterialEquipo = await fetchFilesContentWord(
+          grado,
+          grupo,
+          materia,
+          arrayTypesWords
+        );
 
-          const arrayTypesWords = [
-            DocumentTypeValues.PROGRAMA_ANALITICO.type,
-            DocumentTypeValues.CRONOGRAMAS.type,
-            DocumentTypeValues.PLANEACION_DIDACTICA.type,
-            DocumentTypeValues.PROYECTOS.type,
-            DocumentTypeValues.EVALUACION_FORMATIVA.type,
-          ];
-          const wordsMaterialEquipo = await fetchFilesContentWord(
-            grado,
-            grupo,
-            materia,
-            arrayTypesWords
-          );
+        const diapositivasEquipoConvert: MaterialDidacticoType[] | undefined =
+          diapositivasEquipo?.map((mat: FileInfo, index: number) => {
+            return {
+              id: "",
+              url: mat.path,
+              titulo: mat.name,
+              descripcion: "",
+              miniatura: Buffer.from(""),
+              regDate: new Date(),
+              tipo: DocumentTypeValues.DIAPOSITIVAS.type,
+            };
+          }) || [];
 
-          const diapositivasEquipoConvert: MaterialDidacticoType[] | undefined =
-            diapositivasEquipo?.map((mat: FileInfo, index: number) => {
-              return {
-                id: "",
-                url: mat.path,
-                titulo: mat.name,
-                descripcion: "",
-                miniatura: Buffer.from(""),
-                regDate: new Date(),
-                tipo: DocumentTypeValues.DIAPOSITIVAS.type,
-              };
-            }) || [];
+        const videosEquipoConvert: MaterialDidacticoType[] | undefined =
+          videosEquipo?.map((mat: FileInfo, index: number) => {
+            return {
+              id: "",
+              url: mat.path,
+              titulo: mat.name,
+              descripcion: "",
+              miniatura: Buffer.from(""),
+              regDate: new Date(),
+              tipo: DocumentTypeValues.VIDEO.type,
+            };
+          }) || [];
 
-          const videosEquipoConvert: MaterialDidacticoType[] | undefined =
-            videosEquipo?.map((mat: FileInfo, index: number) => {
-              return {
-                id: "",
-                url: mat.path,
-                titulo: mat.name,
-                descripcion: "",
-                miniatura: Buffer.from(""),
-                regDate: new Date(),
-                tipo: DocumentTypeValues.VIDEO.type,
-              };
-            }) || [];
+        const wordEquipoConvert: MaterialDidacticoType[] | undefined =
+          wordsEquipo?.map((mat: FileInfo, index: number) => {
+            return {
+              id: "",
+              url: mat.path,
+              titulo: mat.name,
+              descripcion: "",
+              miniatura: Buffer.from(""),
+              regDate: new Date(),
+              tipo: DocumentTypeValues.WORD.type,
+            };
+          }) || [];
 
-          const wordEquipoConvert: MaterialDidacticoType[] | undefined =
-            wordsEquipo?.map((mat: FileInfo, index: number) => {
-              return {
-                id: "",
-                url: mat.path,
-                titulo: mat.name,
-                descripcion: "",
-                miniatura: Buffer.from(""),
-                regDate: new Date(),
-                tipo: DocumentTypeValues.WORD.type,
-              };
-            }) || [];
+        const pdfEquipoConvert: MaterialDidacticoType[] | undefined =
+          pdfEquipo?.map((mat: FileInfo, index: number) => {
+            return {
+              id: "",
+              url: mat.path,
+              titulo: mat.name,
+              descripcion: "",
+              miniatura: Buffer.from(""),
+              regDate: new Date(),
+              tipo: DocumentTypeValues.PDF.type,
+            };
+          }) || [];
 
-          const pdfEquipoConvert: MaterialDidacticoType[] | undefined =
-            pdfEquipo?.map((mat: FileInfo, index: number) => {
-              return {
-                id: "",
-                url: mat.path,
-                titulo: mat.name,
-                descripcion: "",
-                miniatura: Buffer.from(""),
-                regDate: new Date(),
-                tipo: DocumentTypeValues.PDF.type,
-              };
-            }) || [];
+        const wordsMaterialEquipoConvert: MaterialDidacticoType[] | undefined =
+          wordsMaterialEquipo?.map((mat: FileInfo, index: number) => {
+            console.log("tipo " + mat.tipo);
+            return {
+              id: "",
+              url: mat.path,
+              titulo: mat.name,
+              descripcion: "",
+              miniatura: Buffer.from(""),
+              regDate: new Date(),
+              tipo: mat.tipo,
+            };
+          }) || [];
 
-          const wordsMaterialEquipoConvert:
-            | MaterialDidacticoType[]
-            | undefined =
-            wordsMaterialEquipo?.map((mat: FileInfo, index: number) => {
-              console.log("tipo " + mat.tipo);
-              return {
-                id: "",
-                url: mat.path,
-                titulo: mat.name,
-                descripcion: "",
-                miniatura: Buffer.from(""),
-                regDate: new Date(),
-                tipo: mat.tipo,
-              };
-            }) || [];
+        const materialesDiapositivas = [
+          ...materiales,
+          ...diapositivasEquipoConvert,
+        ];
 
-          const materialesDiapositivas = [
-            ...materiales,
-            ...diapositivasEquipoConvert,
-          ];
+        const materialesVideos = [
+          ...materialesDiapositivas,
+          ...videosEquipoConvert,
+        ];
 
-          const materialesVideos = [
-            ...materialesDiapositivas,
-            ...videosEquipoConvert,
-          ];
+        const materialesWords = [...materialesVideos, ...wordEquipoConvert];
 
-          const materialesWords = [...materialesVideos, ...wordEquipoConvert];
+        const materialesPdfs = [...materialesWords, ...pdfEquipoConvert];
 
-          const materialesPdfs = [...materialesWords, ...pdfEquipoConvert];
+        const materialeswordsMaterialEquipo = [
+          ...materialesPdfs,
+          ...wordsMaterialEquipoConvert,
+        ];
 
-          const materialeswordsMaterialEquipo = [
-            ...materialesPdfs,
-            ...wordsMaterialEquipoConvert,
-          ];
-
-          setVideosDocument(materialeswordsMaterialEquipo);
-        } catch (error) {}
-      }
-      setIsLoading(false);
+        setVideosDocument(materialeswordsMaterialEquipo);
+        setIsLoading(false);
+      } catch (error) {}
     };
+
     fechMaterialDidactico();
   }, []);
 
@@ -241,10 +235,15 @@ export default function MaterialDidactico() {
   const existWord = doesTypeExist(videosDocument, DocumentTypeValues.WORD.type);
   const existPdf = doesTypeExist(videosDocument, DocumentTypeValues.PDF.type);
 
-  return (
-    <div className=" max-h-full h-full">
-      <Loading isLoading={isLoading} />
+  if (isLoading) {
+    return <Loading isLoading={isLoading} />;
+  }
 
+  return (
+    <div
+      className={`mt-16 mr-4
+      ${isMenuVisible ? "ml-72" : "ml-4"}`}
+    >
       {selectTypeDocument !== undefined &&
         selectTypeDocument.url !== "" &&
         selectTypeDocument.tipo === DocumentTypeValues.YOUTUBE.type && (
@@ -267,14 +266,14 @@ export default function MaterialDidactico() {
         selectTypeDocument.url !== "" &&
         selectTypeDocument.tipo !== "" &&
         selectTypeDocument.titulo !== "" && (
-          <div className="mb-4 ml-80">
+          <div className="mb-4 ">
             <h3 className="mt-4  block text-gray-700 dark:text-gray-200 font-bold text-xl ">
               {selectTypeDocument.titulo}
             </h3>
             <p className="text-gray-500"> {selectTypeDocument.descripcion}</p>
           </div>
         )}
-      <div className="mt-16">
+      <div className="">
         {existProgramaAnalitico && (
           <WordsMaterialCarousel
             videosDocument={videosDocument}

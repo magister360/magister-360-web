@@ -1,6 +1,6 @@
 
 import CryptoJS from 'crypto-js';
-import { config } from '../config';
+import { config } from '../../../config';
 
 export function encryptString(mensaje: string): string {
     return CryptoJS.AES.encrypt(mensaje, config.getSecretKey()).toString();

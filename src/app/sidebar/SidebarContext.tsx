@@ -1,6 +1,5 @@
 "use client";
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { useRouter } from "next/navigation";
+import React, { createContext, useState, useContext } from "react";
 
 interface SidebarContextType {
   visibleSidebar: boolean;
@@ -15,6 +14,8 @@ interface SidebarContextType {
   nameUser?: string;
   contenido?: string;
   idInicioSesion?: string;
+  cls?:string;
+  isMenuVisible:boolean
   updateContextField: <K extends keyof SidebarContextType>(
     field: K,
     value: SidebarContextType[K]
@@ -36,7 +37,7 @@ type SidebarProviderProps = {
 };
 
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
-  const router = useRouter();
+
   const [visibleSidebar, setVisibleSidebar] = useState(false);
 
   const [contextData, setContextData] = useState<SidebarContextType>(() => ({
@@ -52,6 +53,8 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
     nameUser: undefined,
     contenido: undefined,
     idInicioSesion: undefined,
+    cls:undefined,
+    isMenuVisible:true,
     updateContextField: <K extends keyof SidebarContextType>(
       field: K,
       value: SidebarContextType[K]

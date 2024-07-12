@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { fetchOpenPdf } from "../controller/MaterialDidacticoController";
 
 
@@ -70,7 +70,7 @@ interface PDFViewerProps {
     return (
       <div 
         ref={containerRef} 
-        className={`relative ${isFullScreen ? 'fixed inset-0 z-50' : 'ml-72 mt-14 mr-4 mb-1 h-[80vh]'}`}
+        className={`relative ${isFullScreen ? 'fixed inset-0 z-50' : ' mt-2 mr-4 mb-1 h-[80vh]'}`}
       >
         <iframe
           src={pdfUrl}

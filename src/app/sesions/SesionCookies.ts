@@ -1,4 +1,4 @@
-import { decryptString, encryptString } from "../../../security/Security";
+import { decryptString, encryptString } from "../security/Security";
 import { Sesion } from "./Sesion";
 const CLAVE_LOGGED_APP = 'Khs4SddQWRPOOIcxc654gp47896aEw';
 

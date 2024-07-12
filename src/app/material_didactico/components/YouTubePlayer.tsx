@@ -4,8 +4,6 @@ import React, { useRef, useCallback } from "react";
 
 interface YouTubePlayerProps {
   videoId: string;
- 
-
 }
 
 const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId }) => {
@@ -23,9 +21,10 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ videoId }) => {
   return (
     <div
       ref={playerRef}
-      className="ml-72 mt-14 mr-4 mb-1 relative max-h-[80vh] h-[80vh]"
+      className=" mt-2 mr-4 mb-1 relative max-h-[80vh] h-[80vh]"
     >
       <iframe
+        title="Videos de youtube"
         className="w-full h-full"
         src={embedUrl}
         allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

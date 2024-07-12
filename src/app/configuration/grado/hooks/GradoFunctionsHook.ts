@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation";
-import { loadSessionFromLocalStorage } from "@/app/sesions/SesionCookies";
 
 import { TypeStatusGrado } from "@/app/utils/TypeStatusGrado";
 import {
@@ -94,7 +93,7 @@ export const GradoFunctionsHook = (
     const confirmar = window.confirm("¿Está seguro de eliminar la grado?");
     if (confirmar) {
       setIsLoading(true);
-      const id = getIdGrado((items = items), index);
+      const id = getIdGrado(items, index);
 
       const remove = await removeGrado(id, TypeStatusGrado.REMOVE);
       if (remove) {
@@ -110,15 +109,15 @@ export const GradoFunctionsHook = (
     }
   };
 
-  const handleClickUpdate = async (items: ItemGrado[], index: number) => {
-    setIsLoading(true);
-    const id = getIdGrado((items = items), index);
-    const value = getStrGrado((items = items), index);
-    setIdSelect(id);
-    setValue("grado", value);
-    setNewModify(false);
-    setIsLoading(false);
-  };
+const handleClickUpdate = async (items: ItemGrado[], index: number) => {
+  setIsLoading(true);
+  const id = getIdGrado(items, index);
+  const value = getStrGrado(items, index);
+  setIdSelect(id);
+  setValue("grado", value);
+  setNewModify(false);
+  setIsLoading(false);
+};
 
   const handleClickNew = () => {
     setIdSelect(-1);

@@ -10,7 +10,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoPath }) => {
   const playerRef = useRef<HTMLVideoElement>(null);
   const openVideo = async (videoPath: string) => {
     const url = await fetchOpenVideo(videoPath);
-    setVideoUrl(url)
+    setVideoUrl(url);
     return url;
   };
   openVideo(videoPath);
@@ -24,13 +24,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoPath }) => {
   }, []);
 
   return (
-    <div className="ml-72 mt-14 mr-4 mb-1 relative max-h-[80vh] h-[80vh]">
+    <div className=" mr-4 mb-1 relative max-h-[80vh] h-[80vh]">
       <video ref={playerRef} className="w-full h-full" controls src={videoUrl}>
+        <track
+          kind="captions"
+          src="ruta/a/los/subtitulos.vtt"
+          srcLang="es"
+          label="Español"
+        />
         Tu navegador no soporta el elemento de video.
       </video>
       <button
         onClick={toggleFullScreen}
-        className="absolute bottom-10 right-4 mb-10 bg-black bg-opacity-50 text-white p-2 rounded-full 
+        className="absolute bottom-10 right-4 mb-10 bg-black bg-opacity-50 
+        text-white p-2 rounded-full 
           hover:bg-opacity-75 transition-opacity"
       >
         Pantalla completa

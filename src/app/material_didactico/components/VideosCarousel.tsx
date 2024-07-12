@@ -1,29 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { DocumentsHook } from "./hooks/DocumentsHook";
 import { MaterialDidacticoType } from "@/app/types/types";
-import { getYouTubeThumbnail } from "@/app/utils/URLYouTube";
 import { DocumentTypeValues } from "@/app/utils/DocumentTypeValues";
+import { v4 as uuidv4 } from "uuid";
 
 const TOTAL_VIDEOS = 4;
 
 interface VideosCarouselProps {
   videosDocument: MaterialDidacticoType[];
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >;
 
   scrollToTop: () => void;
-
 }
 
 const handleSelectVideo = (
   index: number,
   videos: MaterialDidacticoType[],
   setSelectTypeDocument: React.Dispatch<
-    React.SetStateAction<MaterialDidacticoType|undefined>
+    React.SetStateAction<MaterialDidacticoType | undefined>
   >,
   scrollToTop: () => void
 ) => {
@@ -46,7 +45,6 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
   videosDocument,
   setSelectTypeDocument,
   scrollToTop,
-
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -61,15 +59,13 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
     slidesLength: videos.length,
   });
 
-
-
   return (
     <>
-      <h3 className="mt-6 ml-80 block text-gray-700 dark:text-gray-200 font-bold text-xl ">
+      <h3 className="mt-2  block text-gray-700 dark:text-gray-200 font-bold text-xl ">
         Videos
       </h3>
 
-      <div className="ml-72 mt-0 mr-4 relative w-full max-w-[calc(100%-18rem)]  mx-auto">
+      <div className=" mt-0 mr-4 relative w-full  mx-auto">
         <div className="overflow-hidden rounded-lg mr-4 p-4">
           <div
             className="flex transition-transform duration-500 ease-out"
@@ -77,43 +73,46 @@ const VideosCarousel: React.FC<VideosCarouselProps> = ({
           >
             {videos.map((video, index) => (
               <div
-                key={index}
-                className="w-1/4 flex-shrink-0 p-2 flex container-documents h-80"
-                onClick={() =>
-                  handleSelectVideo(
-                    index,
-                    videos,
-                    setSelectTypeDocument,
-                    scrollToTop
-                  )
-                }
+                key={uuidv4()}
+                className="rounded-lg overflow-hidden  shadow-md
+              bg-white dark:bg-[#ddeff0]  w-[200px] min-w-[200px] h-72 mr-4
+                transition-transform duration-300  hover:scale-110 hover:z-20 hover:rounded-2xl"
               >
-                <div
-                  className="rounded-lg overflow-hidden  shadow-md
-                 bg-white dark:bg-[#ddeff0] flex flex-col flex-grow 
-                 transition-transform duration-300  hover:scale-110 hover:z-20 hover:rounded-2xl"
+                <button
+                  key={uuidv4()}
+                  className="flex-shrink-0   flex container-documents "
+                  onClick={() =>
+                    handleSelectVideo(
+                      index,
+                      videos,
+                      setSelectTypeDocument,
+                      scrollToTop
+                    )
+                  }
                 >
-                  <div className="h-48 max-h-48 overflow-hidden">
-                    <Image
-                      src={
-                        DocumentTypeValues.VIDEO.icon
-                      }
-                      alt={"Video"}
-                      width={320}
-                      height={180}
-                      className="w-full h-full object-cover rounded"
-                    />
+                  <div className=" flex flex-col flex-grow ">
+                    <div className="h-40 max-h-40 w-52  overflow-hidden">
+                      <Image
+                        src={DocumentTypeValues.VIDEO.icon}
+                        alt={"Video"}
+                        width={320}
+                        height={180}
+                        className="w-full h-full object-cover rounded"
+                      />
+                    </div>
+                    <div className="p-4 flex flex-col flex-grow h-50 max-h-50">
+                      <h3
+                        className="text-lg text-left font-semibold mb-2 dark:text-gray-600 
+                                   overflow-hidden max-h-20"
+                      >
+                        {video.titulo}
+                      </h3>
+                      <p className="text-sm text-left text-gray-600 overflow-hidden">
+                        {video.descripcion}
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-4 flex flex-col flex-grow h-50 max-h-50">
-                    <h3 className="text-lg font-semibold mb-2 dark:text-gray-600 
-                    overflow-hidden max-h-20">
-                      {video.titulo}
-                    </h3>
-                    <p className="text-sm text-gray-600 overflow-hidden">
-                      {video.descripcion}
-                    </p>
-                  </div>
-                </div>
+                </button>
               </div>
             ))}
           </div>
