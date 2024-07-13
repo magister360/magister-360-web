@@ -26,16 +26,11 @@ export const GradoFunctionsHook = (
   setNewModify: Function,
   setIsLoading: Function
 ) => {
-  const router = useRouter();
   const { idUsuario } = useSidebarContext();
 
   const fetchGrados = async () => {
     setIsLoading(true);
 
-    if (!idUsuario) {
-      router.push("/login");
-      return;
-    }
     const userId = idUsuario ?? -1;
     const grados = await getGrados(userId, TypeStatusGrado.ALTA);
     if (grados) {
@@ -46,46 +41,39 @@ export const GradoFunctionsHook = (
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    if (!idUsuario) {
-      router.refresh();
-      router.push("/login");
-    } else {
-      const userId = idUsuario ?? -1;
-      if (newModify) {
-        const save = await createGrado(
-          userId,
-          data.grado,
-          TypeStatusGrado.ALTA
-        );
-        if (save === true) {
-          fetchGrados();
-          setSuccessMessage("El grado se guardo con éxito.");
-          setIsSuccessModalOpen(true);
-          reset();
-        } else {
-          setErrorMessage(
-            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
-          );
-          setIsErrorModalOpen(true);
-          reset();
-        }
+
+    const userId = idUsuario ?? -1;
+    if (newModify) {
+      const save = await createGrado(userId, data.grado, TypeStatusGrado.ALTA);
+      if (save === true) {
+        fetchGrados();
+        setSuccessMessage("El grado se guardo con éxito.");
+        setIsSuccessModalOpen(true);
+        reset();
       } else {
-        const save = await updateGrado(idSelect, data.grado);
-        if (save === true) {
-          fetchGrados();
-          setSuccessMessage("El grado se modificó con éxito.");
-          setIsSuccessModalOpen(true);
-          reset();
-        } else {
-          setErrorMessage(
-            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
-          );
-          setIsErrorModalOpen(true);
-          reset();
-        }
-        handleClickNew();
+        setErrorMessage(
+          "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
+        );
+        setIsErrorModalOpen(true);
+        reset();
       }
+    } else {
+      const save = await updateGrado(idSelect, data.grado);
+      if (save === true) {
+        fetchGrados();
+        setSuccessMessage("El grado se modificó con éxito.");
+        setIsSuccessModalOpen(true);
+        reset();
+      } else {
+        setErrorMessage(
+          "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde."
+        );
+        setIsErrorModalOpen(true);
+        reset();
+      }
+      handleClickNew();
     }
+
     setIsLoading(false);
   };
 
@@ -109,15 +97,15 @@ export const GradoFunctionsHook = (
     }
   };
 
-const handleClickUpdate = async (items: ItemGrado[], index: number) => {
-  setIsLoading(true);
-  const id = getIdGrado(items, index);
-  const value = getStrGrado(items, index);
-  setIdSelect(id);
-  setValue("grado", value);
-  setNewModify(false);
-  setIsLoading(false);
-};
+  const handleClickUpdate = async (items: ItemGrado[], index: number) => {
+    setIsLoading(true);
+    const id = getIdGrado(items, index);
+    const value = getStrGrado(items, index);
+    setIdSelect(id);
+    setValue("grado", value);
+    setNewModify(false);
+    setIsLoading(false);
+  };
 
   const handleClickNew = () => {
     setIdSelect(-1);

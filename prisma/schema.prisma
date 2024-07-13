@@ -36,6 +36,7 @@ model Users {
   tareas Tareas[]
   inicioSesiones  InicioSesiones[]
   finSesiones     FinSesiones[]
+  encuadreCalificacion EncuadreCalificacion[]
 }
 
 model InicioSesiones {
@@ -63,6 +64,7 @@ model Grado {
   idUsuario Int
   alumnos Alumno[]
   materialDidactico MaterialDidactico[]
+  encuadreCalificacion EncuadreCalificacion[]
 }
 
 model Grupo {
@@ -74,6 +76,7 @@ model Grupo {
   idUsuario Int
   alumnos Alumno[]
   materialDidactico MaterialDidactico[]
+  encuadreCalificacion EncuadreCalificacion[]
 }
 
 model Materia {
@@ -90,6 +93,7 @@ model Materia {
    proyectos Proyectos[] @relation("ProyectosToMateria")
    examenes Examenes[] @relation("ExamenesToMateria")
    tareas Tareas[] @relation("TareasToMateria") 
+   encuadreCalificacion EncuadreCalificacion[] @relation("EncuadreToMateria")
 }
 
 model Alumno {
@@ -227,4 +231,22 @@ model Tareas {
    materia   Materia   @relation("TareasToMateria", fields: [idMateria], references: [id])
   idMateria Int
   @@index([idAlumno, idMateria])
+}
+
+
+model EncuadreCalificacion {
+  id  String @db.VarChar(255) @id  
+  json String
+  puntosExtra String
+  estatus Int  @default(0)
+  regDate  DateTime @default(now())
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+  grado   Grado   @relation(fields: [idGrado], references: [id])
+  idGrado Int
+  grupo   Grupo   @relation(fields: [idGrupo], references: [id])
+  idGrupo Int
+   materia   Materia   @relation("EncuadreToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+ 
 }

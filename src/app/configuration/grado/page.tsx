@@ -55,6 +55,28 @@ export default function Grado() {
       setIsLoading
     );
 
+  if (isErrorModalOpen) {
+    return (
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    );
+  }
+
+  if (isSuccessModalOpen) {
+    return (
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessModal}
+        successMessage={successMessage}
+        setSuccessMessage={setSuccessMessage}
+      />
+    );
+  }
+
   return (
     <div
       className={`mt-16 mr-4  
@@ -129,19 +151,6 @@ export default function Grado() {
           >
             Guardar
           </button>
-
-          <ErrorModal
-            isOpen={isErrorModalOpen}
-            onClose={handleCloseErrorModal}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
-          <SuccessModal
-            isOpen={isSuccessModalOpen}
-            onClose={handleSuccessModal}
-            successMessage={successMessage}
-            setSuccessMessage={setSuccessMessage}
-          />
         </form>
       </div>
     </div>

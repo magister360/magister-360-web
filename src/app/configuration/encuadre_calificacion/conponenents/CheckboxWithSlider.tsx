@@ -1,22 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface CheckboxWithSliderProps {
   label: string;
   onValueChange: (isChecked: boolean, value: number) => void;
+  initialChecked?: boolean;
+  initialValue?: number;
 }
 
 const CheckboxWithSlider: React.FC<CheckboxWithSliderProps> = ({
   label,
   onValueChange,
+  initialChecked = false,
+  initialValue = 0,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [sliderValue, setSliderValue] = useState(50);
-  const [inputValue, setInputValue] = useState(0);
+  const [isChecked, setIsChecked] = useState(initialChecked);
+  const [sliderValue, setSliderValue] = useState(initialValue);
+  const [inputValue, setInputValue] = useState(initialValue);
+
+  useEffect(() => {
+    setIsChecked(initialChecked);
+    setSliderValue(initialValue);
+    setInputValue(initialValue);
+  }, [initialChecked, initialValue]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsChecked(checked);
     onValueChange(checked, sliderValue);
+
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +79,11 @@ const CheckboxWithSlider: React.FC<CheckboxWithSliderProps> = ({
             min="0"
             max="100"
             onChange={handleSliderChange}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 custom-range"
+            style={{
+              background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 
+              ${sliderValue}%, #e5e7eb ${sliderValue}%, #e5e7eb 100%)`,
+            }}
           />
           <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
             Min (0)
