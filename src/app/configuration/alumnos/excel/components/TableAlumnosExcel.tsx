@@ -48,7 +48,8 @@ export default function TableAlumnosExcel({ data, errorEncabezado }: Props) {
                   <tr
                     key={uuidv4()}
                     className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
-                                    dark:border-gray-700 hover:bg-[#e6e6e6] dark:hover:bg-gray-600"
+                                    dark:border-gray-700 hover:bg-[#e6e6e6] 
+                                    dark:hover:bg-gray-600"
                   >
                     <td className="w-4 p-4">
                       <div className="flex items-center">

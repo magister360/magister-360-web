@@ -14,6 +14,11 @@ export enum EstatusExamenType {
 }
 
 export enum EstatusProyectoType {
-    OK = 0,
-    ELIMININAR = 1,
-  }
+  OK = 0,
+  ELIMININAR = 1,
+}
+
+export enum EstatusPuntoExtraType {
+  OK = 0,
+  ELIMININAR = 1,
+}

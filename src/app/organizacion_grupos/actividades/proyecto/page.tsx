@@ -75,12 +75,6 @@ export default function Proyecto() {
         setErrorMessage("Error al guardar el proyecto");
         setIsErrorModalOpen(true);
       } else {
-        addStudent(studentProyecto);
-        setNombre(
-          `${studentProyecto.nombre} 
-          ${studentProyecto.apellidoPaterno} 
-          ${studentProyecto.apellidoMaterno}`
-        );
         const save = await createProyecto(
           UUID,
           date,
@@ -94,6 +88,12 @@ export default function Proyecto() {
         if (save.isSave) {
           setSuccessMessage(save.message);
           setIsSuccessModalOpen(true);
+          addStudent(studentProyecto);
+          setNombre(
+            `${studentProyecto.nombre} 
+            ${studentProyecto.apellidoPaterno} 
+            ${studentProyecto.apellidoMaterno}`
+          );
         } else {
           setErrorMessage(save.message);
           setIsErrorModalOpen(true);

@@ -71,12 +71,6 @@ export default function Tarea() {
         setErrorMessage("Error al guardar la tarea");
         setIsErrorModalOpen(true);
       } else {
-        addStudent(studentTarea);
-        setNombre(
-          `${studentTarea.nombre} 
-          ${studentTarea.apellidoPaterno} 
-          ${studentTarea.apellidoMaterno}`
-        );
         const save = await createTarea(
           UUID,
           date,
@@ -90,6 +84,12 @@ export default function Tarea() {
         if (save.isSave) {
           setSuccessMessage(save.message);
           setIsSuccessModalOpen(true);
+          addStudent(studentTarea);
+          setNombre(
+            `${studentTarea.nombre} 
+            ${studentTarea.apellidoPaterno} 
+            ${studentTarea.apellidoMaterno}`
+          );
         } else {
           setErrorMessage(save.message);
           setIsErrorModalOpen(true);

@@ -6,9 +6,9 @@ import {
 
 interface EncuadreCalificacionParams {
   userId: number;
-  selectGrado: { idGrado: number };
-  selectGrupo: { idGrupo: number };
-  selectMateria: { idMateria: number };
+  idGrado: number | undefined;
+  idGrupo: number | undefined;
+  idMateria: number | undefined;
   participaciones: { isChecked: boolean; value: number };
   tareas: { isChecked: boolean; value: number };
   examenes: { isChecked: boolean; value: number };
@@ -17,16 +17,22 @@ interface EncuadreCalificacionParams {
   isCheckedPuntosExtra: boolean;
   isCheckedRedondear: boolean;
   id: string | undefined;
-  setSelectGrado?: React.Dispatch<React.SetStateAction<{ idGrado: number; grado: string }>>;
-  setSelectGrupo?: React.Dispatch<React.SetStateAction<{ idGrupo: number; grupo: string }>>;
-  setSelectMateria?: React.Dispatch<React.SetStateAction<{ idMateria: number; materia: string }>>;
+  setSelectGrado?: React.Dispatch<
+    React.SetStateAction<{ idGrado: number; grado: string }>
+  >;
+  setSelectGrupo?: React.Dispatch<
+    React.SetStateAction<{ idGrupo: number; grupo: string }>
+  >;
+  setSelectMateria?: React.Dispatch<
+    React.SetStateAction<{ idMateria: number; materia: string }>
+  >;
 }
 
 export const handleSubmitEncuadreCalificacion = async ({
   userId,
-  selectGrado,
-  selectGrupo,
-  selectMateria,
+  idGrado,
+  idGrupo,
+  idMateria,
   participaciones,
   tareas,
   examenes,
@@ -35,15 +41,11 @@ export const handleSubmitEncuadreCalificacion = async ({
   isCheckedPuntosExtra,
   isCheckedRedondear,
   id,
-  setSelectGrado,
-  setSelectGrupo,
-  setSelectMateria
 }: EncuadreCalificacionParams): Promise<{
   success: boolean;
   message: string;
 }> => {
   if (sum !== 100) {
-   
     return {
       success: false,
       message: "El porcentaje es incorrecto",
@@ -87,9 +89,9 @@ export const handleSubmitEncuadreCalificacion = async ({
         configuracionPuntosExtraJSON,
         0,
         userId,
-        selectGrado.idGrado,
-        selectGrupo.idGrupo,
-        selectMateria.idMateria
+        idGrado ?? -1,
+        idGrupo ?? -1,
+        idMateria ?? -1
       );
 
       if (saved) {

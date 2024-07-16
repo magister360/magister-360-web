@@ -31,13 +31,11 @@ export const createParticipacion = async (
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
-  const fechaRegistro: Date = new Date();
   const fechaISO = convertDateToISO(fecha);
 
   return await createParticipacionApi(
     id,
     fechaISO,
-    fechaRegistro,
     calificacion,
     contenido,
     idAlumno,

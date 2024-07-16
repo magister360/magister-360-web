@@ -1,15 +1,8 @@
 "use client";
 import Loading from "@/app/components/Loading";
-import OptionsGrados, { filterIndexGrado } from "@/app/components/OptionGrados";
-import OptionsGrupos, {
-  filterIndexGrupo,
-} from "@/app/components/OptionsGrupos";
-import OptionsMaterias, {
-  filterIndexMaterias,
-} from "@/app/components/OptionsMaterias";
+
 import SubmitButton from "@/app/components/SubmitButton";
-import { useEffectFetchGradoGrupoMateria } from "@/app/hooks/GradoGrupoMateriaHook";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent,useState } from "react";
 import CheckboxWithSlider from "./conponenents/CheckboxWithSlider";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import ErrorModal from "@/app/components/ErrorModal ";
@@ -19,22 +12,17 @@ import { calculateSumEncuadre } from "./actions/sumEncuadreCalificacion";
 import useEncuadreCalificacionHook from "./hooks/useEncuadreCalificacionHook";
 
 export default function EncuadreCalificacion() {
-  const { isMenuVisible, idUsuario } = useSidebarContext();
-  const [isLoading, setIsLoading] = useState(true);
-  const { itemsGrados, itemsGrupos, itemsMaterias, isFetch } =
-    useEffectFetchGradoGrupoMateria();
-  const [selectGrado, setSelectGrado] = useState({
-    idGrado: -1,
-    grado: "",
-  });
-  const [selectGrupo, setSelectGrupo] = useState({
-    idGrupo: -1,
-    grupo: "",
-  });
-  const [selectMateria, setSelectMateria] = useState({
-    idMateria: -1,
-    materia: "",
-  });
+  const {
+    isMenuVisible,
+    idUsuario,
+    grado,
+    grupo,
+    materia,
+    idGrado,
+    idGrupo,
+    idMateria,
+  } = useSidebarContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [participaciones, setParticipaciones] = useState({
     isChecked: false,
@@ -49,7 +37,7 @@ export default function EncuadreCalificacion() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isCheckedPuntosExtra, setIsCheckedPuntosExtra] = useState(false);
   const [isCheckedRedondear, setIsCheckedRedondear] = useState(false);
-  const [id, setId] = useState<string|undefined>(undefined);
+  const [id, setId] = useState<string | undefined>(undefined);
 
   const handleCheckboxChange1 = () => {
     setIsCheckedPuntosExtra(!isCheckedPuntosExtra);
@@ -82,101 +70,15 @@ export default function EncuadreCalificacion() {
     setIsSuccessModalOpen(false);
   };
 
-  const handleChangeGrado = (event: { target: { selectedIndex: any } }) => {
-    const selectedIndex = event.target.selectedIndex;
-    if (!isArrayEmpty(itemsGrados)) {
-      const itemFilter = filterIndexGrado({ itemsGrados }, selectedIndex);
-      if (itemFilter) {
-        setSelectGrado({
-          idGrado: itemFilter.id,
-          grado: itemFilter.grado,
-        });
-      }
-    }
-  };
-
-  const handleChangeGrupo = (event: { target: { selectedIndex: any } }) => {
-    const selectedIndex = event.target.selectedIndex;
-    if (!isArrayEmpty(itemsGrupos)) {
-      const itemFilter = filterIndexGrupo({ itemsGrupos }, selectedIndex);
-      if (itemFilter) {
-        setSelectGrupo({
-          idGrupo: itemFilter.id,
-          grupo: itemFilter.grupo,
-        });
-      }
-    }
-  };
-
-  const handleChangeMateria = (event: { target: { selectedIndex: any } }) => {
-    const selectedIndex = event.target.selectedIndex;
-    if (!isArrayEmpty(itemsGrupos)) {
-      const itemFilter = filterIndexMaterias({ itemsMaterias }, selectedIndex);
-      if (itemFilter) {
-        setSelectMateria({
-          idMateria: itemFilter.id,
-          materia: itemFilter.materia,
-        });
-      }
-    }
-  };
-  const isArrayEmpty = (array: any[]) => {
-    return array.length === 0;
-  };
-
-  useEffect(() => {
-    const selectElement = document.getElementById(
-      "select-grado"
-    ) as HTMLSelectElement | null;
-    if (selectElement) {
-      handleChangeGrado({
-        target: selectElement,
-      });
-    }
-  }, [itemsGrados]);
-
-  useEffect(() => {
-    const selectElement = document.getElementById(
-      "select-grupo"
-    ) as HTMLSelectElement | null;
-    if (selectElement) {
-      handleChangeGrupo({
-        target: selectElement,
-      });
-    }
-  }, [itemsGrupos]);
-
-  useEffect(() => {
-    const selectElement = document.getElementById(
-      "select-materia"
-    ) as HTMLSelectElement | null;
-    if (selectElement) {
-      handleChangeMateria({
-        target: selectElement,
-      });
-    }
-  }, [itemsMaterias]);
-
-  useEffect(() => {
-    if (
-      (itemsGrados.length > 0 &&
-        itemsGrupos.length > 0 &&
-        itemsMaterias.length > 0) ||
-      isFetch
-    ) {
-      setIsLoading(false);
-    }
-  }, [itemsGrados, itemsGrupos, itemsMaterias, isFetch]);
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const userId = idUsuario ?? -1;
 
     const result = await handleSubmitEncuadreCalificacion({
       userId,
-      selectGrado,
-      selectGrupo,
-      selectMateria,
+      idGrado,
+      idGrupo,
+      idMateria,
       participaciones,
       tareas,
       examenes,
@@ -185,9 +87,6 @@ export default function EncuadreCalificacion() {
       isCheckedPuntosExtra,
       isCheckedRedondear,
       id,
-      setSelectGrado,
-      setSelectGrupo,
-      setSelectMateria
     });
 
     if (result.success) {
@@ -207,9 +106,9 @@ export default function EncuadreCalificacion() {
   });
 
   useEncuadreCalificacionHook(
-    selectGrado.idGrado,
-    selectGrupo.idGrupo,
-    selectMateria.idMateria,
+    idGrado,
+    idGrupo,
+    idMateria,
     idUsuario,
     setParticipaciones,
     setTareas,
@@ -255,73 +154,43 @@ export default function EncuadreCalificacion() {
         <h3 className="mt-2 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2">
           Encuadre calificación
         </h3>
+
         <div
-          className="rounded-lg shadow  
-                        sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]  p-5"
+          className={` mr-4  pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
+                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]`}
         >
-          <div>
-            <label
-              htmlFor="lbl-grado"
-              className="block mb-2 text-sm font-medium text-gray-900
-                        dark:text-white"
-            >
-              Grado
-            </label>
-            <select
-              id="select-grado"
-              className="block w-full p-2 mb-2 text-sm text-gray-900 
-                         border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500
-                        focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
-                        dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500 "
-              onChange={handleChangeGrado}
-            >
-              <OptionsGrados itemsGrados={itemsGrados} />
-            </select>
-          </div>
+          <div className="flex space-x-2">
+            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
+              <label
+                className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
+                htmlFor="lbl-date-start-end"
+              >
+                Grado: <span className="font-normal text-sm"> {grado}</span>
+              </label>
+            </div>
 
-          <div>
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                            dark:text-white"
-            >
-              Grupo
-            </label>
-            <select
-              id="select-grupo"
-              className="block w-full p-2 mb-2 text-sm text-gray-900 
-                            border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500
-                            focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
-                            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                            dark:focus:border-blue-500 "
-              onChange={handleChangeGrupo}
-            >
-              <OptionsGrupos itemsGrupos={itemsGrupos} />
-            </select>
-          </div>
+            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
+              <label
+                className="block text-gray-700 dark:text-gray-200 font-bold 
+                        text-md mb-2"
+                htmlFor="lbl-date-start-end"
+              >
+                Grupo: <span className="font-normal text-sm"> {grupo}</span>
+              </label>
+            </div>
 
-          <div>
-            <label
-              htmlFor="small"
-              className="block mb-2 text-sm font-medium text-gray-900
-                    dark:text-white"
-            >
-              Materia
-            </label>
-            <select
-              id="select-materia"
-              className="block w-full p-2  text-sm text-gray-900 
-                                    border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500
-                                  focus:border-blue-500 dark:bg-[#1a2c32] dark:border-gray-600
-                                  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                                 dark:focus:border-blue-500 "
-              onChange={handleChangeMateria}
-            >
-              <OptionsMaterias itemsMaterias={itemsMaterias} />
-            </select>
+            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
+              <label
+                className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
+                htmlFor="lbl-date-start-end"
+              >
+                Materia: <span className="font-normal text-sm"> {materia}</span>
+              </label>
+            </div>
           </div>
+         
         </div>
+
         <div
           className="rounded-lg shadow  
                         sm:max-w-xl  dark:bg-[#18181B] bg-[#ffffff]  p-5 mt-4"

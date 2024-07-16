@@ -1,13 +1,14 @@
 import { ItemMateria } from '@/app/types/types';
 import Image from 'next/image';
+import { v4 as uuidv4 } from "uuid";
 
 
 type Props = {
-    materiasSinAsignar: ItemMateria[];
-    materiasAsignadas: ItemMateria[];
-    errorEncabezado: string;
-    removeMateriaSinAsignar: (id: number, index: number) => void;
-    removeMateriaAsignar: (id: number, index: number) => void;
+   readonly materiasSinAsignar: ItemMateria[];
+   readonly materiasAsignadas: ItemMateria[];
+   readonly errorEncabezado: string;
+   readonly removeMateriaSinAsignar: (id: number, index: number) => void;
+   readonly removeMateriaAsignar: (id: number, index: number) => void;
 }
 
 export default function TablesMaterias({
@@ -45,7 +46,7 @@ export default function TablesMaterias({
                                         <tbody>
 
                                             {materiasSinAsignar.map((item, index) => (
-                                                <tr key={index} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
+                                                <tr key={uuidv4()} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
                                                                         dark:border-gray-700 hover:bg-[#e6e6e6]
                                                                          dark:hover:bg-gray-600">
 
@@ -97,7 +98,7 @@ export default function TablesMaterias({
                                     <tbody>
 
                                         {materiasAsignadas.map((item, index) => (
-                                            <tr key={index} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
+                                            <tr key={uuidv4()} className="border-b dark:bg-[#1a2c32] bg-[#ffffff]
                                              dark:border-gray-700 hover:bg-[#e6e6e6] dark:hover:bg-gray-600">
 
                                                 <td className="px-6 py-3">

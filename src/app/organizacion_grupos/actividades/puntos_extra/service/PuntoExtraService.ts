@@ -1,9 +1,9 @@
 
-import { StudentProyecto } from "@/app/types/proyecto/TypeProyecto";
+import { StudentPuntoExtra } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { getApiUrl } from "../../../../../../API";
 import axios from "axios";
 
-export const createProyectoApi = async (
+export const createPuntoExtrApi = async (
   id: string,
   fecha: string,
   calificacion: number,
@@ -16,7 +16,7 @@ export const createProyectoApi = async (
   if (fecha === "") {
     return false;
   }
-  const apiUrl = getApiUrl("/api/proyecto");
+  const apiUrl = getApiUrl("/api/punto_extra");
 
   const response = await axios
     .post(
@@ -46,14 +46,14 @@ export const createProyectoApi = async (
   return response;
 };
 
-export const getProyectosApi = async (
+export const getPuntoExtraApi = async (
   idUsuario: number,
   idMateria: number,
   codigoBarras: string,
   fecha: string,
-  estatus:  number
-): Promise<StudentProyecto | null> => {
-  const apiUrl = getApiUrl("/api/proyecto");
+  estatus:number
+): Promise<StudentPuntoExtra | null> => {
+  const apiUrl = getApiUrl("/api/punto_extra");
 
   const response = await axios
     .get(apiUrl, {
@@ -67,14 +67,13 @@ export const getProyectosApi = async (
     })
     .then((r) => {
       if (r.status === 200) {
-        return r.data as StudentProyecto;
+       
+        return r.data as StudentPuntoExtra;
       } else {
-        console.log(r.status)
         return null;
       }
     })
     .catch((e) => {
-  
       return null;
     });
   return response;

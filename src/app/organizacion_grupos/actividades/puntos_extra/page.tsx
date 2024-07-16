@@ -1,22 +1,25 @@
 "use client";
 import Image from "next/image";
-import TableAlumnosParticipacion from "./components/TableAlumnosParticipacion";
 import { useSearchParams } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import React, { useState, useEffect, useRef } from "react";
-import {
-  createParticipacion,
-  getParticipacion,
-} from "./controller/ParticipacionController";
+
 import { v4 as uuidv4 } from "uuid";
 import ErrorModal from "@/app/components/ErrorModal ";
-import SuccessNameModal from "./components/SuccessNameModal";
+
+import SuccessNameModal from "../participacion/components/SuccessNameModal";
+
+import TableAlumnosPuntosExtra from "./components/TableAlumnoPuntoExtra";
 import {
-  ItemStudentParticipacion,
-  StudentParticipacion,
-} from "@/app/types/types";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
+  createPuntoExtra,
+  getPuntoExtra,
+} from "./controller/PuntoExtraController";
+import {
+  ItemStudentPuntoExtra,
+  StudentPuntoExtra,
+} from "@/app/types/puntos_extra/TypePuntoExtra";
+import { EstatusPuntoExtraType } from "@/app/estatus/EstatusType";
 
 export default function Participacion() {
   const { isMenuVisible } = useSidebarContext();
@@ -32,8 +35,8 @@ export default function Participacion() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [nombre, setNombre] = useState("");
-  const [alumnos, setAlumnos] = useState<ItemStudentParticipacion[]>([]);
-  const [calificacion, setCalificacion] = useState(10);
+  const [alumnos, setAlumnos] = useState<ItemStudentPuntoExtra[]>([]);
+  const [calificacion, setCalificacion] = useState(0.1);
   const barcodeInputRef = useRef<HTMLInputElement>(null);
 
   const handleCloseErrorModal = () => {
@@ -47,9 +50,9 @@ export default function Participacion() {
     setBarcode(event.target.value);
   };
 
-  function addStudent(studentParticipacion: StudentParticipacion) {
+  function addStudent(studentParticipacion: StudentPuntoExtra) {
     if (studentParticipacion) {
-      const newStudent: ItemStudentParticipacion = {
+      const newStudent: ItemStudentPuntoExtra = {
         ...studentParticipacion,
         calificacion: calificacion,
       };
@@ -63,35 +66,35 @@ export default function Participacion() {
     if (event.key === "Enter") {
       const UUID = uuidv4();
       const userId = idUsuario ?? -1;
-      const studentParticipacion = await getParticipacion(
+      const studentPuntoExtra = await getPuntoExtra(
         userId,
         idMateria,
         barcode,
         date,
-        EstatusParticipacionType.OK
+        EstatusPuntoExtraType.OK
       );
-      if (!studentParticipacion) {
-        setErrorMessage("Error al guardar la participación");
+      if (!studentPuntoExtra) {
+        setErrorMessage("Error al guardar el punto extra");
         setIsErrorModalOpen(true);
       } else {
-        const save = await createParticipacion(
+        const save = await createPuntoExtra(
           UUID,
           date,
           calificacion,
           contenido ?? "",
-          studentParticipacion.id,
+          studentPuntoExtra.id,
           userId,
           idMateria,
-          EstatusParticipacionType.OK
+          EstatusPuntoExtraType.OK
         );
         if (save.isSave) {
           setSuccessMessage(save.message);
           setIsSuccessModalOpen(true);
-          addStudent(studentParticipacion);
+          addStudent(studentPuntoExtra);
           setNombre(
-            `${studentParticipacion.nombre} 
-            ${studentParticipacion.apellidoPaterno} 
-            ${studentParticipacion.apellidoMaterno}`
+            `${studentPuntoExtra.nombre} 
+          ${studentPuntoExtra.apellidoPaterno} 
+          ${studentPuntoExtra.apellidoMaterno}`
           );
         } else {
           setErrorMessage(save.message);
@@ -151,7 +154,7 @@ export default function Participacion() {
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
       >
-        Participación
+        Puntos extra
       </h3>
       <div
         className={` mr-4  pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
@@ -194,7 +197,6 @@ export default function Participacion() {
           Fecha: <span className="font-normal text-sm"> {dateFormatStr}</span>
         </label>
       </div>
-      
       {contenido && (
         <div
           className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
@@ -227,7 +229,6 @@ export default function Participacion() {
               height={28}
             />
           </div>
-          
           <input
             type="text"
             id="text-grado"
@@ -244,11 +245,9 @@ export default function Participacion() {
             onChange={handleChange}
             onKeyDown={handleKeyPress}
           />
-
-
         </div>
 
-        <TableAlumnosParticipacion alumnos={alumnos} />
+        <TableAlumnosPuntosExtra alumnos={alumnos} errorEncabezado="" />
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import axios from "axios";
 export const createParticipacionApi = async (
   id: string,
   fecha: string,
-  fechaRegistro: Date,
   calificacion: number,
   contenido: string,
   idAlumno: string,
@@ -24,7 +23,6 @@ export const createParticipacionApi = async (
       {
         id,
         fecha,
-        fechaRegistro,
         calificacion,
         contenido,
         idAlumno,

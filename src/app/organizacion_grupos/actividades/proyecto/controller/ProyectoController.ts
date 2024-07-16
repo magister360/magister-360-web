@@ -13,7 +13,7 @@ export const createProyecto = async (
   idMateria: number | undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
-  console.log("fecha " + fecha);
+
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
@@ -26,17 +26,14 @@ export const createProyecto = async (
     idUsuario <= 0 ||
     fecha === null
   ) {
-    console.log(idAlumno);
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
-  const fechaRegistro: Date = new Date();
   const fechaISO = convertDateToISO(fecha);
 
   return await createProyectoApi(
     id,
     fechaISO,
-    fechaRegistro,
     calificacion,
     contenido,
     idAlumno,

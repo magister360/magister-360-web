@@ -1,8 +1,8 @@
+import { StudentPuntoExtra } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { convertDateToISO } from "@/app/utils/DateUtils";
-import { createTareaApi, getTareasApi } from "../service/TareaService";
-import { StudentTarea } from "@/app/types/tarea/TypeTarea";
+import { createPuntoExtrApi, getPuntoExtraApi } from "../service/PuntoExtraService";
 
-export const createTarea = async (
+export const createPuntoExtra = async (
   id: string,
   fecha: string | null,
   calificacion: number,
@@ -10,41 +10,39 @@ export const createTarea = async (
   idAlumno: string,
   idUsuario: number,
   idMateria: number | undefined,
-  estatus: number
+  estatus:number
 ): Promise<{ isSave: boolean; message: string }> => {
-  console.log("fecha " + fecha);
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
     idMateria === undefined ||
     idMateria <= 0 ||
     calificacion === undefined ||
-    calificacion < 5 ||
-    calificacion > 10 ||
     idUsuario === undefined ||
     idUsuario <= 0 ||
     fecha === null
   ) {
+
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
   const fechaISO = convertDateToISO(fecha);
 
-  return await createTareaApi(
+  return await createPuntoExtrApi(
     id,
     fechaISO,
     calificacion,
     contenido,
     idAlumno,
     idUsuario,
-    idMateria,
+    idMateria, 
     estatus
   )
     .then((response) => {
       if (response) {
         return {
           isSave: true,
-          message: "La tarea se guardó con éxito",
+          message: "El punto extra se guardó con éxito",
         };
       } else {
         return {
@@ -55,17 +53,18 @@ export const createTarea = async (
       }
     })
     .catch((error) => {
+        console.log(error)
       return { isSave: false, message: "No fue posible guardar los datos." };
     });
 };
 
-export const getTarea = async (
+export const getPuntoExtra = async (
   idUsuario: number,
   idMateria: number | undefined,
   codigoBarras: string,
   fecha: string | null,
   estatus: number
-): Promise<StudentTarea | null> => {
+): Promise<StudentPuntoExtra | null> => {
   if (
     codigoBarras === undefined ||
     codigoBarras.length === 0 ||
@@ -79,7 +78,7 @@ export const getTarea = async (
   }
   const fechaISO = convertDateToISO(fecha);
 
-  return await getTareasApi(
+  return await getPuntoExtraApi(
     idUsuario,
     idMateria,
     codigoBarras,

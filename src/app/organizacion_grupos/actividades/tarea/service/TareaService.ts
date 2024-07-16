@@ -6,7 +6,6 @@ import axios from "axios";
 export const createTareaApi = async (
   id: string,
   fecha: string,
-  fechaRegistro: Date,
   calificacion: number,
   contenido: string,
   idAlumno: string,
@@ -25,7 +24,6 @@ export const createTareaApi = async (
       {
         id,
         fecha,
-        fechaRegistro,
         calificacion,
         contenido,
         idAlumno,

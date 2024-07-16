@@ -34,6 +34,7 @@ model Users {
   proyectos Proyectos[]
   examenes  Examenes[]
   tareas Tareas[]
+  puntosExtras PuntoExtra[]
   inicioSesiones  InicioSesiones[]
   finSesiones     FinSesiones[]
   encuadreCalificacion EncuadreCalificacion[]
@@ -88,12 +89,13 @@ model Materia {
   idUsuario Int
   alumnos   AlumnoMateria[]
   materialDidactico MaterialDidactico[]
-   participaciones Participaciones[] @relation("ParticipacionesToMateria")
+  participaciones Participaciones[] @relation("ParticipacionesToMateria")
   asistencias Asistencias[] @relation("AsistenciasToMateria")
-   proyectos Proyectos[] @relation("ProyectosToMateria")
-   examenes Examenes[] @relation("ExamenesToMateria")
-   tareas Tareas[] @relation("TareasToMateria") 
-   encuadreCalificacion EncuadreCalificacion[] @relation("EncuadreToMateria")
+  proyectos Proyectos[] @relation("ProyectosToMateria")
+  examenes Examenes[] @relation("ExamenesToMateria")
+  tareas Tareas[] @relation("TareasToMateria") 
+  puntoExtra PuntoExtra[] @relation("PuntosExtraToMateria") 
+  encuadreCalificacion EncuadreCalificacion[] @relation("EncuadreToMateria")
 }
 
 model Alumno {
@@ -118,6 +120,7 @@ model Alumno {
   proyectos Proyectos[]
   examenes Examenes[]
   tareas Tareas[]
+  puntosExtras PuntoExtra[]
 }
 
 model AlumnoMateria {
@@ -233,6 +236,22 @@ model Tareas {
   @@index([idAlumno, idMateria])
 }
 
+model PuntoExtra {
+  id  String @db.VarChar(255) @id  
+  fecha DateTime
+  fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime? 
+  calificacion Float
+  contenido String @db.Text
+  estatus Int  @default(0)
+  alumno    Alumno   @relation(fields: [idAlumno], references: [id])
+  idAlumno  String
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+   materia   Materia   @relation("PuntosExtraToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+  @@index([idAlumno, idMateria])
+}
 
 model EncuadreCalificacion {
   id  String @db.VarChar(255) @id  

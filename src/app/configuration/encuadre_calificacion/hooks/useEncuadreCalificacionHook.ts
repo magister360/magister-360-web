@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { getEncuadreCalificacion } from "../controller/EncuadreCalificacionController";
 
 const useEncuadreCalificacion = (
-  idGrado: number,
-  idGrupo: number,
-  idMateria: number,
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
+  idMateria: number | undefined,
   idUsuario: number | undefined,
   setParticipaciones: React.Dispatch<
     React.SetStateAction<{ isChecked: boolean; value: number }>
@@ -24,14 +24,11 @@ const useEncuadreCalificacion = (
 ) => {
   useEffect(() => {
     const fetchEncuadreCalificacion = async () => {
-      console.log("idGrado " + idGrado);
-      console.log("idGrupo " + idGrupo);
-      console.log("idMateria " + idMateria);
       const userId = idUsuario ?? -1;
       const result = await getEncuadreCalificacion(
-        idGrado,
-        idGrupo,
-        idMateria,
+        idGrado ?? -1,
+        idGrupo ?? -1,
+        idMateria ?? -1,
         userId
       );
 
@@ -61,7 +58,7 @@ const useEncuadreCalificacion = (
       if (jsonpuntosExtra) {
         setIsCheckedPuntosExtra(jsonpuntosExtra.isCheckedPuntosExtra);
         setIsCheckedRedondear(jsonpuntosExtra.isCheckedRedondear);
-      }else{
+      } else {
         setIsCheckedPuntosExtra(false);
         setIsCheckedRedondear(false);
       }

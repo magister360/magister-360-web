@@ -18,7 +18,6 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const {
     id,
     fecha,
-    fechaRegistro,
     calificacion,
     contenido,
     idAlumno,
@@ -43,7 +42,6 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       data: {
         id,
         fecha,
-        fechaRegistro,
         calificacion,
         contenido,
         idAlumno,

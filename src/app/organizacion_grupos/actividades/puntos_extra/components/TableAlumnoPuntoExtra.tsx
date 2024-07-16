@@ -1,20 +1,20 @@
 "use cliente";
-import {
-  ItemStudentParticipacion,
-} from "@/app/types/types";
+
+import { ItemStudentProyecto } from "@/app/types/proyecto/TypeProyecto";
 import { v4 as uuidv4 } from "uuid";
 
 type Props = {
-  readonly alumnos: ItemStudentParticipacion[];
- 
+  readonly alumnos: ItemStudentProyecto[];
+  readonly errorEncabezado: string;
 };
 
-export default function TableAlumnosParticipacion({
-  alumnos
+export default function TableAlumnosPuntosExtra({
+  alumnos,
+  errorEncabezado,
 }: Props) {
   return (
     <>
-      {alumnos.length !== 0 && (
+      {errorEncabezado === "" && alumnos.length !== 0 && (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-3 mr-3 w-full max-w-4xl mx-auto">
           <div
             className="flex items-center justify-between flex-column flex-wrap md:flex-row 
@@ -65,7 +65,10 @@ export default function TableAlumnosParticipacion({
                     <td className="px-6 py-4 w-1/6">{alumno.calificacion}</td>
                   </tr>
                 ) : (
-                  <div key={uuidv4()} className=" items-center text-justify justify-center">
+                  <div
+                    key={uuidv4()}
+                    className=" items-center text-justify justify-center"
+                  >
                     No existen datos
                   </div>
                 )
