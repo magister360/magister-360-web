@@ -22,3 +22,8 @@ export enum EstatusPuntoExtraType {
   OK = 0,
   ELIMININAR = 1,
 }
+
+export enum EstatusFechaPeriodosType {
+  OK = 0,
+  ELIMININAR = 1,
+}

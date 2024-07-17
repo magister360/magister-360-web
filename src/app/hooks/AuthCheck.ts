@@ -9,9 +9,10 @@ export const AuthCheck = () => {
 
   useEffect(() => {
     if (idUsuario === undefined) {
+   
       router.push("/login");
     }
-  }, [idUsuario, router]);
+  }, [idUsuario,router]);
 
   return null;
 };

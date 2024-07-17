@@ -1,10 +1,8 @@
 "use client";
 import Card from "@/app/components/Card";
-import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import Link from "next/link";
 
 export default function CardTareas() {
-  const { idGrado, idGrupo, idMateria } = useSidebarContext();
 
   return (
     <Card

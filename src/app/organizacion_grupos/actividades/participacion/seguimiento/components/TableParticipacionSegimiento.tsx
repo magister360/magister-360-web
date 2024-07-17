@@ -4,9 +4,18 @@ import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   readonly alumnos: StudentParticipacion[];
+  readonly setSelectAlumno: (alumno: StudentParticipacion | undefined) => void;
 };
 
-export default function TableParticipacionSeguimiento({ alumnos }: Props) {
+export default function TableParticipacionSeguimiento({
+  alumnos,
+  setSelectAlumno,
+}: Props) {
+  const handleSelectAlumno = (alumno: StudentParticipacion) => {
+    setSelectAlumno(alumno);
+   
+  };
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mt-4 mr-3">
       <div
@@ -36,13 +45,13 @@ export default function TableParticipacionSeguimiento({ alumnos }: Props) {
         </thead>
 
         <tbody>
-          {alumnos.map((item) => (
+          {alumnos.map((alumno) => (
             <tr
               key={uuidv4()}
               className="border-b dark:bg-[#1a2c32] bg-[#ffffff] dark:border-gray-700"
             >
               <td className="px-6 py-3">
-                <div className="flex items-center">{item.noLista}</div>
+                <div className="flex items-center">{alumno.noLista}</div>
               </td>
               <td
                 scope="row"
@@ -50,14 +59,18 @@ export default function TableParticipacionSeguimiento({ alumnos }: Props) {
                 dark:text-white"
               >
                 <div className="ps-3">
-                  <div className="text-base font-semibold">{item.nombre}</div>
+                  <div className="text-base font-semibold">{alumno.nombre}</div>
                   <div className="font-normal text-gray-500">
-                    {item.apellidoPaterno} {item.apellidoMaterno}
+                    {alumno.apellidoPaterno} {alumno.apellidoMaterno}
                   </div>
                 </div>
               </td>
               <td className="px-6 py-4 min-w-[20px]">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold 
+                py-2 px-4 rounded"
+                  onClick={() => handleSelectAlumno(alumno)}
+                >
                   Seleccionar
                 </button>
               </td>

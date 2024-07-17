@@ -38,6 +38,7 @@ model Users {
   inicioSesiones  InicioSesiones[]
   finSesiones     FinSesiones[]
   encuadreCalificacion EncuadreCalificacion[]
+  periodosEvaluacion PeriodosEvaluacion[]
 }
 
 model InicioSesiones {
@@ -267,5 +268,19 @@ model EncuadreCalificacion {
   idGrupo Int
    materia   Materia   @relation("EncuadreToMateria", fields: [idMateria], references: [id])
   idMateria Int
+ 
+}
+
+
+model PeriodosEvaluacion {
+  id  String @db.VarChar(255) @id  
+  noPeriodo Int
+  fechaInicial DateTime 
+  fechaFinal DateTime 
+  fechaRegistro DateTime @default(now()) 
+  actividad String @db.VarChar(255)
+  estatus Int  @default(0)
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
  
 }

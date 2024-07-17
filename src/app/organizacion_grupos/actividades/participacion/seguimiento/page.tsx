@@ -1,15 +1,20 @@
 "use client";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import Image from "next/image";
 import { getAlumnosParticipacion } from "./controller/SegParticipacionController";
 import { useRef, useState } from "react";
-import { SvgIcons } from "@/app/svg/SvgIcons";
-import TableParticipacionSeguimiento from "./components/TableParticipacionSegimiento";
+
 import { StudentParticipacion } from "@/app/types/types";
+import TableParticipacionSeguimiento from "./components/TableParticipacionSegimiento";
+import StudentSelectCard from "./components/StudentSelectCard";
+import { SvgIcons } from "@/app/svg/SvgIcons";
+
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
   const [alumnos, setAlumnos] = useState<StudentParticipacion[]>([]);
+  const [selectAlumno, setSelectAlumno] = useState<
+    StudentParticipacion | undefined
+  >(undefined);
   const barcodeInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -51,8 +56,8 @@ export default function Seguimiento() {
       idMateria ?? -1
     );
     setAlumnos(result);
-    console.log(result);
   };
+
 
   return (
     <div
@@ -136,7 +141,13 @@ export default function Seguimiento() {
           </div>
         </div>
         <div>
-          <TableParticipacionSeguimiento alumnos={alumnos} />
+          <TableParticipacionSeguimiento
+            alumnos={alumnos}
+            setSelectAlumno={setSelectAlumno}
+          />
+        </div>
+        <div>
+          <StudentSelectCard student={selectAlumno} />
         </div>
       </div>
     </div>
