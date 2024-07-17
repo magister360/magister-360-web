@@ -1,3 +1,4 @@
+import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import { StudentParticipacion } from "@/app/types/types";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -5,15 +6,24 @@ import { v4 as uuidv4 } from "uuid";
 type Props = {
   readonly alumnos: StudentParticipacion[];
   readonly setSelectAlumno: (alumno: StudentParticipacion | undefined) => void;
+  readonly setFechasParticipaciones: React.Dispatch<
+    React.SetStateAction<string[] | null>
+  >;
+  readonly setSelectPeriodo: React.Dispatch<
+  React.SetStateAction<PeriodoEvaluacion | null>
+>;
 };
 
 export default function TableParticipacionSeguimiento({
   alumnos,
   setSelectAlumno,
+  setFechasParticipaciones,
+  setSelectPeriodo
 }: Props) {
   const handleSelectAlumno = (alumno: StudentParticipacion) => {
     setSelectAlumno(alumno);
-   
+    setFechasParticipaciones(null);
+    setSelectPeriodo(null)
   };
 
   return (

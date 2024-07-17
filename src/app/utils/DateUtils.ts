@@ -39,7 +39,7 @@ export function formatDateLocale(
 ): string {
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (!dateRegex.test(dateString)) {
-    throw new Error("Invalid date format");
+    return ""
   }
 
   const [year, month, day] = dateString.split("-").map(Number);
@@ -89,4 +89,17 @@ export function formatDateStr(
   } catch (error) {
     return "";
   }
+}
+
+export function formatDateLong(isoDate: string): string {
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+  };
+  const formattedDate = date.toLocaleDateString('es-ES', options);
+  const [day, month, year] = formattedDate.split(' de ');
+  
+  return `${parseInt(day)} de ${month} del ${year}`;
 }

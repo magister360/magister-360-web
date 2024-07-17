@@ -1,13 +1,22 @@
 "use client";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import { getAlumnosParticipacion } from "./controller/SegParticipacionController";
-import { useRef, useState } from "react";
+import {
+  getAlumnosParticipacion,
+  getFechasParticipacion,
+} from "./controller/SegParticipacionController";
+import { useEffect, useRef, useState } from "react";
 
 import { StudentParticipacion } from "@/app/types/types";
 import TableParticipacionSeguimiento from "./components/TableParticipacionSegimiento";
 import StudentSelectCard from "./components/StudentSelectCard";
 import { SvgIcons } from "@/app/svg/SvgIcons";
-
+import Loading from "@/app/components/Loading";
+import { AuthCheck } from "@/app/hooks/AuthCheck";
+import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
+import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
+import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
+import PeriodoCard from "./components/PeriodoCard";
+import FechasParticipaciones from "./components/FechasParticipaciones";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
@@ -16,6 +25,14 @@ export default function Seguimiento() {
     StudentParticipacion | undefined
   >(undefined);
   const barcodeInputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [periodos, setPeriodos] = useState<PeriodoEvaluacion[] | null>(null);
+  const [selectPeriodo, setSelectPeriodo] = useState<PeriodoEvaluacion | null>(
+    null
+  );
+  const [fechasParticipaciones, setFechasParticipaciones] = useState<
+    string[] | null
+  >([]);
 
   const {
     isMenuVisible,
@@ -27,6 +44,37 @@ export default function Seguimiento() {
     idMateria,
     idUsuario,
   } = useSidebarContext();
+
+  const fetchFechasParticipacion = async (
+    periodoEvaluacion: PeriodoEvaluacion
+  ) => {
+    const fechas = await getFechasParticipacion(
+      idMateria,
+      idUsuario,
+      periodoEvaluacion?.fechaInicial,
+      periodoEvaluacion?.fechaFinal
+    );
+    setFechasParticipaciones(fechas);
+    console.log(fechas);
+  };
+
+  const fetchPeriodos = async () => {
+    setLoading(true);
+
+    try {
+      const result = await getFechasPeriodos(
+        idUsuario ?? -1,
+        EstatusFechaPeriodosType.OK
+      );
+      if (result) {
+        setPeriodos(result);
+      }
+    } catch (err) {
+      setPeriodos(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValueSearch(event.target.value);
@@ -58,6 +106,22 @@ export default function Seguimiento() {
     setAlumnos(result);
   };
 
+  useEffect(() => {
+    const fetchDataPeriodos = async () => {
+      fetchPeriodos();
+    };
+    if (selectAlumno !== undefined) {
+      fetchDataPeriodos();
+    }
+  }, [selectAlumno]);
+
+  if (loading) {
+    return <Loading isLoading={loading} />;
+  }
+
+  if (idUsuario === undefined) {
+    return <AuthCheck />;
+  }
 
   return (
     <div
@@ -144,10 +208,25 @@ export default function Seguimiento() {
           <TableParticipacionSeguimiento
             alumnos={alumnos}
             setSelectAlumno={setSelectAlumno}
+            setFechasParticipaciones={setFechasParticipaciones}
+            setSelectPeriodo={setSelectPeriodo}
           />
         </div>
         <div>
           <StudentSelectCard student={selectAlumno} />
+        </div>
+        <div>
+          <PeriodoCard
+            periodos={periodos}
+            setSelectedPeriodo={setSelectPeriodo}
+            fetchFechasParticipacion={fetchFechasParticipacion}
+          />
+        </div>
+        <div className="mt-6">
+          <FechasParticipaciones
+            fechasParticipaciones={fechasParticipaciones}
+            noPeriodo={selectPeriodo?.noPeriodo}
+          />
         </div>
       </div>
     </div>

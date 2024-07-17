@@ -3,7 +3,9 @@ import { getApiUrl } from "../../../../../../../API";
 
 export const getFechasParticipacionApi = async (
   idUsuario: number,
-  idMateria: number
+  idMateria: number,
+  fechaInicial: Date | null,
+  fechaFinal: Date | null
 ) => {
   const apiUrl = getApiUrl("/api/fechas_participacion");
 
@@ -12,6 +14,8 @@ export const getFechasParticipacionApi = async (
       params: {
         idUsuario,
         idMateria,
+        fechaInicial,
+        fechaFinal
       },
     })
     .then((r) => {
