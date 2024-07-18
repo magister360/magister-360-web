@@ -51,7 +51,7 @@ export default function Seguimiento() {
   } = useSidebarContext();
 
   const fetchFechasParticipacion = async (
-    periodoEvaluacion: PeriodoEvaluacion
+    periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
     const fechas = await getFechasParticipacion(
       idMateria,
@@ -240,6 +240,9 @@ export default function Seguimiento() {
             fechasParticipaciones={fechasParticipaciones}
             noPeriodo={selectPeriodo?.noPeriodo}
             participacionesAlumno={participacionesAlumno}
+            fetchFechasParticipacion={fetchFechasParticipacion}
+            selectPeriodo={selectPeriodo}
+            idAlumno={selectAlumno?.id}
           />
         </div>
       </div>

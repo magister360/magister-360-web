@@ -45,6 +45,38 @@ export const createParticipacionApi = async (
   return response;
 };
 
+
+export const updateParticipacionApi = async (
+  id: string,
+  calificacion: number,
+
+) => {
+
+  const apiUrl = getApiUrl("/api/participacion");
+
+  const response = await axios
+    .put(
+      apiUrl,
+      {
+        id,
+        calificacion,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
+    })
+    .catch((error) => {
+      
+      return false;
+    });
+  return response;
+};
+
 export const getParticipacionesApi = async (
   idUsuario: number,
   idMateria: number,

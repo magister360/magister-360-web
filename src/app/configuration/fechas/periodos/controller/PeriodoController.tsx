@@ -16,6 +16,7 @@ export const createFechasPeriodos = async (
   estatus: number,
   periodos: PeriodoEvaluacion[] | null,
   idUsuario: number | undefined
+
 ): Promise<{ success: boolean; message: string }> => {
   if (actividad === undefined || idUsuario === undefined) {
     return { success: false, message: "Datos incompletos o inválidos" };
@@ -24,7 +25,9 @@ export const createFechasPeriodos = async (
   const isValdRangeDate = isOutsideAllPeriods(
     fechaInicial,
     fechaFinal,
-    periodos
+    periodos,
+    noPeriodo,
+    id
   );
   if (!isValdRangeDate) {
     return { success: false, message: "Fechas incorrectas" };
@@ -123,13 +126,21 @@ export const getFechasPeriodos = async (idUsuario: number, estatus: number) => {
 function isOutsideAllPeriods(
   startDate: Date | null,
   endDate: Date | null,
-  periods: PeriodoEvaluacion[] | null
+  periods: PeriodoEvaluacion[] | null,
+  noPeriodo: number | undefined,
+  id: string | undefined
 ): boolean {
   if (!startDate || !endDate || !periods || periods.length === 0) {
     return false;
   }
 
   return periods.every((periodo) => {
+    if (
+      id!==undefined &&
+      periodo.noPeriodo === noPeriodo
+    ) {
+      return true;
+    }
     const periodStart = new Date(periodo.fechaInicial);
     const periodEnd = new Date(periodo.fechaFinal);
 

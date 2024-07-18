@@ -138,3 +138,38 @@ export const updateEstatusParticipacion = async (
       };
     });
 };
+
+
+export const createParticipacion = async (
+  id: string|undefined,
+  estatus: number
+): Promise<{ isSave: boolean; message: string }> => {
+  if (id === undefined) {
+    return {
+      isSave: false,
+      message: "No fue posible eliminar la participación.",
+    };
+  }
+  return await updateEstatusParticipacionApi(id, estatus)
+    .then((response) => {
+      if (response) {
+        return {
+          isSave: true,
+          message: "La participación se elimino con éxito",
+        };
+      } else {
+        return {
+          isSave: false,
+          message:
+            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.",
+        };
+      }
+    })
+    .catch((error) => {
+
+      return {
+        isSave: false,
+        message: "No fue posible eliminar la participación.",
+      };
+    });
+};

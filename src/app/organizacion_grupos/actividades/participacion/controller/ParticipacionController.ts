@@ -2,6 +2,7 @@ import { convertDateToISO } from "@/app/utils/DateUtils";
 import {
   createParticipacionApi,
   getParticipacionesApi,
+  updateParticipacionApi,
 } from "../services/ParticipacionService";
 import { StudentParticipacion } from "@/app/types/types";
 
@@ -10,10 +11,10 @@ export const createParticipacion = async (
   fecha: string | null,
   calificacion: number,
   contenido: string,
-  idAlumno: string,
-  idUsuario: number,
+  idAlumno: string | undefined,
+  idUsuario: number | undefined,
   idMateria: number | undefined,
-  estatus:number
+  estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
   if (
     idAlumno === undefined ||
@@ -27,7 +28,6 @@ export const createParticipacion = async (
     idUsuario <= 0 ||
     fecha === null
   ) {
-
     return { isSave: false, message: "No fue posible guardar los datos." };
   }
 
@@ -40,7 +40,7 @@ export const createParticipacion = async (
     contenido,
     idAlumno,
     idUsuario,
-    idMateria, 
+    idMateria,
     estatus
   )
     .then((response) => {
@@ -59,6 +59,39 @@ export const createParticipacion = async (
     })
     .catch((error) => {
       return { isSave: false, message: "No fue posible guardar los datos." };
+    });
+};
+
+export const updateParticipacion = async (
+  id: string,
+  calificacion: number
+): Promise<{ isSave: boolean; message: string }> => {
+  
+  if (id === undefined) {
+    return { isSave: false, message: "No fue posible guardar los datos." };
+  }
+  if (calificacion === undefined || calificacion < 5 || calificacion > 10) {
+    return { isSave: false, message: "La calificación es inválida." };
+  }
+
+
+  return await updateParticipacionApi(id, calificacion)
+    .then((response) => {
+      if (response) {
+        return {
+          isSave: true,
+          message: "La participación se modifico con éxito",
+        };
+      } else {
+        return {
+          isSave: false,
+          message:
+            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.",
+        };
+      }
+    })
+    .catch((error) => {
+      return { isSave: false, message: "No fue posible modificar los datos." };
     });
 };
 

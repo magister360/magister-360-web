@@ -7,24 +7,43 @@ import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 import { updateEstatusParticipacion } from "../controller/SegParticipacionController";
 import ErrorModal from "@/app/components/ErrorModal ";
 import SuccessModal from "@/app/components/SuccessModal";
+import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
+import { CalificacionModal } from "@/app/components/CalificacionModal";
+import {
+  createParticipacion,
+  updateParticipacion,
+} from "../../controller/ParticipacionController";
+import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 interface FechasParticipacionesProps {
   noPeriodo: number | undefined;
   fechasParticipaciones: string[] | null;
   participacionesAlumno: TypeParticipacion[] | null;
+  fetchFechasParticipacion: (
+    periodoEvaluacion: PeriodoEvaluacion | null
+  ) => Promise<void>;
+  selectPeriodo: PeriodoEvaluacion | null;
+  idAlumno: string | undefined;
 }
 
 const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   fechasParticipaciones,
   noPeriodo,
   participacionesAlumno,
+  fetchFechasParticipacion,
+  selectPeriodo,
+  idAlumno,
 }) => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
-  const [fecha, setFecha] = useState<string>("");
+
+  const [isCalificacionModalOpen, setIsCalificacionModalOpen] = useState(false);
+  const [selectedFecha, setSelectedFecha] = useState<string>("");
+  const [selectedCalificacion, setSelectedCalificacion] = useState<number>(0);
+  const { idUsuario, idMateria, contenido } = useSidebarContext();
   const titulo = `Trimestre ${noPeriodo}`;
 
   const handleCloseErrorModal = () => {
@@ -37,13 +56,58 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   if (noPeriodo === undefined) {
     return null;
   }
+
+  const handleEditClick = (fecha: string, calificacion: number) => {
+    setSelectedFecha(fecha);
+    setSelectedCalificacion(calificacion);
+    setIsCalificacionModalOpen(true);
+  };
+
   const closeModalConfirm = () => {
     setIsModalConfirmOpen(false);
   };
 
+  const handleSaveCalificacion = async (calificacion: number) => {
+    setIsCalificacionModalOpen(false);
+    const id = buscarId(selectedFecha);
+    if (id === undefined) {
+      const UUID = uuidv4();
+      const userId = idUsuario ?? -1;
+      const save = await createParticipacion(
+        UUID,
+        selectedFecha,
+        calificacion,
+        contenido ?? "",
+        idAlumno,
+        userId,
+        idMateria,
+        EstatusParticipacionType.OK
+      );
+      if (save.isSave) {
+        setSuccessMessage(save.message);
+        setIsSuccessModalOpen(true);
+        fetchFechasParticipacion(selectPeriodo);
+      } else {
+        setErrorMessage(save.message);
+        setIsErrorModalOpen(true);
+      }
+    } else {
+   
+      const save = await updateParticipacion(id, calificacion);
+      if (save.isSave) {
+        setSuccessMessage(save.message);
+        setIsSuccessModalOpen(true);
+        fetchFechasParticipacion(selectPeriodo);
+      } else {
+        setErrorMessage(save.message);
+        setIsErrorModalOpen(true);
+      }
+    }
+  };
+
   const handleConfirm = async () => {
     setIsModalConfirmOpen(false);
-    const id = buscarId(fecha);
+    const id = buscarId(selectedFecha);
 
     const updateStatus = await updateEstatusParticipacion(
       id,
@@ -52,6 +116,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
     if (updateStatus.isSave) {
       setSuccessMessage(updateStatus.message);
       setIsSuccessModalOpen(true);
+      fetchFechasParticipacion(selectPeriodo);
     } else {
       setErrorMessage(updateStatus.message);
       setIsErrorModalOpen(true);
@@ -59,7 +124,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   };
   const handleConfirmOpen = async (fecha: string) => {
     setIsModalConfirmOpen(true);
-    setFecha(fecha);
+    setSelectedFecha(fecha);
   };
 
   const buscarId = (fechaBusqueda: string): string | undefined => {
@@ -117,6 +182,20 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
       />
     );
   }
+
+  if (isCalificacionModalOpen) {
+    return (
+      <CalificacionModal
+        isOpen={isCalificacionModalOpen}
+        onClose={() => setIsCalificacionModalOpen(false)}
+        onSave={handleSaveCalificacion}
+        calificacionInicial={selectedCalificacion}
+        titulo="Participación"
+        selectedFecha={selectedFecha}
+      />
+    );
+  }
+
   return (
     <>
       <div className="bg-gradient-to-r from-blue-500 to-stone-900 rounded-lg shadow-lg p-6">
@@ -167,6 +246,9 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
                   alt="editar"
                   width={28}
                   height={28}
+                  onClick={() =>
+                    handleEditClick(fecha, buscarCalificacion(fecha))
+                  }
                 />
               </div>
             </div>

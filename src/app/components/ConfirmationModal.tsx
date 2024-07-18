@@ -18,8 +18,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/30 dark:bg-white/10 backdrop-blur-sm flex 
-    items-center justify-center p-4"
+      className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-90 flex justify-center 
+    items-center z-50"
     >
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
         <div

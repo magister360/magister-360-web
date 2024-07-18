@@ -22,7 +22,6 @@ export const getFechasParticipacionApi = async (
     })
     .then((r) => {
       if (r.status === 200) {
-        console.log(r.data);
         return r.data;
       } else {
         return null;
@@ -57,7 +56,6 @@ export const getFechasParticipacionAlumnoApi = async (
     })
     .then((r) => {
       if (r.status === 200) {
-        console.log(r.data);
         return r.data;
       } else {
         return null;
@@ -125,9 +123,11 @@ export const updateEstatusParticipacionApi = async (
       }
     })
     .catch((e) => {
-      console.log(e);
+ 
       return null;
     });
 
   return response;
 };
+
+
