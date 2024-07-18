@@ -1,4 +1,4 @@
-export interface TypeParticipacion {
+export interface TypeParticipacionFecha {
   id: string;
   fecha: string;
   calificacion: number;

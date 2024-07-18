@@ -1,5 +1,5 @@
 import { convertDateToISO } from "@/app/utils/DateUtils";
-import { createTareaApi, getTareasApi } from "../service/TareaService";
+import { createTareaApi, getTareasApi, updateTareaApi } from "../service/TareaService";
 import { StudentTarea } from "@/app/types/tarea/TypeTarea";
 
 export const createTarea = async (
@@ -7,12 +7,12 @@ export const createTarea = async (
   fecha: string | null,
   calificacion: number,
   contenido: string,
-  idAlumno: string,
+  idAlumno: string|undefined,
   idUsuario: number,
   idMateria: number | undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
-  console.log("fecha " + fecha);
+  
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
@@ -58,6 +58,41 @@ export const createTarea = async (
       return { isSave: false, message: "No fue posible guardar los datos." };
     });
 };
+
+export const updateTarea = async (
+  id: string,
+  calificacion: number
+): Promise<{ isSave: boolean; message: string }> => {
+  
+  if (id === undefined) {
+    return { isSave: false, message: "No fue posible guardar los datos." };
+  }
+  if (calificacion === undefined || calificacion < 5 || calificacion > 10) {
+    return { isSave: false, message: "La calificación es inválida." };
+  }
+
+
+  return await updateTareaApi(id, calificacion)
+    .then((response) => {
+      if (response) {
+        return {
+          isSave: true,
+          message: "La tarea se modifico con éxito",
+        };
+      } else {
+        return {
+          isSave: false,
+          message:
+            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.",
+        };
+      }
+    })
+    .catch((error) => {
+      return { isSave: false, message: "No fue posible modificar los datos." };
+    });
+};
+
+
 
 export const getTarea = async (
   idUsuario: number,

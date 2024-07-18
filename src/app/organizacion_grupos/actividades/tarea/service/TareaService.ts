@@ -46,6 +46,39 @@ export const createTareaApi = async (
   return response;
 };
 
+
+export const updateTareaApi = async (
+  id: string,
+  calificacion: number,
+
+) => {
+
+  const apiUrl = getApiUrl("/api/tarea");
+
+  const response = await axios
+    .put(
+      apiUrl,
+      {
+        id,
+        calificacion,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
+    })
+    .catch((error) => {
+      
+      return false;
+    });
+  return response;
+};
+
+
 export const getTareasApi = async (
   idUsuario: number,
   idMateria: number,

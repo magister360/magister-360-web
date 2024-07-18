@@ -1,7 +1,7 @@
-import { StudentParticipacion } from "@/app/types/types";
+import { StudentTarea } from "@/app/types/tarea/TypeTarea";
 
 interface StudentCardProps {
-  student: StudentParticipacion | undefined;
+  student: StudentTarea | undefined;
 }
 
 const StudentSelectCard: React.FC<StudentCardProps> = ({ student }) => {

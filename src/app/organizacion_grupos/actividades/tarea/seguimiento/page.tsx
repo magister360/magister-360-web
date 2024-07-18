@@ -1,44 +1,40 @@
 "use client";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import {
-  getAlumnosParticipacion,
-  getFechasParticipacion,
-  getFechasParticipacionAlumno,
-} from "./controller/SegParticipacionController";
+
 import { useEffect, useRef, useState } from "react";
 
-import { StudentParticipacion } from "@/app/types/types";
-import TableParticipacionSeguimiento from "./components/TableParticipacionSegimiento";
-import StudentSelectCard from "./components/StudentSelectCard";
 import { SvgIcons } from "@/app/svg/SvgIcons";
 import Loading from "@/app/components/Loading";
 import { AuthCheck } from "@/app/hooks/AuthCheck";
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
-import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
-import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
-import PeriodoCard from "./components/PeriodoCard";
-import FechasParticipaciones from "./components/FechasParticipaciones";
-import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
 
+import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
+import { StudentTarea, TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+import {
+  getAlumnosTarea,
+  getFechasTarea,
+  getFechasTareaAlumno,
+} from "./controller/SegTareaController";
+import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
+import TableTareaSeguimiento from "./conponents/TableTareaSeguimiento";
+import StudentSelectCard from "./conponents/StudentSelectCard";
+import PeriodoCard from "./conponents/PeriodoCard";
+import FechasTareas from "./conponents/FechasTareas";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
-  const [alumnos, setAlumnos] = useState<StudentParticipacion[]>([]);
-  const [selectAlumno, setSelectAlumno] = useState<
-    StudentParticipacion | undefined
-  >(undefined);
+  const [alumnos, setAlumnos] = useState<StudentTarea[]>([]);
+  const [selectAlumno, setSelectAlumno] = useState<StudentTarea | undefined>(
+    undefined
+  );
   const barcodeInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [periodos, setPeriodos] = useState<PeriodoEvaluacion[] | null>(null);
   const [selectPeriodo, setSelectPeriodo] = useState<PeriodoEvaluacion | null>(
     null
   );
-  const [fechasParticipaciones, setFechasParticipaciones] = useState<
-    string[] | null
-  >([]);
-  const [participacionesAlumno, setParticipacionesAlumno] = useState<
-  TypeParticipacionFecha[] | null
-  >([]);
+  const [fechasTareas, setFechasTareas] = useState<string[] | null>([]);
+  const [tareasAlumno, setTareasAlumno] = useState<TypeTareaFecha[] | null>([]);
 
   const {
     isMenuVisible,
@@ -51,25 +47,25 @@ export default function Seguimiento() {
     idUsuario,
   } = useSidebarContext();
 
-  const fetchFechasParticipacion = async (
+  const fetchFechasTarea = async (
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
-    const fechas = await getFechasParticipacion(
+    const fechas = await getFechasTarea(
       idMateria,
       idUsuario,
       periodoEvaluacion?.fechaInicial,
       periodoEvaluacion?.fechaFinal
     );
-    setFechasParticipaciones(fechas);
+    setFechasTareas(fechas);
 
-    const participacionAlumnos = await getFechasParticipacionAlumno(
+    const tareaAlumnos = await getFechasTareaAlumno(
       idMateria,
       idUsuario,
       selectAlumno?.id,
       periodoEvaluacion?.fechaInicial,
       periodoEvaluacion?.fechaFinal
     );
-    setParticipacionesAlumno(participacionAlumnos);
+    setTareasAlumno(tareaAlumnos);
   };
 
   const fetchPeriodos = async () => {
@@ -98,18 +94,18 @@ export default function Seguimiento() {
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
-      fetchAlumnoParticipacion(valueSearch);
+      fetchAlumnoTarea(valueSearch);
       setValueSearch("");
     }
   };
 
   const handleSearch = async () => {
-    fetchAlumnoParticipacion(valueSearch);
+    fetchAlumnoTarea(valueSearch);
   };
 
-  const fetchAlumnoParticipacion = async (busqueda: string) => {
+  const fetchAlumnoTarea = async (busqueda: string) => {
     const userId = idUsuario ?? -1;
-    const result = await getAlumnosParticipacion(
+    const result = await getAlumnosTarea(
       userId,
       0,
       idGrado ?? -1,
@@ -146,7 +142,7 @@ export default function Seguimiento() {
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
       >
-        Seguimiento participación
+        Seguimiento tarea
       </h3>
 
       <div className="flex space-x-2">
@@ -219,10 +215,10 @@ export default function Seguimiento() {
           </div>
         </div>
         <div>
-          <TableParticipacionSeguimiento
+          <TableTareaSeguimiento
             alumnos={alumnos}
             setSelectAlumno={setSelectAlumno}
-            setFechasParticipaciones={setFechasParticipaciones}
+            setFechasTareas={setFechasTareas}
             setSelectPeriodo={setSelectPeriodo}
           />
         </div>
@@ -233,15 +229,15 @@ export default function Seguimiento() {
           <PeriodoCard
             periodos={periodos}
             setSelectedPeriodo={setSelectPeriodo}
-            fetchFechasParticipacion={fetchFechasParticipacion}
+            fetchFechasTarea={fetchFechasTarea}
           />
         </div>
         <div className="mt-6">
-          <FechasParticipaciones
-            fechasParticipaciones={fechasParticipaciones}
+          <FechasTareas
+            fechasTareas={fechasTareas}
             noPeriodo={selectPeriodo?.noPeriodo}
-            participacionesAlumno={participacionesAlumno}
-            fetchFechasParticipacion={fetchFechasParticipacion}
+            tareasAlumno={tareasAlumno}
+            fetchFechasTarea={fetchFechasTarea}
             selectPeriodo={selectPeriodo}
             idAlumno={selectAlumno?.id}
           />

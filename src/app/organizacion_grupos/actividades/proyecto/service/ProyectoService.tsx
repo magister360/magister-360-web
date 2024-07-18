@@ -46,6 +46,39 @@ export const createProyectoApi = async (
   return response;
 };
 
+
+export const updateProyetoApi = async (
+  id: string,
+  calificacion: number,
+
+) => {
+
+  const apiUrl = getApiUrl("/api/proyecto");
+
+  const response = await axios
+    .put(
+      apiUrl,
+      {
+        id,
+        calificacion,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
+    })
+    .catch((error) => {
+      
+      return false;
+    });
+  return response;
+};
+
+
 export const getProyectosApi = async (
   idUsuario: number,
   idMateria: number,

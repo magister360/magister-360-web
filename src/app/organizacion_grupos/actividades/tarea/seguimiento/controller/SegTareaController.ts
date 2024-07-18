@@ -1,14 +1,11 @@
 
-import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
-import {
-  getAlumnosParticipacionApi,
-  getFechasParticipacionAlumnoApi,
-  getFechasParticipacionApi,
-  updateEstatusParticipacionApi,
-} from "../service/SegParticipacionService";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 
-export const getFechasParticipacion = async (
+
+import { EstatusTareaType } from "@/app/estatus/EstatusType";
+import { getAlumnosTareaApi, getFechasTareaAlumnoApi, getFechasTareaApi, updateEstatusTareaApi } from "../service/SegTareaService";
+import { TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+
+export const getFechasTarea = async (
   idMateria: number | undefined,
   idUsuario: number | undefined,
   fechaInicial: string | undefined,
@@ -28,25 +25,25 @@ export const getFechasParticipacion = async (
   try {
     const dateStart = new Date(fechaInicial);
     const dateEnd = new Date(fechaFinal);
-    return await getFechasParticipacionApi(
+    return await getFechasTareaApi(
       idUsuario,
       idMateria,
       dateStart,
       dateEnd,
-      EstatusParticipacionType.OK
+      EstatusTareaType.OK
     );
   } catch (error) {
     return null;
   }
 };
 
-export const getFechasParticipacionAlumno = async (
+export const getFechasTareaAlumno = async (
   idMateria: number | undefined,
   idUsuario: number | undefined,
   idAlumno: string | undefined,
   fechaInicial: string | undefined,
   fechaFinal: string | undefined
-): Promise<TypeParticipacionFecha[] | null> => {
+): Promise<TypeTareaFecha[] | null> => {
   if (
     idMateria === undefined ||
     idUsuario === undefined ||
@@ -62,20 +59,20 @@ export const getFechasParticipacionAlumno = async (
   try {
     const dateStart = new Date(fechaInicial);
     const dateEnd = new Date(fechaFinal);
-    return await getFechasParticipacionAlumnoApi(
+    return await getFechasTareaAlumnoApi(
       idMateria,
       idUsuario,
       idAlumno,
       dateStart,
       dateEnd,
-      EstatusParticipacionType.OK
+      EstatusTareaType.OK
     );
   } catch (error) {
     return null;
   }
 };
 
-export const getAlumnosParticipacion = async (
+export const getAlumnosTarea = async (
   idUsuario: number,
   estatus: number,
   idGrado: number,
@@ -93,7 +90,7 @@ export const getAlumnosParticipacion = async (
   }
 
   try {
-    return await getAlumnosParticipacionApi(
+    return await getAlumnosTareaApi(
       idUsuario,
       estatus,
       idGrado,
@@ -106,22 +103,22 @@ export const getAlumnosParticipacion = async (
   }
 };
 
-export const updateEstatusParticipacion = async (
+export const updateEstatusTarea = async (
   id: string|undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
   if (id === undefined) {
     return {
       isSave: false,
-      message: "No fue posible eliminar la participación.",
+      message: "No fue posible eliminar la tarea.",
     };
   }
-  return await updateEstatusParticipacionApi(id, estatus)
+  return await updateEstatusTareaApi(id, estatus)
     .then((response) => {
       if (response) {
         return {
           isSave: true,
-          message: "La participación se elimino con éxito",
+          message: "La tarea se elimino con éxito",
         };
       } else {
         return {
@@ -135,28 +132,28 @@ export const updateEstatusParticipacion = async (
 
       return {
         isSave: false,
-        message: "No fue posible eliminar la participación.",
+        message: "No fue posible eliminar la tarea.",
       };
     });
 };
 
 
-export const createParticipacion = async (
+export const createTarea = async (
   id: string|undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
   if (id === undefined) {
     return {
       isSave: false,
-      message: "No fue posible eliminar la participación.",
+      message: "No fue posible eliminar la tarea.",
     };
   }
-  return await updateEstatusParticipacionApi(id, estatus)
+  return await updateEstatusTareaApi(id, estatus)
     .then((response) => {
       if (response) {
         return {
           isSave: true,
-          message: "La participación se elimino con éxito",
+          message: "La tarea se elimino con éxito",
         };
       } else {
         return {
@@ -170,7 +167,7 @@ export const createParticipacion = async (
 
       return {
         isSave: false,
-        message: "No fue posible eliminar la participación.",
+        message: "No fue posible eliminar la tarea.",
       };
     });
 };

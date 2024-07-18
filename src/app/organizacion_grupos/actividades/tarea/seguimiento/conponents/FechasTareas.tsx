@@ -1,37 +1,35 @@
-
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
-import { updateEstatusParticipacion } from "../controller/SegParticipacionController";
+import { EstatusTareaType } from "@/app/estatus/EstatusType";
+
 import ErrorModal from "@/app/components/ErrorModal ";
 import SuccessModal from "@/app/components/SuccessModal";
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import { CalificacionModal } from "@/app/components/CalificacionModal";
-import {
-  createParticipacion,
-  updateParticipacion,
-} from "../../controller/ParticipacionController";
-import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
 
-interface FechasParticipacionesProps {
+import { useSidebarContext } from "@/app/sidebar/SidebarContext";
+import { TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+import { createTarea, updateTarea } from "../../controller/TareaController";
+import { updateEstatusTarea } from "../controller/SegTareaController";
+
+interface FechasTareasProps {
   noPeriodo: number | undefined;
-  fechasParticipaciones: string[] | null;
-  participacionesAlumno: TypeParticipacionFecha[] | null;
-  fetchFechasParticipacion: (
+  fechasTareas: string[] | null;
+  tareasAlumno: TypeTareaFecha[] | null;
+  fetchFechasTarea: (
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => Promise<void>;
   selectPeriodo: PeriodoEvaluacion | null;
   idAlumno: string | undefined;
 }
 
-const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
-  fechasParticipaciones,
+const FechasTareas: React.FC<FechasTareasProps> = ({
+  fechasTareas,
   noPeriodo,
-  participacionesAlumno,
-  fetchFechasParticipacion,
+  tareasAlumno,
+  fetchFechasTarea,
   selectPeriodo,
   idAlumno,
 }) => {
@@ -74,7 +72,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
     if (id === undefined) {
       const UUID = uuidv4();
       const userId = idUsuario ?? -1;
-      const save = await createParticipacion(
+      const save = await createTarea(
         UUID,
         selectedFecha,
         calificacion,
@@ -82,23 +80,23 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
         idAlumno,
         userId,
         idMateria,
-        EstatusParticipacionType.OK
+        EstatusTareaType.OK
       );
       if (save.isSave) {
         setSuccessMessage(save.message);
         setIsSuccessModalOpen(true);
-        fetchFechasParticipacion(selectPeriodo);
+        fetchFechasTarea(selectPeriodo);
       } else {
         setErrorMessage(save.message);
         setIsErrorModalOpen(true);
       }
     } else {
    
-      const save = await updateParticipacion(id, calificacion);
+      const save = await updateTarea(id, calificacion);
       if (save.isSave) {
         setSuccessMessage(save.message);
         setIsSuccessModalOpen(true);
-        fetchFechasParticipacion(selectPeriodo);
+        fetchFechasTarea(selectPeriodo);
       } else {
         setErrorMessage(save.message);
         setIsErrorModalOpen(true);
@@ -110,14 +108,14 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
     setIsModalConfirmOpen(false);
     const id = buscarId(selectedFecha);
 
-    const updateStatus = await updateEstatusParticipacion(
+    const updateStatus = await updateEstatusTarea(
       id,
-      EstatusParticipacionType.ELIMININAR
+      EstatusTareaType.ELIMININAR
     );
     if (updateStatus.isSave) {
       setSuccessMessage(updateStatus.message);
       setIsSuccessModalOpen(true);
-      fetchFechasParticipacion(selectPeriodo);
+      fetchFechasTarea(selectPeriodo);
     } else {
       setErrorMessage(updateStatus.message);
       setIsErrorModalOpen(true);
@@ -129,27 +127,27 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   };
 
   const buscarId = (fechaBusqueda: string): string | undefined => {
-    if (!participacionesAlumno) {
+    if (!tareasAlumno) {
       return undefined;
     }
 
-    const participacion = participacionesAlumno.find(
+    const tarea = tareasAlumno.find(
       (p) => p.fecha === fechaBusqueda
     );
 
-    return participacion ? participacion.id : undefined;
+    return tarea ? tarea.id : undefined;
   };
 
   const buscarCalificacion = (fechaBusqueda: string): number => {
-    if (!participacionesAlumno) {
+    if (!tareasAlumno) {
       return 0;
     }
 
-    const participacion = participacionesAlumno.find(
+    const tarea = tareasAlumno.find(
       (p) => p.fecha === fechaBusqueda
     );
 
-    return participacion ? participacion.calificacion : 0;
+    return tarea ? tarea.calificacion : 0;
   };
 
   if (isModalConfirmOpen) {
@@ -158,7 +156,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
         isOpen={isModalConfirmOpen}
         onClose={closeModalConfirm}
         onConfirm={handleConfirm}
-        message="¿Está seguro de eliminar la participación?"
+        message="¿Está seguro de eliminar la tarea?"
       />
     );
   }
@@ -191,7 +189,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
         onClose={() => setIsCalificacionModalOpen(false)}
         onSave={handleSaveCalificacion}
         calificacionInicial={selectedCalificacion}
-        titulo="Participación"
+        titulo="Tarea"
         selectedFecha={selectedFecha}
       />
     );
@@ -204,7 +202,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {fechasParticipaciones?.map((fecha, index) => (
+        {fechasTareas?.map((fecha, index) => (
           <div
             key={uuidv4()}
             className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex"
@@ -212,7 +210,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
             <div className="w-1 bg-blue-500 flex-shrink-0"></div>
             <div className="p-4 flex-grow">
               <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 cursor-default">
-                Participación {index + 1}
+                Tarea {index + 1}
               </h3>
               <p className="">
                 <span className="dark:text-gray-600 text-slate-400 cursor-default">
@@ -260,4 +258,4 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   );
 };
 
-export default FechasParticipaciones;
+export default FechasTareas;

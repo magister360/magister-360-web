@@ -7,7 +7,7 @@ type Props = {
   readonly setSelectedPeriodo: React.Dispatch<
     React.SetStateAction<PeriodoEvaluacion | null>
   >;
-  readonly fetchFechasParticipacion: (
+  readonly fetchFechasTarea: (
     periodoEvaluacion: PeriodoEvaluacion
   ) => Promise<void>;
 };
@@ -15,12 +15,12 @@ type Props = {
 export default function PeriodoCard({
   periodos,
   setSelectedPeriodo,
-  fetchFechasParticipacion,
+  fetchFechasTarea,
 }: Props) {
   const handleSelectPeriodo = async (periodoEvaluacion: PeriodoEvaluacion) => {
     setSelectedPeriodo(periodoEvaluacion);
     console.log(periodoEvaluacion);
-    fetchFechasParticipacion(periodoEvaluacion);
+    fetchFechasTarea(periodoEvaluacion);
   };
 
   return (
@@ -28,12 +28,12 @@ export default function PeriodoCard({
       {periodos?.map((periodo) => (
         <div
           key={periodo.id}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 
           relative overflow-hidden pb-16 cursor-default"
         >
           <div className="pl-3">
             <div className="absolute left-0 top-0 bottom-0 w-2 bg-blue-500 rounded-l-lg"></div>
-            <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200 cursor-default">
               Trimestre {periodo.noPeriodo}
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
