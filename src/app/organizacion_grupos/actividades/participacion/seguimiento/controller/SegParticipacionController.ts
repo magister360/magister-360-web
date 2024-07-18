@@ -3,7 +3,9 @@ import {
   getAlumnosParticipacionApi,
   getFechasParticipacionAlumnoApi,
   getFechasParticipacionApi,
+  updateEstatusParticipacionApi,
 } from "../service/SegParticipacionService";
+import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 
 export const getFechasParticipacion = async (
   idMateria: number | undefined,
@@ -29,7 +31,8 @@ export const getFechasParticipacion = async (
       idUsuario,
       idMateria,
       dateStart,
-      dateEnd
+      dateEnd,
+      EstatusParticipacionType.OK
     );
   } catch (error) {
     return null;
@@ -37,12 +40,12 @@ export const getFechasParticipacion = async (
 };
 
 export const getFechasParticipacionAlumno = async (
-  idMateria: number|undefined,
-  idUsuario: number|undefined,
-  idAlumno: string|undefined,
+  idMateria: number | undefined,
+  idUsuario: number | undefined,
+  idAlumno: string | undefined,
   fechaInicial: string | undefined,
   fechaFinal: string | undefined
-): Promise<TypeParticipacion[]|null> => {
+): Promise<TypeParticipacion[] | null> => {
   if (
     idMateria === undefined ||
     idUsuario === undefined ||
@@ -63,7 +66,8 @@ export const getFechasParticipacionAlumno = async (
       idUsuario,
       idAlumno,
       dateStart,
-      dateEnd
+      dateEnd,
+      EstatusParticipacionType.OK
     );
   } catch (error) {
     return null;
@@ -99,4 +103,38 @@ export const getAlumnosParticipacion = async (
   } catch (error) {
     return null;
   }
+};
+
+export const updateEstatusParticipacion = async (
+  id: string|undefined,
+  estatus: number
+): Promise<{ isSave: boolean; message: string }> => {
+  if (id === undefined) {
+    return {
+      isSave: false,
+      message: "No fue posible eliminar la participación.",
+    };
+  }
+  return await updateEstatusParticipacionApi(id, estatus)
+    .then((response) => {
+      if (response) {
+        return {
+          isSave: true,
+          message: "La participación se elimino con éxito",
+        };
+      } else {
+        return {
+          isSave: false,
+          message:
+            "Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.",
+        };
+      }
+    })
+    .catch((error) => {
+
+      return {
+        isSave: false,
+        message: "No fue posible eliminar la participación.",
+      };
+    });
 };

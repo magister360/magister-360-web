@@ -16,14 +16,16 @@ export async function get(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const { idUsuario, idMateria, fechaInicial, fechaFinal } = req.query;
+  const { idUsuario, idMateria, fechaInicial, fechaFinal, estatus } = req.query;
 
   const parseQueryParam = (param: string | string[] | undefined): number => {
     if (param === undefined) return NaN;
     return Array.isArray(param) ? parseInt(param[0], 10) : parseInt(param, 10);
   };
 
-  const parseDateParam = (param: string | string[] | undefined): Date | null => {
+  const parseDateParam = (
+    param: string | string[] | undefined
+  ): Date | null => {
     if (param === undefined) return null;
     const dateStr = Array.isArray(param) ? param[0] : param;
     return new Date(dateStr);
@@ -31,10 +33,11 @@ export async function get(
 
   const idUsuarioNum = parseQueryParam(idUsuario);
   const idMateriaNum = parseQueryParam(idMateria);
+  const estatusNum = parseQueryParam(estatus);
   const fechaInicialDate = parseDateParam(fechaInicial);
   const fechaFinalDate = parseDateParam(fechaFinal);
 
-  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum)) {
+  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || isNaN(estatusNum)) {
     return res.status(400).json({ error: "Parámetros inválidos" });
   }
 
@@ -42,6 +45,7 @@ export async function get(
     const whereClause: any = {
       idUsuario: idUsuarioNum,
       idMateria: idMateriaNum,
+      estatus: estatusNum,
     };
 
     if (fechaInicialDate) {
@@ -63,14 +67,14 @@ export async function get(
       select: {
         fecha: true,
       },
-      distinct: ['fecha'],
+      distinct: ["fecha"],
       orderBy: {
-        fecha: 'desc',
+        fecha: "desc",
       },
     });
 
-    const formattedDates = distinctDates.map(({ fecha }) =>
-      fecha.toISOString().split('T')[0]
+    const formattedDates = distinctDates.map(
+      ({ fecha }) => fecha.toISOString().split("T")[0]
     );
 
     return res.status(200).json(formattedDates);

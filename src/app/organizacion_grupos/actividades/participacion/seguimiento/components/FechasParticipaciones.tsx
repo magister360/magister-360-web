@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
+import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
+import { updateEstatusParticipacion } from "../controller/SegParticipacionController";
+import ErrorModal from "@/app/components/ErrorModal ";
+import SuccessModal from "@/app/components/SuccessModal";
 
 interface FechasParticipacionesProps {
   noPeriodo: number | undefined;
@@ -15,8 +19,20 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
   noPeriodo,
   participacionesAlumno,
 }) => {
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
+  const [fecha, setFecha] = useState<string>("");
   const titulo = `Trimestre ${noPeriodo}`;
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+  const handleSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+  };
 
   if (noPeriodo === undefined) {
     return null;
@@ -27,6 +43,35 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
 
   const handleConfirm = async () => {
     setIsModalConfirmOpen(false);
+    const id = buscarId(fecha);
+
+    const updateStatus = await updateEstatusParticipacion(
+      id,
+      EstatusParticipacionType.ELIMININAR
+    );
+    if (updateStatus.isSave) {
+      setSuccessMessage(updateStatus.message);
+      setIsSuccessModalOpen(true);
+    } else {
+      setErrorMessage(updateStatus.message);
+      setIsErrorModalOpen(true);
+    }
+  };
+  const handleConfirmOpen = async (fecha: string) => {
+    setIsModalConfirmOpen(true);
+    setFecha(fecha);
+  };
+
+  const buscarId = (fechaBusqueda: string): string | undefined => {
+    if (!participacionesAlumno) {
+      return undefined;
+    }
+
+    const participacion = participacionesAlumno.find(
+      (p) => p.fecha === fechaBusqueda
+    );
+
+    return participacion ? participacion.id : undefined;
   };
 
   const buscarCalificacion = (fechaBusqueda: string): number => {
@@ -48,6 +93,27 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
         onClose={closeModalConfirm}
         onConfirm={handleConfirm}
         message="¿Está seguro de eliminar la participación?"
+      />
+    );
+  }
+
+  if (isErrorModalOpen) {
+    return (
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    );
+  }
+  if (isSuccessModalOpen) {
+    return (
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessModal}
+        successMessage={successMessage}
+        setSuccessMessage={setSuccessMessage}
       />
     );
   }
@@ -92,7 +158,7 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
                   alt="remover"
                   width={28}
                   height={28}
-                  onClick={() => setIsModalConfirmOpen(true)}
+                  onClick={() => handleConfirmOpen(fecha)}
                 />
                 <Image
                   className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3t 

@@ -16,12 +16,11 @@ export async function get(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const { idUsuario, idMateria, idAlumno, fechaInicial, fechaFinal } =
+  const { idUsuario, idMateria, idAlumno, fechaInicial, fechaFinal, estatus } =
     req.query;
 
-  const parseQueryParam = (
-    param: string | string[] | undefined
-  ): string | number => {
+  type QueryParam = string | string[] | undefined;
+  const parseQueryParam = (param: QueryParam): string | number => {
     if (param === undefined) return NaN;
     return Array.isArray(param) ? param[0] : param;
   };
@@ -34,13 +33,24 @@ export async function get(
     return new Date(dateStr);
   };
 
-  const idUsuarioNum = parseInt(parseQueryParam(idUsuario) as string, 10);
-  const idMateriaNum = parseInt(parseQueryParam(idMateria) as string, 10);
+  const parseQueryParamInt = (param: string | string[] | undefined): number => {
+    if (param === undefined) return NaN;
+    return Array.isArray(param) ? parseInt(param[0], 10) : parseInt(param, 10);
+  };
+
+  const idUsuarioNum = parseQueryParamInt(idUsuario);
+  const idMateriaNum = parseQueryParamInt(idMateria);
   const idAlumnoStr = parseQueryParam(idAlumno) as string;
+  const estatusNum = parseQueryParamInt(estatus);
   const fechaInicialDate = parseDateParam(fechaInicial);
   const fechaFinalDate = parseDateParam(fechaFinal);
 
-  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || !idAlumnoStr) {
+  if (
+    isNaN(idUsuarioNum) ||
+    isNaN(idMateriaNum) ||
+    !idAlumnoStr ||
+    isNaN(estatusNum)
+  ) {
     return res.status(400).json({ error: "Parámetros inválidos" });
   }
 
@@ -49,6 +59,7 @@ export async function get(
       idUsuario: idUsuarioNum,
       idMateria: idMateriaNum,
       idAlumno: idAlumnoStr,
+      estatus: estatusNum,
     };
 
     if (fechaInicialDate) {
@@ -87,7 +98,6 @@ export async function get(
     );
 
     return res.status(200).json(formattedParticipaciones);
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error interno del servidor" });
