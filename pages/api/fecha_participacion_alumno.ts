@@ -16,45 +16,78 @@ export async function get(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const { idUsuario, idMateria, idAlumno } = req.query;
+  const { idUsuario, idMateria, idAlumno, fechaInicial, fechaFinal } =
+    req.query;
 
-  const parseQueryParam = (param: string | string[] | undefined): string | number => {
+  const parseQueryParam = (
+    param: string | string[] | undefined
+  ): string | number => {
     if (param === undefined) return NaN;
     return Array.isArray(param) ? param[0] : param;
+  };
+
+  const parseDateParam = (
+    param: string | string[] | undefined
+  ): Date | null => {
+    if (param === undefined) return null;
+    const dateStr = Array.isArray(param) ? param[0] : param;
+    return new Date(dateStr);
   };
 
   const idUsuarioNum = parseInt(parseQueryParam(idUsuario) as string, 10);
   const idMateriaNum = parseInt(parseQueryParam(idMateria) as string, 10);
   const idAlumnoStr = parseQueryParam(idAlumno) as string;
+  const fechaInicialDate = parseDateParam(fechaInicial);
+  const fechaFinalDate = parseDateParam(fechaFinal);
 
   if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || !idAlumnoStr) {
     return res.status(400).json({ error: "Parámetros inválidos" });
   }
 
   try {
+    const whereClause: any = {
+      idUsuario: idUsuarioNum,
+      idMateria: idMateriaNum,
+      idAlumno: idAlumnoStr,
+    };
+
+    if (fechaInicialDate) {
+      whereClause.fecha = {
+        ...whereClause.fecha,
+        gte: fechaInicialDate,
+      };
+    }
+
+    if (fechaFinalDate) {
+      whereClause.fecha = {
+        ...whereClause.fecha,
+        lte: fechaFinalDate,
+      };
+    }
+
     const participaciones = await prisma.participaciones.findMany({
-      where: {
-        idUsuario: idUsuarioNum,
-        idMateria: idMateriaNum,
-        idAlumno: idAlumnoStr,
-      },
+      where: whereClause,
       select: {
-        fecha: true,
         id: true,
+        fecha: true,
         calificacion: true,
       },
+
       orderBy: {
-        fecha: 'asc',
+        fecha: "desc",
       },
     });
 
-    const formattedParticipaciones = participaciones.map(({ fecha, id, calificacion }) => ({
-      fecha: fecha.toISOString().split('T')[0],
-      id,
-      calificacion,
-    }));
+    const formattedParticipaciones = participaciones.map(
+      ({ id, fecha, calificacion }) => ({
+        id,
+        fecha: fecha.toISOString().split("T")[0],
+        calificacion,
+      })
+    );
 
     return res.status(200).json(formattedParticipaciones);
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error interno del servidor" });

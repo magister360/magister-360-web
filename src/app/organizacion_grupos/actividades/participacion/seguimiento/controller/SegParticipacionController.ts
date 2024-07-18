@@ -1,5 +1,7 @@
+import { TypeParticipacion } from "@/app/types/participacion/TypeParticipacion";
 import {
   getAlumnosParticipacionApi,
+  getFechasParticipacionAlumnoApi,
   getFechasParticipacionApi,
 } from "../service/SegParticipacionService";
 
@@ -20,7 +22,6 @@ export const getFechasParticipacion = async (
     return null;
   }
 
-
   try {
     const dateStart = new Date(fechaInicial);
     const dateEnd = new Date(fechaFinal);
@@ -36,16 +37,34 @@ export const getFechasParticipacion = async (
 };
 
 export const getFechasParticipacionAlumno = async (
-  idMateria: number,
-  idUsuario: number,
-  idAlumno: string
-): Promise<any> => {
-  if (idMateria <= 0 || idUsuario <= 0 || idAlumno === undefined) {
+  idMateria: number|undefined,
+  idUsuario: number|undefined,
+  idAlumno: string|undefined,
+  fechaInicial: string | undefined,
+  fechaFinal: string | undefined
+): Promise<TypeParticipacion[]|null> => {
+  if (
+    idMateria === undefined ||
+    idUsuario === undefined ||
+    idMateria <= 0 ||
+    idUsuario <= 0 ||
+    fechaInicial === undefined ||
+    fechaFinal === undefined ||
+    idAlumno === undefined
+  ) {
     return null;
   }
 
   try {
-    //    return await getFechasParticipacionApi(idUsuario, idMateria);
+    const dateStart = new Date(fechaInicial);
+    const dateEnd = new Date(fechaFinal);
+    return await getFechasParticipacionAlumnoApi(
+      idMateria,
+      idUsuario,
+      idAlumno,
+      dateStart,
+      dateEnd
+    );
   } catch (error) {
     return null;
   }

@@ -35,7 +35,9 @@ export const getFechasParticipacionApi = async (
 export const getFechasParticipacionAlumnoApi = async (
   idMateria: number,
   idUsuario: number,
-  idAlumno: string
+  idAlumno: string,
+  fechaInicial: Date | null,
+  fechaFinal: Date | null
 ) => {
   const apiUrl = getApiUrl("/api/fecha_participacion_alumno");
 
@@ -45,6 +47,8 @@ export const getFechasParticipacionAlumnoApi = async (
         idUsuario,
         idMateria,
         idAlumno,
+        fechaInicial,
+        fechaFinal
       },
     })
     .then((r) => {

@@ -3,6 +3,7 @@ import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import {
   getAlumnosParticipacion,
   getFechasParticipacion,
+  getFechasParticipacionAlumno,
 } from "./controller/SegParticipacionController";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,6 +18,7 @@ import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
 import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
 import PeriodoCard from "./components/PeriodoCard";
 import FechasParticipaciones from "./components/FechasParticipaciones";
+import { TypeParticipacion } from "@/app/types/participacion/TypeParticipacion";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
@@ -32,6 +34,9 @@ export default function Seguimiento() {
   );
   const [fechasParticipaciones, setFechasParticipaciones] = useState<
     string[] | null
+  >([]);
+  const [participacionesAlumno, setParticipacionesAlumno] = useState<
+    TypeParticipacion[] | null
   >([]);
 
   const {
@@ -55,7 +60,15 @@ export default function Seguimiento() {
       periodoEvaluacion?.fechaFinal
     );
     setFechasParticipaciones(fechas);
-    console.log(fechas);
+
+    const participacionAlumnos = await getFechasParticipacionAlumno(
+      idMateria,
+      idUsuario,
+      selectAlumno?.id,
+      periodoEvaluacion?.fechaInicial,
+      periodoEvaluacion?.fechaFinal
+    );
+    setParticipacionesAlumno(participacionAlumnos);
   };
 
   const fetchPeriodos = async () => {
@@ -226,6 +239,7 @@ export default function Seguimiento() {
           <FechasParticipaciones
             fechasParticipaciones={fechasParticipaciones}
             noPeriodo={selectPeriodo?.noPeriodo}
+            participacionesAlumno={participacionesAlumno}
           />
         </div>
       </div>
