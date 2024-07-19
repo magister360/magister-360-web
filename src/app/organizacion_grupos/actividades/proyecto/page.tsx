@@ -17,6 +17,7 @@ import TableAlumnosProyecto from "./components/TableAlumnosProyectos";
 import SuccessNameModal from "../participacion/components/SuccessNameModal";
 import { createProyecto, getProyecto } from "./controller/ProyectoController";
 import { EstatusProyectoType } from "@/app/estatus/EstatusType";
+import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 
 export default function Proyecto() {
   const { isMenuVisible } = useSidebarContext();
@@ -156,47 +157,13 @@ export default function Proyecto() {
         Proyecto
       </label>
 
-      <div
-        className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
-                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]"
-      >
-        <div className="flex space-x-2">
-          <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-            <label
-              className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-              htmlFor="lbl-date-start-end"
-            >
-              Grado: <span className="font-normal text-sm"> {grado}</span>
-            </label>
-          </div>
+      <InfoCardDateGGM
+        dateFormatStr={dateFormatStr}
+        grado={grado}
+        grupo={grupo}
+        materia={materia}
+      />
 
-          <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-            <label
-              className="block text-gray-700 dark:text-gray-200 font-bold 
-                        text-md mb-2"
-              htmlFor="lbl-date-start-end"
-            >
-              Grupo: <span className="font-normal text-sm"> {grupo}</span>
-            </label>
-          </div>
-
-          <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-            <label
-              className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-              htmlFor="lbl-date-start-end"
-            >
-              Materia: <span className="font-normal text-sm"> {materia}</span>
-            </label>
-          </div>
-        </div>
-        <label
-          className=" md:mt-2 block text-gray-700 dark:text-gray-200 
-                    font-bold text-sm mb-2"
-          htmlFor="lbl-date-start-end"
-        >
-          Fecha: <span className="font-normal text-sm"> {dateFormatStr}</span>
-        </label>
-      </div>
       {contenido && (
         <div
           className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
