@@ -17,6 +17,8 @@ export async function get(
   res: NextApiResponse
 ): Promise<void> {
   const { idUsuario, idMateria, fechaInicial, fechaFinal, estatus } = req.query;
+  console.log("idUsuario "+idUsuario)
+  console.log("idMateria "+idMateria)
 
   const parseQueryParam = (param: string | string[] | undefined): number => {
     if (param === undefined) return NaN;
@@ -77,6 +79,7 @@ export async function get(
       ({ fecha }) => fecha.toISOString().split("T")[0]
     );
 
+    //console.log(formattedDates)
     return res.status(200).json(formattedDates);
   } catch (error) {
     console.error(error);

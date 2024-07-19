@@ -8,7 +8,7 @@ export const createProyecto = async (
   fecha: string | null,
   calificacion: number,
   contenido: string,
-  idAlumno: string,
+  idAlumno: string|undefined,
   idUsuario: number,
   idMateria: number | undefined,
   estatus: number

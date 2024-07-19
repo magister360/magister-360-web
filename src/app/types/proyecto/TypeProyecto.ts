@@ -1,3 +1,9 @@
+export interface TypeProyectoFecha {
+  id: string;
+  fecha: string;
+  calificacion: number;
+}
+
 export interface StudentProyecto {
     id: string;
     nombre: string;
