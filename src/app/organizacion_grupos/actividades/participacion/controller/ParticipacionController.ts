@@ -16,6 +16,8 @@ export const createParticipacion = async (
   idMateria: number | undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
+
+
   if (
     idAlumno === undefined ||
     idAlumno.length === 0 ||
@@ -73,7 +75,6 @@ export const updateParticipacion = async (
   if (calificacion === undefined || calificacion < 5 || calificacion > 10) {
     return { isSave: false, message: "La calificación es inválida." };
   }
-
 
   return await updateParticipacionApi(id, calificacion)
     .then((response) => {

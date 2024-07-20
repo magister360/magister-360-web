@@ -7,7 +7,8 @@ interface CalificacionModalProps {
   onSave: (calificacion: number) => void;
   calificacionInicial: number;
   titulo: string;
-  selectedFecha: string;
+  selectedFecha: string | null;
+  noLista?: number ;
 }
 
 export const CalificacionModal: React.FC<CalificacionModalProps> = ({
@@ -17,11 +18,16 @@ export const CalificacionModal: React.FC<CalificacionModalProps> = ({
   calificacionInicial,
   titulo,
   selectedFecha,
+  noLista,
 }) => {
   const [calificacion, setCalificacion] = useState<number | null>(
     calificacionInicial
   );
   const opciones = [5, 6, 7, 8, 9, 10];
+
+  const handleClose = () => {
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -51,6 +57,12 @@ export const CalificacionModal: React.FC<CalificacionModalProps> = ({
             <span className="dark:text-gray-500">Fecha:</span>
             <span className="font-light "> {selectedFecha}</span>
           </p>
+          {noLista && (
+            <p>
+              <span className="dark:text-gray-500">No lista:</span>
+              <span className="font-light "> {noLista}</span>
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
@@ -79,7 +91,7 @@ export const CalificacionModal: React.FC<CalificacionModalProps> = ({
         </div>
         <div className="flex justify-end gap-2">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm 
             font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 
             dark:hover:bg-gray-700 mr-3"
@@ -87,7 +99,12 @@ export const CalificacionModal: React.FC<CalificacionModalProps> = ({
             Cancelar
           </button>
           <button
-            onClick={() => calificacion !== null && onSave(calificacion)}
+            onClick={() => {
+              if (calificacion !== null) {
+                onSave(calificacion);
+                handleClose();
+              }
+            }}
             className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded
                hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
           >
