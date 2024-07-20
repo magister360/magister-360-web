@@ -27,7 +27,11 @@ export default function CardProyectos() {
         Código de barras
       </Link>
       <Link
-        href="/organizacion_grupos/actividades/proyecto/select_fecha/codigo_barras"
+        href={
+          idGrado !== -1 && idGrupo !== -1 && idMateria !== -1
+            ? "/organizacion_grupos/actividades/proyecto/select_fecha/manual"
+            : "/error_selection"
+        }
         className="w-full text-center px-3 py-2 text-sm font-medium
             text-white bg-blue-600 rounded-lg hover:bg-blue-500 focus:ring-4 
               focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-500 "
@@ -35,7 +39,7 @@ export default function CardProyectos() {
         Manual
       </Link>
       <Link
-         href={
+        href={
           idGrado !== -1 && idGrupo !== -1 && idMateria !== -1
             ? "/organizacion_grupos/actividades/proyecto/seguimiento"
             : "/error_selection"

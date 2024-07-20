@@ -144,7 +144,7 @@ export default function Seguimiento() {
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
       >
-        Seguimiento participación
+        Seguimiento proyecto
       </h3>
 
       <div className="flex space-x-2">
