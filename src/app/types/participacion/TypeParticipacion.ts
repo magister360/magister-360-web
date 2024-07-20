@@ -4,6 +4,13 @@ export interface TypeParticipacionFecha {
   calificacion: number;
 }
 
+export interface TypeParticipacionCalificacion {
+  id: string;
+  fecha: string;
+  calificacion: number;
+  noLista: number;
+}
+
 export type StudenParticipacionType = {
   id: string;
   noLista: number;

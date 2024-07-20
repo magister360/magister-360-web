@@ -16,15 +16,7 @@ export async function get(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const {
-    idUsuario,
-    idMateria,
-    idGrado,
-    idGrupo,
-    fechaInicial,
-    fechaFinal,
-    estatus,
-  } = req.query;
+  const { idUsuario, idMateria, idGrado, idGrupo, fecha, estatus } = req.query;
 
   const parseQueryParam = (param: string | string[] | undefined): number => {
     if (param === undefined) return NaN;
@@ -41,19 +33,11 @@ export async function get(
 
   const idUsuarioNum = parseQueryParam(idUsuario);
   const idMateriaNum = parseQueryParam(idMateria);
+  const estatusNum = parseQueryParam(estatus);
   const idGradoNum = parseQueryParam(idGrado);
   const idGrupoNum = parseQueryParam(idGrupo);
-  const estatusNum = parseQueryParam(estatus);
-  const fechaInicialDate = parseDateParam(fechaInicial);
-  const fechaFinalDate = parseDateParam(fechaFinal);
 
-  if (
-    isNaN(idUsuarioNum) ||
-    isNaN(idMateriaNum) ||
-    isNaN(estatusNum) ||
-    isNaN(idGradoNum) ||
-    isNaN(idGrupoNum)
-  ) {
+  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || isNaN(estatusNum)) {
     return res.status(400).json({ error: "Parámetros inválidos" });
   }
 
@@ -62,42 +46,40 @@ export async function get(
       idUsuario: idUsuarioNum,
       idMateria: idMateriaNum,
       estatus: estatusNum,
+      fecha: fecha,
       alumno: {
         idGrado: idGradoNum,
         idGrupo: idGrupoNum,
       },
     };
 
-    if (fechaInicialDate) {
-      whereClause.fecha = {
-        ...whereClause.fecha,
-        gte: fechaInicialDate,
-      };
-    }
-
-    if (fechaFinalDate) {
-      whereClause.fecha = {
-        ...whereClause.fecha,
-        lte: fechaFinalDate,
-      };
-    }
-
-    const participaciones = await prisma.tareas.findMany({
+    const participaciones = await prisma.participaciones.findMany({
       where: whereClause,
       select: {
+        id: true,
         fecha: true,
+        calificacion: true,
+        alumno: {
+          select: {
+            noLista: true,
+          },
+        },
       },
-      distinct: ["fecha"],
       orderBy: {
         fecha: "desc",
       },
     });
 
-    const formattedDates = participaciones.map(
-      ({ fecha }) => fecha.toISOString().split("T")[0]
+    const formattedParticipaciones = participaciones.map(
+      ({ id, fecha, calificacion, alumno }) => ({
+        id,
+        fecha: fecha.toISOString().split("T")[0],
+        calificacion,
+        noLista: alumno.noLista,
+      })
     );
 
-    return res.status(200).json(formattedDates);
+    return res.status(200).json(formattedParticipaciones);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error interno del servidor" });

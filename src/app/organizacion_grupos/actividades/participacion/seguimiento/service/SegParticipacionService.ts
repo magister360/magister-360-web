@@ -2,6 +2,8 @@ import axios from "axios";
 import { getApiUrl } from "../../../../../../../API";
 
 export const getFechasParticipacionApi = async (
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
   idUsuario: number,
   idMateria: number,
   fechaInicial: Date | null,
@@ -13,6 +15,8 @@ export const getFechasParticipacionApi = async (
   const response = await axios
     .get(apiUrl, {
       params: {
+        idGrado,
+        idGrupo,
         idUsuario,
         idMateria,
         fechaInicial,
@@ -108,13 +112,10 @@ export const updateEstatusParticipacionApi = async (
   const apiUrl = getApiUrl("/api/participacion");
 
   const response = await axios
-    .patch(
-      apiUrl,
-      {
-        id: id,
-        estatus: estatus
-      }
-    )
+    .patch(apiUrl, {
+      id: id,
+      estatus: estatus,
+    })
     .then((r) => {
       if (r.status === 200) {
         return r.data;
@@ -123,11 +124,8 @@ export const updateEstatusParticipacionApi = async (
       }
     })
     .catch((e) => {
- 
       return null;
     });
 
   return response;
 };
-
-

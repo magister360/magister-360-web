@@ -8,6 +8,8 @@ import TableAlumnosParticipacion from "./conponents/TableAlumnosParticipacion";
 import { useSearchParams } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
+import { useParticipacionesManualHook } from "./hooks/useParticipacionesHook";
+import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 
 export default function Manual() {
   const {
@@ -22,6 +24,12 @@ export default function Manual() {
   } = useSidebarContext();
 
   const [loading, setLoading] = useState(false);
+
+  const searchParams = useSearchParams();
+  const [date, setDate] = useState<string | null>(null);
+  const [dateFormatStr, setDateFormatStr] = useState<string | null>(null);
+  const [isFetchParticipacion, setIsFetchParticipacion] =
+    useState<boolean>(true);
   const { alumnos } = useAlumnosManualHook(
     idUsuario,
     0,
@@ -30,9 +38,18 @@ export default function Manual() {
     idMateria,
     setLoading
   );
-  const searchParams = useSearchParams();
-  const [date, setDate] = useState<string | null>(null);
-  const [dateFormatStr, setDateFormatStr] = useState<string | null>(null);
+
+  const { participaciones } = useParticipacionesManualHook(
+    idUsuario,
+    EstatusParticipacionType.OK,
+    idGrado,
+    idGrupo,
+    idMateria,
+    setLoading,
+    date,
+    setIsFetchParticipacion,
+    isFetchParticipacion
+  );
 
   useEffect(() => {
     if (searchParams) {
@@ -69,7 +86,12 @@ export default function Manual() {
       />
 
       <div>
-        <TableAlumnosParticipacion students={alumnos} />
+        <TableAlumnosParticipacion
+          students={alumnos}
+          date={date}
+          participaciones={participaciones}
+          setIsFetchParticipacion={setIsFetchParticipacion}
+        />
       </div>
     </div>
   );

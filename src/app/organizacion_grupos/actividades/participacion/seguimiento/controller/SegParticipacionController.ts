@@ -1,4 +1,3 @@
-
 import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
 import {
   getAlumnosParticipacionApi,
@@ -9,12 +8,16 @@ import {
 import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 
 export const getFechasParticipacion = async (
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
   idMateria: number | undefined,
   idUsuario: number | undefined,
   fechaInicial: string | undefined,
   fechaFinal: string | undefined
 ): Promise<any> => {
   if (
+    idGrado === undefined ||
+    idGrupo === undefined ||
     idMateria === undefined ||
     idUsuario === undefined ||
     idMateria <= 0 ||
@@ -29,6 +32,8 @@ export const getFechasParticipacion = async (
     const dateStart = new Date(fechaInicial);
     const dateEnd = new Date(fechaFinal);
     return await getFechasParticipacionApi(
+      idGrado,
+      idGrupo,
       idUsuario,
       idMateria,
       dateStart,
@@ -107,7 +112,7 @@ export const getAlumnosParticipacion = async (
 };
 
 export const updateEstatusParticipacion = async (
-  id: string|undefined,
+  id: string | undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
   if (id === undefined) {
@@ -132,7 +137,6 @@ export const updateEstatusParticipacion = async (
       }
     })
     .catch((error) => {
-
       return {
         isSave: false,
         message: "No fue posible eliminar la participación.",
@@ -140,9 +144,8 @@ export const updateEstatusParticipacion = async (
     });
 };
 
-
 export const createParticipacion = async (
-  id: string|undefined,
+  id: string | undefined,
   estatus: number
 ): Promise<{ isSave: boolean; message: string }> => {
   if (id === undefined) {
@@ -167,7 +170,6 @@ export const createParticipacion = async (
       }
     })
     .catch((error) => {
-
       return {
         isSave: false,
         message: "No fue posible eliminar la participación.",

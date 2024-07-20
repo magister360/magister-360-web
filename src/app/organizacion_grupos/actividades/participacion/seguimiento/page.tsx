@@ -55,6 +55,8 @@ export default function Seguimiento() {
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
     const fechas = await getFechasParticipacion(
+      idGrado,
+      idGrupo,
       idMateria,
       idUsuario,
       periodoEvaluacion?.fechaInicial,

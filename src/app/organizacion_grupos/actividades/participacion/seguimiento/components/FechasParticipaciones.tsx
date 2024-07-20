@@ -123,6 +123,8 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
       setIsErrorModalOpen(true);
     }
   };
+
+  
   const handleConfirmOpen = async (fecha: string) => {
     setIsModalConfirmOpen(true);
     setSelectedFecha(fecha);

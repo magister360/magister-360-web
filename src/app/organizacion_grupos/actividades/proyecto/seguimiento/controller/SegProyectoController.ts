@@ -3,14 +3,17 @@ import { getAlumnosProyectoApi, getFechasProyectoAlumnoApi, getFechasProyectoApi
 import { TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
 
 
-
 export const getFechasProyecto = async (
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
   idMateria: number | undefined,
   idUsuario: number | undefined,
   fechaInicial: string | undefined,
   fechaFinal: string | undefined
 ): Promise<any> => {
   if (
+    idGrado === undefined ||
+    idGrupo === undefined ||
     idMateria === undefined ||
     idUsuario === undefined ||
     idMateria <= 0 ||
@@ -25,6 +28,8 @@ export const getFechasProyecto = async (
     const dateStart = new Date(fechaInicial);
     const dateEnd = new Date(fechaFinal);
     return await getFechasProyectoApi(
+      idGrado,
+      idGrupo,
       idUsuario,
       idMateria,
       dateStart,

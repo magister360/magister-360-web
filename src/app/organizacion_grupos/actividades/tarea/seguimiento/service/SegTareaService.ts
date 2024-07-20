@@ -2,6 +2,8 @@ import axios from "axios";
 import { getApiUrl } from "../../../../../../../API";
 
 export const getFechasTareaApi = async (
+  idGrado: number | undefined,
+  idGrupo: number | undefined,
   idUsuario: number,
   idMateria: number,
   fechaInicial: Date | null,
@@ -13,6 +15,8 @@ export const getFechasTareaApi = async (
   const response = await axios
     .get(apiUrl, {
       params: {
+        idGrado,
+        idGrupo,
         idUsuario,
         idMateria,
         fechaInicial,

@@ -16,7 +16,7 @@ export async function get(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const { idUsuario, idMateria, fechaInicial, fechaFinal, estatus } = req.query;
+  const { idUsuario, idMateria, idGrado, idGrupo, fechaInicial, fechaFinal, estatus } = req.query;
 
   const parseQueryParam = (param: string | string[] | undefined): number => {
     if (param === undefined) return NaN;
@@ -33,11 +33,13 @@ export async function get(
 
   const idUsuarioNum = parseQueryParam(idUsuario);
   const idMateriaNum = parseQueryParam(idMateria);
+  const idGradoNum = parseQueryParam(idGrado);
+  const idGrupoNum = parseQueryParam(idGrupo);
   const estatusNum = parseQueryParam(estatus);
   const fechaInicialDate = parseDateParam(fechaInicial);
   const fechaFinalDate = parseDateParam(fechaFinal);
 
-  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || isNaN(estatusNum)) {
+  if (isNaN(idUsuarioNum) || isNaN(idMateriaNum) || isNaN(estatusNum) || isNaN(idGradoNum) || isNaN(idGrupoNum)) {
     return res.status(400).json({ error: "Parámetros inválidos" });
   }
 
@@ -46,6 +48,10 @@ export async function get(
       idUsuario: idUsuarioNum,
       idMateria: idMateriaNum,
       estatus: estatusNum,
+      alumno: {
+        idGrado: idGradoNum,
+        idGrupo: idGrupoNum,
+      },
     };
 
     if (fechaInicialDate) {
@@ -62,7 +68,7 @@ export async function get(
       };
     }
 
-    const distinctDates = await prisma.participaciones.findMany({
+    const participaciones = await prisma.participaciones.findMany({
       where: whereClause,
       select: {
         fecha: true,
@@ -73,8 +79,8 @@ export async function get(
       },
     });
 
-    const formattedDates = distinctDates.map(
-      ({ fecha }) => fecha.toISOString().split("T")[0]
+    const formattedDates = participaciones.map(({ fecha }) => 
+      fecha.toISOString().split("T")[0]
     );
 
     return res.status(200).json(formattedDates);
