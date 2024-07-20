@@ -15,3 +15,18 @@ export interface StudentTarea {
 export interface ItemStudentTarea extends StudentTarea {
   calificacion: number;
 }
+
+export interface TypeTareaCalificacion {
+  id: string;
+  fecha: string;
+  calificacion: number;
+  noLista: number;
+}
+
+export type StudentTareaType = {
+  id: string;
+  noLista: number;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+};
