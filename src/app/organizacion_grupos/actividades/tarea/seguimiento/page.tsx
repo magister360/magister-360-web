@@ -18,8 +18,9 @@ import {
 import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
 import TableTareaSeguimiento from "./conponents/TableTareaSeguimiento";
 import StudentSelectCard from "./conponents/StudentSelectCard";
-import PeriodoCard from "./conponents/PeriodoCard";
 import FechasTareas from "./conponents/FechasTareas";
+import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
+import CardPeriodo from "@/app/components/CardPeriodo";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
@@ -147,35 +148,7 @@ export default function Seguimiento() {
         Seguimiento tarea
       </h3>
 
-      <div className="flex space-x-2">
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Grado: <span className="font-normal text-sm"> {grado}</span>
-          </label>
-        </div>
-
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold 
-                        text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Grupo: <span className="font-normal text-sm"> {grupo}</span>
-          </label>
-        </div>
-
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Materia: <span className="font-normal text-sm"> {materia}</span>
-          </label>
-        </div>
-      </div>
+      <InfoCardDateGGM grado={grado} grupo={grupo} materia={materia} />
 
       <div
         className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
@@ -228,10 +201,10 @@ export default function Seguimiento() {
           <StudentSelectCard student={selectAlumno} />
         </div>
         <div>
-          <PeriodoCard
+          <CardPeriodo
             periodos={periodos}
             setSelectedPeriodo={setSelectPeriodo}
-            fetchFechasTarea={fetchFechasTarea}
+            fetchFechas={fetchFechasTarea}
           />
         </div>
         <div className="mt-6">

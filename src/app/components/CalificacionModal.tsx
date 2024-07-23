@@ -7,8 +7,8 @@ interface CalificacionModalProps {
   onSave: (calificacion: number) => void;
   calificacionInicial: number;
   titulo: string;
-  selectedFecha: string | null;
-  noLista?: number ;
+  selectedFecha?: string | null;
+  noLista?: number;
 }
 
 export const CalificacionModal: React.FC<CalificacionModalProps> = ({
@@ -53,10 +53,13 @@ export const CalificacionModal: React.FC<CalificacionModalProps> = ({
           </button>
         </div>
         <div className="pt-4 pb-4">
-          <p>
-            <span className="dark:text-gray-500">Fecha:</span>
-            <span className="font-light "> {selectedFecha}</span>
-          </p>
+          {selectedFecha && (
+            <p>
+              <span className="dark:text-gray-500">Fecha:</span>
+              <span className="font-light "> {selectedFecha}</span>
+            </p>
+          )}
+
           {noLista && (
             <p>
               <span className="dark:text-gray-500">No lista:</span>

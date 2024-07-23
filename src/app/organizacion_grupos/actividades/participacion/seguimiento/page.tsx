@@ -16,10 +16,10 @@ import { AuthCheck } from "@/app/hooks/AuthCheck";
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import { getFechasPeriodos } from "./controller/PeriodosEvaluacionController";
 import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
-import PeriodoCard from "./components/PeriodoCard";
 import FechasParticipaciones from "./components/FechasParticipaciones";
 import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
-
+import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
+import CardPeriodo from "@/app/components/CardPeriodo";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
@@ -37,7 +37,7 @@ export default function Seguimiento() {
     string[] | null
   >([]);
   const [participacionesAlumno, setParticipacionesAlumno] = useState<
-  TypeParticipacionFecha[] | null
+    TypeParticipacionFecha[] | null
   >([]);
 
   const {
@@ -151,35 +151,7 @@ export default function Seguimiento() {
         Seguimiento participación
       </h3>
 
-      <div className="flex space-x-2">
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Grado: <span className="font-normal text-sm"> {grado}</span>
-          </label>
-        </div>
-
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold 
-                        text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Grupo: <span className="font-normal text-sm"> {grupo}</span>
-          </label>
-        </div>
-
-        <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-          <label
-            className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-            htmlFor="lbl-date-start-end"
-          >
-            Materia: <span className="font-normal text-sm"> {materia}</span>
-          </label>
-        </div>
-      </div>
+      <InfoCardDateGGM grado={grado} grupo={grupo} materia={materia} />
 
       <div
         className=" mt-2 pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
@@ -232,10 +204,10 @@ export default function Seguimiento() {
           <StudentSelectCard student={selectAlumno} />
         </div>
         <div>
-          <PeriodoCard
+          <CardPeriodo
             periodos={periodos}
             setSelectedPeriodo={setSelectPeriodo}
-            fetchFechasParticipacion={fetchFechasParticipacion}
+            fetchFechas={fetchFechasParticipacion}
           />
         </div>
         <div className="mt-6">

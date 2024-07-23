@@ -205,7 +205,7 @@ model Proyectos {
 
 model Examenes {
   id  String @db.VarChar(255) @id  
-  fecha DateTime
+  noPeriodo Int
   fechaRegistro DateTime @default(now())
   fechaActualizacion DateTime? 
   calificacion Int

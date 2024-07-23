@@ -94,3 +94,16 @@ export interface User {
   cls: string;
   estatus?: number;
 }
+
+
+export interface StudentExamen {
+  id: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string | null;
+  noLista: number;
+}
+
+export interface ItemStudentExamen extends StudentExamen {
+  calificacion: number;
+}

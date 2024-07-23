@@ -3,42 +3,37 @@ import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 import { useEffect, useRef, useState } from "react";
 
+import { StudentExamen, StudentParticipacion } from "@/app/types/types";
+
 import { SvgIcons } from "@/app/svg/SvgIcons";
 import Loading from "@/app/components/Loading";
 import { AuthCheck } from "@/app/hooks/AuthCheck";
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import { EstatusFechaPeriodosType } from "@/app/estatus/EstatusType";
-import {
-  StudentProyecto,
-  TypeProyectoFecha,
-} from "@/app/types/proyecto/TypeProyecto";
-import {
-  getAlumnosProyecto,
-  getFechasProyecto,
-  getFechasProyectoAlumno,
-} from "./controller/SegProyectoController";
-import { getFechasPeriodos } from "@/app/controller/PeriodosEvaluacionController";
-import TableProyectoSeguimiento from "./conponents/TableProyectoSeguimiento";
-import StudentSelectCard from "./conponents/StudentSelectCard";
-import FechasProyectos from "./conponents/FechasProyecto";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
+import { getAlumnosExamen, getPeriodosExamenAlumno } from "./controller/SegExamenService";
+import { getPeriodos } from "@/app/controller/PeriodosController";
+import TableExamenSeguimiento from "./conponents/TableExamenSeguimiento";
+import StudentSelectCard from "./conponents/StudentSelectCard";
 import CardPeriodo from "@/app/components/CardPeriodo";
+import PeriodosExamenes from "./conponents/PeriodosExamenes";
+import { TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
 
 export default function Seguimiento() {
   const [valueSearch, setValueSearch] = useState("");
-  const [alumnos, setAlumnos] = useState<StudentProyecto[]>([]);
-  const [selectAlumno, setSelectAlumno] = useState<StudentProyecto | undefined>(
-    undefined
-  );
+  const [alumnos, setAlumnos] = useState<StudentExamen[]>([]);
+  const [selectAlumno, setSelectAlumno] = useState<
+    StudentParticipacion | undefined
+  >(undefined);
   const barcodeInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [periodos, setPeriodos] = useState<PeriodoEvaluacion[] | null>(null);
   const [selectPeriodo, setSelectPeriodo] = useState<PeriodoEvaluacion | null>(
     null
   );
-  const [fechasProyectos, setFechasProyectos] = useState<string[] | null>([]);
-  const [proyectosAlumno, setProyectosAlumno] = useState<
-    TypeProyectoFecha[] | null
+
+  const [examenesAlumno, setExamenesAlumno] = useState<
+    TypeExamenPeriodo[] | null
   >([]);
 
   const {
@@ -52,34 +47,23 @@ export default function Seguimiento() {
     idUsuario,
   } = useSidebarContext();
 
-  const fetchFechasProyecto = async (
+  const fetchPeriodosExamenes = async (
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
-    const fechas = await getFechasProyecto(
-      idGrado,
-      idGrupo,
-      idMateria,
-      idUsuario,
-      periodoEvaluacion?.fechaInicial,
-      periodoEvaluacion?.fechaFinal
-    );
-    setFechasProyectos(fechas);
-
-    const proyectoAlumnos = await getFechasProyectoAlumno(
+    const examenAlumnos = await getPeriodosExamenAlumno(
       idMateria,
       idUsuario,
       selectAlumno?.id,
-      periodoEvaluacion?.fechaInicial,
-      periodoEvaluacion?.fechaFinal
+      periodoEvaluacion?.noPeriodo
     );
-    setProyectosAlumno(proyectoAlumnos);
+    setExamenesAlumno(examenAlumnos);
   };
 
   const fetchPeriodos = async () => {
     setLoading(true);
 
     try {
-      const result = await getFechasPeriodos(
+      const result = await getPeriodos(
         idUsuario ?? -1,
         EstatusFechaPeriodosType.OK
       );
@@ -101,18 +85,18 @@ export default function Seguimiento() {
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
-      fetchAlumnoProyecto(valueSearch);
+      fetchAlumnoExamen(valueSearch);
       setValueSearch("");
     }
   };
 
   const handleSearch = async () => {
-    fetchAlumnoProyecto(valueSearch);
+    fetchAlumnoExamen(valueSearch);
   };
 
-  const fetchAlumnoProyecto = async (busqueda: string) => {
+  const fetchAlumnoExamen = async (busqueda: string) => {
     const userId = idUsuario ?? -1;
-    const result = await getAlumnosProyecto(
+    const result = await getAlumnosExamen(
       userId,
       0,
       idGrado ?? -1,
@@ -120,6 +104,7 @@ export default function Seguimiento() {
       busqueda,
       idMateria ?? -1
     );
+    //console.log(result)
     setAlumnos(result);
   };
 
@@ -149,7 +134,7 @@ export default function Seguimiento() {
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
       >
-        Seguimiento proyecto
+        Seguimiento examenes
       </h3>
 
       <InfoCardDateGGM grado={grado} grupo={grupo} materia={materia} />
@@ -194,10 +179,10 @@ export default function Seguimiento() {
           </div>
         </div>
         <div>
-          <TableProyectoSeguimiento
+        <TableExamenSeguimiento
             alumnos={alumnos}
             setSelectAlumno={setSelectAlumno}
-            setFechasProyectos={setFechasProyectos}
+           // setFechasExamenes={setFechasExamenes}
             setSelectPeriodo={setSelectPeriodo}
           />
         </div>
@@ -208,15 +193,14 @@ export default function Seguimiento() {
           <CardPeriodo
             periodos={periodos}
             setSelectedPeriodo={setSelectPeriodo}
-            fetchFechas={fetchFechasProyecto}
+            fetchFechas={fetchPeriodosExamenes}
           />
         </div>
         <div className="mt-6">
-          <FechasProyectos
-            fechasProyectos={fechasProyectos}
+          <PeriodosExamenes
             noPeriodo={selectPeriodo?.noPeriodo}
-            proyectosAlumno={proyectosAlumno}
-            fetchFechasProyecto={fetchFechasProyecto}
+            examenesAlumno={examenesAlumno}
+            fetchPeriodosExamen={fetchPeriodosExamenes}
             selectPeriodo={selectPeriodo}
             idAlumno={selectAlumno?.id}
           />

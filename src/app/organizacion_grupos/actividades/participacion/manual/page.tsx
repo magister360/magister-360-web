@@ -10,6 +10,7 @@ import { formatDateLocale } from "@/app/utils/DateUtils";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 import { useParticipacionesManualHook } from "./hooks/useParticipacionesHook";
 import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
+import Loading from "@/app/components/Loading";
 
 export default function Manual() {
   const {
@@ -61,6 +62,8 @@ export default function Manual() {
       }
     }
   }, [searchParams]);
+
+
 
   if (idUsuario === undefined) {
     return <AuthCheck />;

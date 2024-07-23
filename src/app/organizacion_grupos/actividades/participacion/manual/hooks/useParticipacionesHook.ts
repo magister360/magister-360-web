@@ -30,7 +30,7 @@ export const useParticipacionesManualHook = (
           date
         );
 
-        console.log(result)
+       
 
         setParticipaciones(result);
       } catch (err) {

@@ -15,6 +15,7 @@ import {
   updateProyecto,
 } from "../../controller/ProyectoController";
 import { updateEstatusProyecto } from "../controller/SegProyectoController";
+import CardCalificacion from "@/app/components/CardCalificacion";
 
 interface FechasProyectosProps {
   noPeriodo: number | undefined;
@@ -202,55 +203,16 @@ const FechasProyectos: React.FC<FechasProyectosProps> = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {fechasProyectos?.map((fecha, index) => (
-          <div
+          <CardCalificacion
             key={uuidv4()}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex"
-          >
-            <div className="w-1 bg-blue-500 flex-shrink-0"></div>
-            <div className="p-4 flex-grow">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 cursor-default">
-                Proyecto {index + 1}
-              </h3>
-              <p className="">
-                <span className="dark:text-gray-600 text-slate-400 cursor-default">
-                  Fecha{" "}
-                </span>
-                <span className="text-gray-600 dark:text-gray-300 cursor-default">
-                  {fecha}
-                </span>
-              </p>
-              <p className="mt-4">
-                <span className="dark:text-gray-600 text-slate-400 cursor-default">
-                  Calificación{" "}
-                </span>
-                <span className="dark:text-gray-200 text-3xl font-light cursor-default">
-                  {buscarCalificacion(fecha)}
-                </span>
-              </p>
-              <div className="flex gap-6">
-                <Image
-                  className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3t 
-                    cursor-pointer mt-4"
-                  src="/remover.svg"
-                  alt="remover"
-                  width={28}
-                  height={28}
-                  onClick={() => handleConfirmOpen(fecha)}
-                />
-                <Image
-                  className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none mr-3t 
-                    cursor-pointer mt-4"
-                  src="/editar.svg"
-                  alt="editar"
-                  width={28}
-                  height={28}
-                  onClick={() =>
-                    handleEditClick(fecha, buscarCalificacion(fecha))
-                  }
-                />
-              </div>
-            </div>
-          </div>
+            index={index}
+            fecha={fecha}
+            buscarCalificacion={buscarCalificacion}
+            handleConfirmOpen={handleConfirmOpen}
+            handleEditClick={handleEditClick}
+            title="Proyecto"
+            titleDatePeriod="Fecha"
+          />
         ))}
       </div>
     </>

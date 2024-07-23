@@ -5,7 +5,8 @@ interface InfoCardProps {
   grado: string | undefined;
   grupo: string | undefined;
   materia: string | undefined;
-  dateFormatStr: string | null;
+  dateFormatStr?: string | null;
+  noPeriodo?: string;
 }
 
 const InfoCardDateGGM: React.FC<InfoCardProps> = ({
@@ -13,6 +14,7 @@ const InfoCardDateGGM: React.FC<InfoCardProps> = ({
   grupo,
   materia,
   dateFormatStr,
+  noPeriodo,
 }) => {
   return (
     <div
@@ -35,10 +37,18 @@ const InfoCardDateGGM: React.FC<InfoCardProps> = ({
             </span>
           ))}
         </div>
-        <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-          <SvgIcons.Calendar />
-          <span>Fecha: {dateFormatStr}</span>
-        </div>
+        {dateFormatStr && (
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <SvgIcons.Calendar />
+            <span>Fecha: {dateFormatStr}</span>
+          </div>
+        )}
+        {noPeriodo && (
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+            <SvgIcons.Document />
+            <span>Periodo: {noPeriodo}</span>
+          </div>
+        )}
       </div>
     </div>
   );

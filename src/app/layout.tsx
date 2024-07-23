@@ -22,8 +22,10 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <SidebarProvider>
           <SidebarTopLeft />
-          <AuthCheck/>
-          <div className="flex-grow">{children}</div>
+          <AuthCheck />
+          <div className="flex-grow">
+            {children}
+          </div>
         </SidebarProvider>
       </body>
     </html>

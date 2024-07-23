@@ -50,13 +50,12 @@ const SelectorFecha: React.FC<SelectorFechaProps> = ({ title, route }) => {
     ${isMenuVisible ? "ml-72" : "ml-4"}`}
     >
       <form className=" " onSubmit={handleSubmit(onSubmit)} method="POST">
-        <label
+        <h2
           className=" md:mt-14 block text-gray-700 dark:text-gray-200 
             font-bold text-xl mb-2"
-          htmlFor="lbl-date-start-end"
         >
           {title}
-        </label>
+        </h2>
 
         <div
           className="md:mt-2 pt-2 pb-4 pl-4 pr-4  rounded-lg shadow  

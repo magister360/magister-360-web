@@ -7,20 +7,20 @@ type Props = {
   readonly setSelectedPeriodo: React.Dispatch<
     React.SetStateAction<PeriodoEvaluacion | null>
   >;
-  readonly fetchFechasParticipacion: (
+  readonly fetchFechas: (
     periodoEvaluacion: PeriodoEvaluacion
   ) => Promise<void>;
 };
 
-export default function PeriodoCard({
+export default function CardPeriodo({
   periodos,
   setSelectedPeriodo,
-  fetchFechasParticipacion,
+  fetchFechas,
 }: Props) {
   const handleSelectPeriodo = async (periodoEvaluacion: PeriodoEvaluacion) => {
     setSelectedPeriodo(periodoEvaluacion);
-    console.log(periodoEvaluacion);
-    fetchFechasParticipacion(periodoEvaluacion);
+
+    fetchFechas(periodoEvaluacion);
   };
 
   return (
