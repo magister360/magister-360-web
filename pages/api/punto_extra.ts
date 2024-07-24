@@ -7,6 +7,10 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
       return await post(req, res);
     case "GET":
       return await get(req, res);
+    case "PATCH":
+      return await updateEstatus(req, res);
+    case "PUT":
+      return await updateCalificacion(req, res);
 
     default:
       res.status(405).json({ error: "Método no permitido" });
@@ -24,14 +28,13 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     idAlumno,
     idUsuario,
     idMateria,
-    estatus
+    estatus,
   } = req.body;
   if (
     idAlumno === undefined ||
     idMateria === undefined ||
     idMateria <= 0 ||
     calificacion === undefined ||
-    
     idUsuario === undefined ||
     idUsuario <= 0
   ) {
@@ -47,7 +50,7 @@ async function post(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         idAlumno,
         idUsuario,
         idMateria,
-        estatus
+        estatus,
       },
     })
     .catch((error) => {
@@ -131,6 +134,57 @@ async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     return res.status(404).json({ error: "No se encontraron datos" });
   } catch (error) {
     return res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+async function updateEstatus(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
+  const { id, estatus } = req.body;
+
+  if (id === undefined || estatus === undefined || estatus < 0) {
+    return res.status(400).json({ error: "Parámetros inválidos" });
+  }
+
+  try {
+    const response = await prisma.puntoExtra.update({
+      where: { id: id },
+      data: { estatus: estatus, fechaActualizacion: new Date() },
+    });
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error al actualizar:", error);
+    return res.status(500).json({ error: "Error al actualizar el estatus" });
+  }
+}
+
+async function updateCalificacion(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
+  const { id, calificacion } = req.body;
+
+  if (
+    id === undefined ||
+    calificacion === undefined ||
+    calificacion < 5 ||
+    calificacion > 10
+  ) {
+    return res.status(400).json({ error: "Parámetros inválidos" });
+  }
+
+  try {
+    const response = await prisma.puntoExtra.update({
+      where: { id: id },
+      data: { calificacion: calificacion, fechaActualizacion: new Date() },
+    });
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error al actualizar:", error);
+    return res.status(500).json({ error: "Error al actualizar el estatus" });
   }
 }
 

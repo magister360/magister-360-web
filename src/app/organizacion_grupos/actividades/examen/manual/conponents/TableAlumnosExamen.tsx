@@ -289,6 +289,7 @@ export default function TableAlumnosExamen({
                             examenes,
                             student.noLista
                           )}
+                          isDecimal={false}
                         />
                       </div>
                     </td>

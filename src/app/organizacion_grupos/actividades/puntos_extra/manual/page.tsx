@@ -2,14 +2,14 @@
 
 import { AuthCheck } from "@/app/hooks/AuthCheck";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import { useAlumnosManualHook } from "./hooks/useAlumnosManualHook";
 import { useEffect, useState } from "react";
-import TableAlumnosParticipacion from "./conponents/TableAlumnosParticipacion";
 import { useSearchParams } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
-import { useParticipacionesManualHook } from "./hooks/useParticipacionesHook";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
+import { useAlumnosManualHook } from "./hooks/useAlumnosManualHook";
+import TableAlumnosPuntoExtra from "./conponents/TableAlumnosPuntoExtra";
+import { usePuntoExtraManualHook } from "./hooks/usePuntoExtraHook";
+import { EstatusPuntoExtraType } from "@/app/estatus/EstatusType";
 
 export default function Manual() {
   const {
@@ -28,8 +28,8 @@ export default function Manual() {
   const searchParams = useSearchParams();
   const [date, setDate] = useState<string | null>(null);
   const [dateFormatStr, setDateFormatStr] = useState<string | null>(null);
-  const [isFetchParticipacion, setIsFetchParticipacion] =
-    useState<boolean>(true);
+  const [isFetchPuntoExtra, setIsFetchPuntoExtra] = useState<boolean>(true);
+
   const { alumnos } = useAlumnosManualHook(
     idUsuario,
     0,
@@ -39,16 +39,16 @@ export default function Manual() {
     setLoading
   );
 
-  const { participaciones } = useParticipacionesManualHook(
+  const { puntosExtras } = usePuntoExtraManualHook(
     idUsuario,
-    EstatusParticipacionType.OK,
+    EstatusPuntoExtraType.OK,
     idGrado,
     idGrupo,
     idMateria,
     setLoading,
     date,
-    setIsFetchParticipacion,
-    isFetchParticipacion
+    setIsFetchPuntoExtra,
+    isFetchPuntoExtra
   );
 
   useEffect(() => {
@@ -61,8 +61,6 @@ export default function Manual() {
       }
     }
   }, [searchParams]);
-
-
 
   if (idUsuario === undefined) {
     return <AuthCheck />;
@@ -77,7 +75,7 @@ export default function Manual() {
         className=" md:mt-14 block text-gray-700 dark:text-gray-200 
                 font-bold text-xl mb-2"
       >
-        Participación manual
+        Punto extra manual
       </h3>
 
       <InfoCardDateGGM
@@ -88,11 +86,11 @@ export default function Manual() {
       />
 
       <div>
-        <TableAlumnosParticipacion
+        <TableAlumnosPuntoExtra
           students={alumnos}
           date={date}
-          participaciones={participaciones}
-          setIsFetchParticipacion={setIsFetchParticipacion}
+          puntosExtra={puntosExtras}
+          setIsFetchPuntosExtras={setIsFetchPuntoExtra}
         />
       </div>
     </div>

@@ -46,6 +46,37 @@ export const createPuntoExtrApi = async (
   return response;
 };
 
+export const updatePuntoExtraApi = async (
+  id: string,
+  calificacion: number,
+
+) => {
+
+  const apiUrl = getApiUrl("/api/punto_extra");
+
+  const response = await axios
+    .put(
+      apiUrl,
+      {
+        id,
+        calificacion,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      return response.status === 200;
+    })
+    .catch((error) => {
+      
+      return false;
+    });
+  return response;
+};
+
 export const getPuntoExtraApi = async (
   idUsuario: number,
   idMateria: number,

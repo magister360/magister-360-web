@@ -299,6 +299,7 @@ export default function TableAlumnosProyecto({
                             proyectos,
                             student.noLista
                           )}
+                          isDecimal={false}
                         />
                       </div>
                     </td>

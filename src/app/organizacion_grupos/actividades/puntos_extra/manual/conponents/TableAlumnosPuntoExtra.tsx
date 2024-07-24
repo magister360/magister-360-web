@@ -1,36 +1,37 @@
-import {
-  StudenParticipacionType,
-  TypeParticipacionCalificacion,
-} from "@/app/types/participacion/TypeParticipacion";
 import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
 
 import SuccessModal from "@/app/components/SuccessModal";
-import { CalificacionModal } from "@/app/components/CalificacionModal";
-import { updateEstatusParticipacion } from "../controller/AlumnoController";
-import { EstatusParticipacionType } from "@/app/estatus/EstatusType";
 import CalificacionCircle from "@/app/components/CalificacionCircle";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
-import {
-  createParticipacion,
-  updateParticipacion,
-} from "../../controller/ParticipacionController";
+
 import ErrorModal from "@/app/components/ErrorModal ";
+import { updateEstatusPuntoExtra } from "../controller/AlumnoController";
+import { EstatusPuntoExtraType } from "@/app/estatus/EstatusType";
+import {
+  createPuntoExtra,
+  updatePuntoExtra,
+} from "../../controller/PuntoExtraController";
+import {
+  StudenPuntoExtraType,
+  TypePuntoExtraCalificacion,
+} from "@/app/types/puntos_extra/TypePuntoExtra";
+import { CalificacionPuntoExtraModal } from "@/app/components/CalificacionPuntoExtraModal";
 
 type Props = {
-  readonly students: StudenParticipacionType[] | null;
+  readonly students: StudenPuntoExtraType[] | null;
   readonly date: string | null;
-  readonly participaciones: TypeParticipacionCalificacion[] | null;
-  readonly setIsFetchParticipacion: Dispatch<SetStateAction<boolean>>;
+  readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
+  readonly setIsFetchPuntosExtras: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function TableAlumnosParticipacion({
   students,
   date,
-  participaciones,
-  setIsFetchParticipacion,
+  puntosExtra,
+  setIsFetchPuntosExtras,
 }: Props) {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -65,14 +66,14 @@ export default function TableAlumnosParticipacion({
 
   const handleConfirm = async () => {
     setIsModalConfirmOpen(false);
-    const save = await updateEstatusParticipacion(
+    const save = await updateEstatusPuntoExtra(
       id,
-      EstatusParticipacionType.ELIMININAR
+      EstatusPuntoExtraType.ELIMININAR
     );
     if (save.isSave) {
       setSuccessMessage(save.message);
       setIsSuccessModalOpen(true);
-      setIsFetchParticipacion(true);
+      setIsFetchPuntosExtras(true);
     } else {
       setErrorMessage(save.message);
       setIsErrorModalOpen(true);
@@ -85,7 +86,7 @@ export default function TableAlumnosParticipacion({
     }
     setIsModalConfirmOpen(true);
 
-    const selectId = getId(participaciones, noLista);
+    const selectId = getId(puntosExtra, noLista);
     setId(selectId);
   };
 
@@ -97,7 +98,7 @@ export default function TableAlumnosParticipacion({
         const idAlumno = getIdAlumno(students, noLista);
         const UUID = uuidv4();
         const userId = idUsuario ?? -1;
-        const save = await createParticipacion(
+        const save = await createPuntoExtra(
           UUID,
           selectedFecha,
           calificacion,
@@ -105,22 +106,22 @@ export default function TableAlumnosParticipacion({
           idAlumno,
           userId,
           idMateria,
-          EstatusParticipacionType.OK
+          EstatusPuntoExtraType.OK
         );
         if (save.isSave) {
           setSuccessMessage(save.message);
           setIsSuccessModalOpen(true);
-          setIsFetchParticipacion(true);
+          setIsFetchPuntosExtras(true);
         } else {
           setErrorMessage(save.message);
           setIsErrorModalOpen(true);
         }
       } else {
-        const save = await updateParticipacion(id, calificacion);
+        const save = await updatePuntoExtra(id, calificacion);
         if (save.isSave) {
           setSuccessMessage(save.message);
           setIsSuccessModalOpen(true);
-          setIsFetchParticipacion(true);
+          setIsFetchPuntosExtras(true);
         } else {
           setErrorMessage(save.message);
           setIsErrorModalOpen(true);
@@ -132,7 +133,7 @@ export default function TableAlumnosParticipacion({
         tableBodyRef.current.scrollTop = currentScrollPosition;
       }
     } catch (error) {
-      console.error("Error al guardar la calificación:", error);
+      //  console.error("Error al guardar la calificación:", error);
     }
   };
 
@@ -141,16 +142,16 @@ export default function TableAlumnosParticipacion({
       setScrollPosition(tableBodyRef.current.scrollTop);
     }
     setIsCalificacionModalOpen(true);
-    const selectId = getId(participaciones, noLista);
+    const selectId = getId(puntosExtra, noLista);
     setId(selectId);
-    const calificacion = getCalificacion(participaciones, noLista);
+    const calificacion = getCalificacion(puntosExtra, noLista);
     setCalificacion(calificacion);
     setSelectedFecha(date);
     setNoLista(noLista);
   };
 
   const getIdAlumno = (
-    students: StudenParticipacionType[] | null,
+    students: StudenPuntoExtraType[] | null,
     noLista: number | undefined
   ): string | undefined => {
     const student = students?.find((p) => p.noLista === noLista);
@@ -158,19 +159,21 @@ export default function TableAlumnosParticipacion({
   };
 
   const getId = (
-    participaciones: TypeParticipacionCalificacion[] | null,
+    puntosExtras: TypePuntoExtraCalificacion[] | null,
     noLista: number | undefined
   ): string | undefined => {
-    const participacion = participaciones?.find((p) => p.noLista === noLista);
-    return participacion?.id ?? undefined;
+    const puntoExtra = puntosExtras?.find((p) => p.noLista === noLista);
+    return puntoExtra?.id ?? undefined;
   };
 
   const getCalificacion = (
-    participaciones: TypeParticipacionCalificacion[] | null,
+    puntosExtras: TypePuntoExtraCalificacion[] | null,
     noLista: number | undefined
   ): number => {
-    const participacion = participaciones?.find((p) => p.noLista === noLista);
-    return participacion?.calificacion ?? 0;
+
+   
+    const puntoExtra = puntosExtras?.find((p) => p.noLista === noLista);
+    return puntoExtra?.calificacion ?? 0;
   };
 
   if (isModalConfirmOpen) {
@@ -179,7 +182,7 @@ export default function TableAlumnosParticipacion({
         isOpen={isModalConfirmOpen}
         onClose={closeModalConfirm}
         onConfirm={handleConfirm}
-        message="¿Está seguro de eliminar la participación?"
+        message="¿Está seguro de eliminar el punto extra?"
       />
     );
   }
@@ -207,14 +210,14 @@ export default function TableAlumnosParticipacion({
 
   if (isCalificacionModalOpen) {
     return (
-      <CalificacionModal
+      <CalificacionPuntoExtraModal
         isOpen={isCalificacionModalOpen}
         onClose={() => {
           setIsCalificacionModalOpen(false);
         }}
         onSave={handleSaveCalificacion}
         calificacionInicial={calificacion}
-        titulo="Participación"
+        titulo="Punto extra"
         selectedFecha={selectedFecha}
         noLista={noLista}
       />
@@ -268,7 +271,7 @@ export default function TableAlumnosParticipacion({
                   <tr
                     key={uuidv4()}
                     className="border-b dark:bg-[#1a2c32] bg-[#ffffff] dark:border-gray-700
-                     hover:bg-[#e6e6e6] dark:hover:bg-gray-600"
+                       hover:bg-[#e6e6e6] dark:hover:bg-gray-600"
                   >
                     <td className="w-16 px-6 py-4">
                       <div className="flex items-center cursor-default">
@@ -289,10 +292,10 @@ export default function TableAlumnosParticipacion({
                       <div className="flex justify-center items-center cursor-default">
                         <CalificacionCircle
                           calificacion={getCalificacion(
-                            participaciones,
+                            puntosExtra,
                             student.noLista
                           )}
-                          isDecimal={false}
+                          isDecimal={true}
                         />
                       </div>
                     </td>
