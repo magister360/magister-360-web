@@ -27,3 +27,8 @@ export enum EstatusFechaPeriodosType {
   OK = 0,
   ELIMININAR = 1,
 }
+
+export enum EstatusAsistenciaType {
+  OK = 0,
+  ELIMININAR = 1,
+}
