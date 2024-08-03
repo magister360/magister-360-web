@@ -69,6 +69,7 @@ export default function Manual() {
   }
 
   return (
+    
     <div
       className={`mt-16 mr-4  
                 ${isMenuVisible ? "ml-72" : "ml-4"}`}

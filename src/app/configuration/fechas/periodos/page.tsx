@@ -89,6 +89,7 @@ export default function Periodos() {
 
   const handleFechaPeriodos = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //console.log("Periodos")
     const result = await createFechasPeriodos(
       id,
       noPeriodo,

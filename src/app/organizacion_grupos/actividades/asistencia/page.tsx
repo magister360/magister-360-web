@@ -2,14 +2,20 @@
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatDateLocale } from "@/app/utils/DateUtils";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 import { useAlumnosAsistenciaHook } from "./hooks/useAlumnosAsistenciaHook";
 import { EstatusAsistenciaType } from "@/app/estatus/EstatusType";
 import { AsistenciaType } from "./types";
+import {
+  createAsistencias,
+} from "./controller/AsistenciaController";
+import ErrorModal from "@/app/components/ErrorModal ";
+import SuccessModal from "@/app/components/SuccessModal";
 
-export default function Actividades() {
+export default function Asistencias() {
+  const router = useRouter();
   const {
     grado,
     grupo,
@@ -29,6 +35,17 @@ export default function Actividades() {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+  const handleSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+  };
 
   useEffect(() => {
     if (searchParams) {
@@ -57,8 +74,24 @@ export default function Actividades() {
       currentIndex
     );
 
-  const handleSaveData = () => {
-    console.log("Saving data...");
+  const handleSaveData = async () => {
+
+      const save = await createAsistencias(
+        alumnosA,
+        idUsuario,
+        idMateria,
+        date,
+        EstatusAsistenciaType.OK
+      );
+      if (save.isSave) {
+        setSuccessMessage(save.message);
+        setIsSuccessModalOpen(true);
+        router.push("/organizacion_grupos/actividades/asistencia/select_fecha/manual");
+      } else {
+        setErrorMessage(save.message);
+        setIsErrorModalOpen(true);
+      }
+    
   };
 
   const handleAsistenciaChange = (
@@ -85,6 +118,27 @@ export default function Actividades() {
       setCurrentIndex(currentIndex - 1);
     }
   };
+
+  if (isErrorModalOpen) {
+    return (
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    );
+  }
+  if (isSuccessModalOpen) {
+    return (
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessModal}
+        successMessage={successMessage}
+        setSuccessMessage={setSuccessMessage}
+      />
+    );
+  }
 
   return (
     <div

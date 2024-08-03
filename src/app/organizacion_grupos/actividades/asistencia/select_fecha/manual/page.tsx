@@ -4,12 +4,18 @@ import SubmitButton from "@/app/components/SubmitButton";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import { DateFormats, formatDate } from "@/app/utils/DateUtils";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { countFechasAsistencias } from "../../controller/AsistenciaController";
+import { EstatusAsistenciaType } from "@/app/estatus/EstatusType";
+import ErrorModal from "@/app/components/ErrorModal ";
 
 export default function SeleccionFecha() {
   const router = useRouter();
-  const { isMenuVisible } = useSidebarContext();
+  const { isMenuVisible, idMateria, idGrado, idGrupo } = useSidebarContext();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -32,14 +38,43 @@ export default function SeleccionFecha() {
     return selectedDate <= currentDate || "fecha incorrecta";
   };
 
-  const onSubmit = (data: any) => {
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+
+  const onSubmit = async (data: any) => {
     const params = new URLSearchParams({
       date: data.date,
       orderStudents: data.orderStudents,
     });
-    let route = "/organizacion_grupos/actividades/asistencia";
-    router.push(`${route}?${params.toString()}`);
+
+    
+    const count = await countFechasAsistencias(
+      data.date,
+      idMateria,
+      EstatusAsistenciaType.OK,
+      idGrado,
+      idGrupo
+    );
+    if (count.isSave) {
+      setErrorMessage(count.message);
+      setIsErrorModalOpen(true);
+    } else {
+      let route = "/organizacion_grupos/actividades/asistencia";
+      router.push(`${route}?${params.toString()}`);
+    }
   };
+
+  if (isErrorModalOpen) {
+    return (
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    );
+  }
 
   return (
     <div

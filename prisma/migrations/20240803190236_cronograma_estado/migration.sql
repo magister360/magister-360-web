@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `cronograma` ADD COLUMN `estadoClase` INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN `fechaActualizacion` DATETIME(3) NULL,
+    ADD COLUMN `fechaRegistro` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

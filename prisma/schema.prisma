@@ -39,6 +39,8 @@ model Users {
   finSesiones     FinSesiones[]
   encuadreCalificacion EncuadreCalificacion[]
   periodosEvaluacion PeriodosEvaluacion[]
+  cronograma Cronograma[]
+  inicioFinClases InicioFinClases[]
 }
 
 model InicioSesiones {
@@ -67,6 +69,7 @@ model Grado {
   alumnos Alumno[]
   materialDidactico MaterialDidactico[]
   encuadreCalificacion EncuadreCalificacion[]
+  cronograma Cronograma[]
 }
 
 model Grupo {
@@ -79,6 +82,8 @@ model Grupo {
   alumnos Alumno[]
   materialDidactico MaterialDidactico[]
   encuadreCalificacion EncuadreCalificacion[]
+  cronograma Cronograma[]
+
 }
 
 model Materia {
@@ -97,6 +102,7 @@ model Materia {
   tareas Tareas[] @relation("TareasToMateria") 
   puntoExtra PuntoExtra[] @relation("PuntosExtraToMateria") 
   encuadreCalificacion EncuadreCalificacion[] @relation("EncuadreToMateria")
+  cronograma Cronograma[] @relation("CronogramaToMateria")
 }
 
 model Alumno {
@@ -283,4 +289,32 @@ model PeriodosEvaluacion {
   usuario   Users   @relation(fields: [idUsuario], references: [id])
   idUsuario Int
  
+}
+
+
+model Cronograma {
+  id  String @db.VarChar(255) @id  
+  fechaInicial DateTime 
+  fechaFinal DateTime 
+  contenido String @db.Text
+  estadoClase Int  @default(0)
+  fechaRegistro DateTime @default(now())
+  fechaActualizacion DateTime?
+  usuario   Users   @relation(fields: [idUsuario], references: [id])
+  idUsuario Int
+  grado   Grado   @relation(fields: [idGrado], references: [id])
+  idGrado Int
+  grupo   Grupo   @relation(fields: [idGrupo], references: [id])
+  idGrupo Int
+  materia   Materia   @relation("CronogramaToMateria", fields: [idMateria], references: [id])
+  idMateria Int
+
+}
+
+model InicioFinClases{
+    id    Int     @id @default(autoincrement())
+    fechaInicial DateTime 
+    fechaFinal DateTime 
+    usuario   Users   @relation(fields: [idUsuario], references: [id])
+    idUsuario Int
 }
