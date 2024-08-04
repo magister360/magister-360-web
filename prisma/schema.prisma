@@ -41,6 +41,7 @@ model Users {
   periodosEvaluacion PeriodosEvaluacion[]
   cronograma Cronograma[]
   inicioFinClases InicioFinClases[]
+  fechaFestiva FechaFestiva[]
 }
 
 model InicioSesiones {
@@ -317,4 +318,12 @@ model InicioFinClases{
     fechaFinal DateTime 
     usuario   Users   @relation(fields: [idUsuario], references: [id])
     idUsuario Int
+}
+
+model FechaFestiva{
+   id    Int     @id @default(autoincrement())
+   fecha DateTime
+   actividad String  @db.Text
+   usuario   Users   @relation(fields: [idUsuario], references: [id])
+   idUsuario Int
 }

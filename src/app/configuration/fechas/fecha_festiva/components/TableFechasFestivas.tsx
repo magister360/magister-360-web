@@ -3,8 +3,7 @@ import Image from 'next/image';
 export default function TableFechasFestivas() {
 
     return (
-        <div className="rounded-lg shadow  
-        sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff]  pt-2 pb-4 pr-0  ">
+       
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mt-3 ">
 
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500
@@ -54,7 +53,6 @@ export default function TableFechasFestivas() {
                 </table>
             </div>
 
-        </div>
     )
 }
 

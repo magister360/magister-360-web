@@ -14,6 +14,7 @@ export const createFechaInicioFinClases = async (
   if (idUsuario === undefined || fechaInicial === null || fechaFinal === null) {
     return { success: false, message: "Datos incompletos o inválidos" };
   }
+ 
 
   if (id === undefined) {
     const result = await createFechaInicioFinClasesApi(
