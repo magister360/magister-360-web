@@ -15,34 +15,22 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<void> {
-    const {
-      id,
-      fechaInicial,
-      fechaFinal,
-      contenido,
-      idUsuario,
-      idGrado,
-      idGrupo,
-      idMateria,
-    } = req.body;
-    if (
-      fechaInicial === undefined ||
-      fechaFinal === undefined ||
-      idUsuario === undefined
-    ) {
+    const { id, mes, contenido, idUsuario, idGrado, idGrupo, idMateria,estatus } =
+      req.body;
+    if (idUsuario === undefined) {
       return res.status(401).json({ error: "Parametros invalidos" });
     }
     const response = await prisma.cronograma
       .create({
         data: {
           id,
-          fechaInicial,
-          fechaFinal,
+          mes,
           contenido,
           idUsuario,
           idGrado,
           idGrupo,
           idMateria,
+          estatus
         },
       })
       .catch((error) => {

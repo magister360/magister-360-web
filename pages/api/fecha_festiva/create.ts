@@ -15,21 +15,23 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<void> {
-    const { fecha, idUsuario, actividad } = req.body;
+    const { fecha, idUsuario, actividad, estatus } = req.body;
     if (
       fecha === undefined ||
       idUsuario === undefined ||
-      actividad === undefined
+      actividad === undefined ||
+      estatus === undefined
     ) {
       return res.status(401).json({ error: "Parametros invalidos" });
     }
-  
+
     const response = await prisma.fechaFestiva
       .create({
         data: {
           fecha,
           idUsuario,
           actividad,
+          estatus,
         },
       })
       .catch((error) => {

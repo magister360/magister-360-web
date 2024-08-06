@@ -12,7 +12,7 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   }
 
   async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-    const { idUsuario, idGrado, idGrupo, idMateria, estatus } = req.query;
+    const { idUsuario,estatus } = req.query;
 
     const parseQueryParam = (param: string | string[] | undefined): number => {
       if (param === undefined) return NaN;
@@ -22,47 +22,34 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     };
 
     const idUsuarioNum = parseQueryParam(idUsuario);
-    const idGradoNum = parseQueryParam(idGrado);
-    const idGrupoNum = parseQueryParam(idGrupo);
-    const idMateriaNum = parseQueryParam(idMateria);
     const estatusNum = parseQueryParam(estatus);
 
-    if (
-      isNaN(idUsuarioNum) ||
-      isNaN(idGradoNum) ||
-      isNaN(idGrupoNum) ||
-      isNaN(idMateriaNum) ||
-      isNaN(estatusNum)
-    ) {
-      return res.status(400).json({ error: "PARAMETRO INVALIDO" });
+    if (isNaN(idUsuarioNum)) {
+      return res.status(400).json({ error: "ID de usuario inválido" });
     }
 
     try {
-      const cronograma = await prisma.cronograma.findFirst({
+      const inicioFinClases = await prisma.fechaFestiva.findFirst({
         where: {
           idUsuario: idUsuarioNum,
-          idGrado: idGradoNum,
-          idGrupo: idGrupoNum,
-          idMateria: idMateriaNum,
-          estatus: estatusNum,
+          estatus: estatusNum 
         },
-        select: {
-          id: true,
-
-          contenido: true,
-          mes: true,
-        },
+        select:{
+          id:true,
+          fecha: true,
+          actividad: true
+        }
       });
 
-      if (!cronograma) {
+      if (!inicioFinClases) {
         return res
           .status(404)
-          .json({ error: "No se encontró el registro de cronograma" });
+          .json({ error: "No se encontró el registro de fecha festiva" });
       }
 
-      return res.status(200).json(cronograma);
+      return res.status(200).json(inicioFinClases);
     } catch (error) {
-      console.error("Error al buscar cronograma:", error);
+      console.error("Error al buscar InicioFinClases:", error);
       return res.status(500).json({ error: "Error interno del servidor" });
     }
   }

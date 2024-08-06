@@ -32,3 +32,11 @@ export enum EstatusAsistenciaType {
   OK = 0,
   ELIMININAR = 1,
 }
+export enum EstatusFechafestivaType {
+  OK = 0,
+  ELIMININAR = 1,
+}
+export enum EstatusCronogramaType {
+  OK = 0,
+  ELIMININAR = 1,
+}

@@ -178,6 +178,7 @@ export default function AlumnosExcel() {
           "NO. LISTA",
           "N.L.",
           "N.L",
+          "N°"
         ];
         const rowColumnNomLista = await readEncabezadoRowAndColumn(
           file,

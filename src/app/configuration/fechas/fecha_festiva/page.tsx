@@ -11,6 +11,8 @@ import { AuthCheck } from "@/app/hooks/AuthCheck";
 import { useForm } from "react-hook-form";
 import ErrorMessageInput from "@/app/components/ErrorMessageInput";
 import OptionsActividades from "./components/OptionsActivdades";
+import useFechaFestiva from "./hooks/useFechaFestiva";
+import type { FechaFestiva } from "@/app/types/fecha_festiva/TypeFechaFestiva";
 
 export default function FechaFestiva() {
   const { isMenuVisible, idUsuario } = useSidebarContext();
@@ -25,6 +27,12 @@ export default function FechaFestiva() {
     setValue,
   } = useForm();
 
+  const [isFetch, setIsFetch] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [fechasFestivas, setFechasFestivas] = useState<FechaFestiva[] | null>(
+    null
+  );
+
   let actividades: string[] = [
     "Suspensión de labores docentes",
     "Receso de clases",
@@ -32,7 +40,7 @@ export default function FechaFestiva() {
     "Consejo técnico escolar, sesión ordinaria",
     "Registro calificaciones",
     "Taller intensivo para personal docente",
-    "Taller intensivo para personal con funciones de dirección"
+    "Taller intensivo para personal con funciones de dirección",
   ];
 
   const handleCloseErrorModal = () => {
@@ -41,6 +49,13 @@ export default function FechaFestiva() {
   const handleSuccessModal = () => {
     setIsSuccessModalOpen(false);
   };
+
+  useFechaFestiva({
+    setLoading,
+    isFetch,
+    setIsFetch,
+    setFechasFestivas,
+  });
 
   const onSubmit = async (data: any) => {
     const result = await createFechaFestiva(
@@ -94,7 +109,7 @@ export default function FechaFestiva() {
         className="rounded-lg shadow  
         sm:max-w-full  dark:bg-[#18181B] bg-[#ffffff]  pt-2 pb-4 pr-0  "
       >
-        <TableFechasFestivas />
+        <TableFechasFestivas fechasFestivas={fechasFestivas} />
 
         <div>
           <div className="flex space-x-2  items-center justify-start  mt-4 ml-4 mb-4">

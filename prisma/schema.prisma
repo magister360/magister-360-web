@@ -295,10 +295,9 @@ model PeriodosEvaluacion {
 
 model Cronograma {
   id  String @db.VarChar(255) @id  
-  fechaInicial DateTime 
-  fechaFinal DateTime 
   contenido String @db.Text
-  estadoClase Int  @default(0)
+  mes String @db.VarChar(255)
+  estatus Int  @default(0)
   fechaRegistro DateTime @default(now())
   fechaActualizacion DateTime?
   usuario   Users   @relation(fields: [idUsuario], references: [id])
@@ -324,6 +323,7 @@ model FechaFestiva{
    id    Int     @id @default(autoincrement())
    fecha DateTime
    actividad String  @db.Text
+   estatus Int  @default(0)
    usuario   Users   @relation(fields: [idUsuario], references: [id])
    idUsuario Int
 }

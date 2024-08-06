@@ -1,8 +1,8 @@
 export interface Cronograma {
     id: number;
-    fechaInicial: string;
-    fechaFinal: string;
+    mes: string;
+   
     contenido: string;
-    estadoClase:number;
+   
   }
   
