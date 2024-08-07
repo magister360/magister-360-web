@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 import { getEncuadreCalificacion } from "../controller/EncuadreCalificacionController";
+import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 const useEncuadreCalificacion = (
-  idGrado: number | undefined,
-  idGrupo: number | undefined,
-  idMateria: number | undefined,
-  idUsuario: number | undefined,
   setParticipaciones: React.Dispatch<
     React.SetStateAction<{ isChecked: boolean; value: number }>
   >,
@@ -20,9 +17,12 @@ const useEncuadreCalificacion = (
   >,
   setIsCheckedPuntosExtra: React.Dispatch<React.SetStateAction<boolean>>,
   setIsCheckedRedondear: React.Dispatch<React.SetStateAction<boolean>>,
-  setId: React.Dispatch<React.SetStateAction<string | undefined>>
+  setId: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  const { idGrado, idGrupo, idMateria, idUsuario } = useSidebarContext();
   useEffect(() => {
+    setIsLoading(true)
     const fetchEncuadreCalificacion = async () => {
       const result = await getEncuadreCalificacion(
         idGrado,
@@ -38,7 +38,6 @@ const useEncuadreCalificacion = (
       }
 
       const jsonData = result?.json ? JSON.parse(result.json) : null;
-    
 
       if (jsonData) {
         setParticipaciones(jsonData.participaciones);
@@ -62,6 +61,7 @@ const useEncuadreCalificacion = (
         setIsCheckedPuntosExtra(false);
         setIsCheckedRedondear(false);
       }
+      setIsLoading(false)
     };
 
     if (

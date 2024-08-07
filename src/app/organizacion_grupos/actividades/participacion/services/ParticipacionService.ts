@@ -108,3 +108,4 @@ export const getParticipacionesApi = async (
     });
   return response;
 };
+

@@ -1,117 +1,95 @@
-"use client";
-import React, { useState } from "react";
-
-interface Week {
-  id: string;
-  days: (number | null)[];
-  content: string;
-  month: string;
-  mergedTo?: string;
-  mergedFrom?: string[];
-  startDate: Date;
-  endDate: Date;
-}
+import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import Image from "next/image";
+import { Cronograma } from "@/app/types/cronograma/TypeCronograma";
+import { InicioFinClases } from "@/app/types/inicio_fin_clases/TypeInicioFinClases";
 
 interface EditableCalendarProps {
-  startDate: Date;
-  endDate: Date;
-  initialData: { content: string }[];
-  onSave: (data: { startDate: Date; endDate: Date; content: string }[]) => void;
+  cronogramas: Cronograma[] | null;
+  inicioFinClases: InicioFinClases | null;
+  initialData: { monthYear: string; contents: string[] }[];
 }
 
 const EditableCalendar: React.FC<EditableCalendarProps> = ({
-  startDate,
-  endDate,
+  cronogramas,
+  inicioFinClases,
   initialData,
-  onSave,
 }) => {
-  const [weeks, setWeeks] = useState<Week[]>(
-    generateWeeks(startDate, endDate, initialData)
+  const [monthsAndYears, setMonthsAndYears] = useState<string[]>([]);
+  const [calendarData, setCalendarData] = useState<{ [key: string]: string[] }>(
+    {}
   );
 
-  const handleTextChange = (
-    id: string,
-    event: React.ChangeEvent<HTMLTextAreaElement>
+  useEffect(() => {
+    if (inicioFinClases) {
+      const monthYearList = getMonthsAndYears(inicioFinClases);
+      setMonthsAndYears(monthYearList);
+
+      // Initialize calendarData with initialData
+      const initialCalendarData = initialData.reduce((acc, item) => {
+        acc[item.monthYear] = item.contents;
+        return acc;
+      }, {} as { [key: string]: string[] });
+
+      setCalendarData(initialCalendarData);
+    }
+  }, [inicioFinClases, initialData]);
+
+  const getMonthsAndYears = (data: InicioFinClases): string[] => {
+    const startDate = new Date(data.fechaInicial);
+    const endDate = new Date(data.fechaFinal);
+    const monthYearList: string[] = [];
+    const monthNames = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const month = monthNames[currentDate.getMonth()];
+      const year = currentDate.getFullYear();
+      monthYearList.push(`${month}-${year}`);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+    return monthYearList;
+  };
+
+  const handleAddTextarea = (monthYear: string) => {
+    setCalendarData((prevData) => ({
+      ...prevData,
+      [monthYear]: [...(prevData[monthYear] || []), ""],
+    }));
+  };
+
+  const handleTextareaChange = (
+    monthYear: string,
+    index: number,
+    value: string
   ) => {
-    const newWeeks = weeks.map((week) =>
-      week.id === id ? { ...week, content: event.target.value } : week
-    );
-    setWeeks(newWeeks);
-  };
-
-  const handleMergeWeeks = (startIndex: number) => {
-    const newWeeks = [...weeks];
-    let primaryWeek = newWeeks[startIndex];
-
-    while (primaryWeek.mergedTo) {
-      const mergedToWeek = newWeeks.find((w) => w.id === primaryWeek.mergedTo);
-      if (!mergedToWeek) break;
-      primaryWeek = mergedToWeek;
-    }
-
-    let nextIndex = startIndex + 1;
-    while (nextIndex < newWeeks.length && newWeeks[nextIndex].mergedTo) {
-      nextIndex++;
-    }
-    if (nextIndex < newWeeks.length) {
-      let currentWeek = newWeeks[nextIndex];
-      primaryWeek.content += " " + currentWeek.content;
-      primaryWeek.mergedFrom = [
-        ...(primaryWeek.mergedFrom || []),
-        currentWeek.id,
-      ];
-      primaryWeek.endDate = currentWeek.endDate;
-      currentWeek.mergedTo = primaryWeek.id;
-      currentWeek.content = "";
-    }
-
-    setWeeks(newWeeks);
-  };
-
-  const handleUnmergeWeeks = (index: number) => {
-    const newWeeks = [...weeks];
-    const currentWeek = newWeeks[index];
-
-    if (currentWeek.mergedFrom && currentWeek.mergedFrom.length > 0) {
-      const lastMergedId =
-        currentWeek.mergedFrom[currentWeek.mergedFrom.length - 1];
-      const lastMergedWeek = newWeeks.find((w) => w.id === lastMergedId);
-
-      if (lastMergedWeek) {
-        delete lastMergedWeek.mergedTo;
-        currentWeek.mergedFrom.pop();
-        currentWeek.endDate = new Date(lastMergedWeek.startDate);
-        currentWeek.endDate.setDate(currentWeek.endDate.getDate() - 1);
-
-        if (currentWeek.mergedFrom.length === 0) {
-          delete currentWeek.mergedFrom;
-        }
-
-        const contentWords = currentWeek.content.split(" ");
-        const wordsPerWeek = Math.ceil(contentWords.length / 2);
-        lastMergedWeek.content = contentWords.slice(wordsPerWeek).join(" ");
-        currentWeek.content = contentWords.slice(0, wordsPerWeek).join(" ");
-      }
-
-      setWeeks(newWeeks);
-    }
-  };
-
-  const canMergeWith = (index: number): boolean => {
-    if (index >= weeks.length - 1) return false;
-    const nextWeek = weeks[index + 1];
-    return !nextWeek.mergedTo;
+    setCalendarData((prevData) => ({
+      ...prevData,
+      [monthYear]: prevData[monthYear].map((content, i) =>
+        i === index ? value : content
+      ),
+    }));
   };
 
   const handleSave = () => {
-    const savedData = weeks
-      .filter((week) => !week.mergedTo)
-      .map((week) => ({
-        startDate: week.startDate,
-        endDate: week.endDate,
-        content: week.content,
-      }));
-    onSave(savedData);
+    const dataToSave = monthsAndYears.map((monthYear) => ({
+      monthYear,
+      contents: calendarData[monthYear],
+    }));
+    console.log("Data to save:", dataToSave);
+    // Here you would typically send this data to a server or parent component
   };
 
   return (
@@ -120,22 +98,7 @@ const EditableCalendar: React.FC<EditableCalendarProps> = ({
         <thead className="bg-gray-100 dark:bg-gray-800">
           <tr>
             <th className="border border-gray-200 dark:border-gray-700 p-2">
-              Mes
-            </th>
-            <th className="border border-gray-200 dark:border-gray-700 p-2">
-              L
-            </th>
-            <th className="border border-gray-200 dark:border-gray-700 p-2">
-              M
-            </th>
-            <th className="border border-gray-200 dark:border-gray-700 p-2">
-              M
-            </th>
-            <th className="border border-gray-200 dark:border-gray-700 p-2">
-              J
-            </th>
-            <th className="border border-gray-200 dark:border-gray-700 p-2">
-              V
+              Mes-año
             </th>
             <th className="border border-gray-200 dark:border-gray-700 p-2">
               CONTENIDOS
@@ -146,45 +109,39 @@ const EditableCalendar: React.FC<EditableCalendarProps> = ({
           </tr>
         </thead>
         <tbody>
-          {weeks.map((week, index) => (
-            <tr key={week.id} className={week.mergedTo ? "opacity-50" : ""}>
-              <td className="border border-gray-200 dark:border-gray-700 p-2 dark:text-white">
-                {week.month}
-              </td>
-              {week.days.slice(0, 5).map((day, i) => (
-                <td
-                  key={i}
-                  className="border border-gray-200 dark:border-gray-700 p-2 dark:text-white"
-                >
-                  {day}
-                </td>
-              ))}
+          {monthsAndYears.map((monthYear) => (
+            <tr key={uuidv4()}>
               <td className="border border-gray-200 dark:border-gray-700 p-2">
-                {!week.mergedTo && (
+                {monthYear}
+              </td>
+              <td className="border border-gray-200 dark:border-gray-700 p-2">
+                {calendarData[monthYear]?.map((content, index) => (
                   <textarea
-                    className="w-full p-2 border border-gray-200 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                    value={week.content}
-                    onChange={(e) => handleTextChange(week.id, e)}
+                    key={uuidv4()}
+                    value={content}
+                    onChange={(e) =>
+                      handleTextareaChange(monthYear, index, e.target.value)
+                    }
+                    className="w-full px-3 py-2 mb-2 border bg-gray-50 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-[#1a2c32] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+                    rows={2}
                   />
-                )}
+                ))}
+                <button
+                  onClick={() => handleAddTextarea(monthYear)}
+                  className="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  <Image
+                    className="dark:filter dark:invert dark:opacity-75 opacity-40 filter-none w-auto h-5 mr-1"
+                    src="/add.svg"
+                    alt="add"
+                    width={20}
+                    height={20}
+                  />
+                  Agregar contenido
+                </button>
               </td>
               <td className="border border-gray-200 dark:border-gray-700 p-2">
-                {canMergeWith(index) && (
-                  <button
-                    onClick={() => handleMergeWeeks(index)}
-                    className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mb-2"
-                  >
-                    Unir con siguiente
-                  </button>
-                )}
-                {week.mergedFrom && week.mergedFrom.length > 0 && (
-                  <button
-                    onClick={() => handleUnmergeWeeks(index)}
-                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                  >
-                    Desunir última
-                  </button>
-                )}
+                {/* Individual save button removed as we'll use a global save */}
               </td>
             </tr>
           ))}
@@ -194,73 +151,10 @@ const EditableCalendar: React.FC<EditableCalendarProps> = ({
         onClick={handleSave}
         className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
       >
-        Guardar
+        Guardar Todo
       </button>
     </div>
   );
-};
-
-const generateWeeks = (
-  startDate: Date,
-  endDate: Date,
-  initialData: { content: string }[]
-): Week[] => {
-  const weeks: Week[] = [];
-  let currentDate = new Date(startDate);
-
-  // Ajustamos para que comience en el día correcto de la semana
-  const dayOfWeek = currentDate.getDay();
-  if (dayOfWeek !== 1) {
-    // Si no es lunes
-    const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
-    currentDate.setDate(currentDate.getDate() + daysUntilMonday);
-  }
-
-  const months = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
-
-  while (currentDate <= endDate) {
-    const weekStartDate = new Date(currentDate);
-    const weekEndDate = new Date(currentDate);
-    weekEndDate.setDate(weekEndDate.getDate() + 4);
-
-    const week: Week = {
-      id: `week-${weeks.length}`,
-      days: [],
-      content: initialData[weeks.length]?.content || "",
-      month: months[currentDate.getMonth()],
-      startDate: weekStartDate,
-      endDate: weekEndDate,
-    };
-
-    for (let i = 0; i < 5; i++) {
-      if (currentDate >= startDate && currentDate <= endDate) {
-        week.days.push(currentDate.getDate());
-      } else {
-        week.days.push(null);
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    // Avanzamos al siguiente lunes
-    currentDate.setDate(currentDate.getDate() + 2);
-
-    weeks.push(week);
-  }
-
-  return weeks;
 };
 
 export default EditableCalendar;
