@@ -51,7 +51,7 @@ export const getParticipacionesApi = async (
     estatus:number,
     ): Promise<number> => {
       const apiUrl = getApiUrl("/api/participacion/count_participacion");
-    console.log(fechaInicial, fechaFinal)
+   
       const response = await axios
         .get(apiUrl, {
           params: {
@@ -66,7 +66,7 @@ export const getParticipacionesApi = async (
         })
         .then((r) => {
           if (r.status === 200) {
-            console.log(r.data)
+           
             return r.data ;
           } else {
             return 0;

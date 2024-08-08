@@ -92,6 +92,7 @@ export default function Estadisticas() {
       idGrupo,
       periodoEvaluacion?.fechaInicial,
       periodoEvaluacion?.fechaFinal,
+      periodoEvaluacion?.noPeriodo,
       setIsLoading);
 
   };
