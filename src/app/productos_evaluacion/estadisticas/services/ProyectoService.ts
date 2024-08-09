@@ -1,4 +1,4 @@
-import { TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
+import { TypeProyectoCalificacion, TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
 import { getApiUrl } from "../../../../../API";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ export const getProyectosApi = async (
   fechaInicial:string,
   fechaFinal:string,
   estatus:number,
-  ): Promise<TypeProyectoFecha[] | null> => {
+  ): Promise<TypeProyectoCalificacion[] | null> => {
     const apiUrl = getApiUrl("/api/proyecto/get_proyectos");
 
     const response = await axios
@@ -29,13 +29,12 @@ export const getProyectosApi = async (
       .then((r) => {
         if (r.status === 200) {
           
-          return r.data as TypeProyectoFecha[];
+          return r.data as TypeProyectoCalificacion[];
         } else {
           return null;
         }
       })
       .catch((e) => {
-        console.log(e)
         return null;
       });
     return response;

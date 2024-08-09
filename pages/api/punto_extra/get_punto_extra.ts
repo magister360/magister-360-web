@@ -86,7 +86,7 @@ export async function get(
       },
     });
 
-    const formattedProyectos = puntoExtra.map(
+    const formattedPuntoExtra = puntoExtra.map(
       ({ id, fecha, calificacion, alumno }) => ({
         id,
         fecha: fecha.toISOString().split("T")[0],
@@ -95,7 +95,7 @@ export async function get(
       })
     );
 
-    return res.status(200).json(formattedProyectos);
+    return res.status(200).json(formattedPuntoExtra);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error interno del servidor" });

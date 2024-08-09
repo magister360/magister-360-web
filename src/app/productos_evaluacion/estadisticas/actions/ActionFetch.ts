@@ -1,4 +1,5 @@
 import {
+  EstatusAlumno,
   EstatusExamenType,
   EstatusParticipacionType,
   EstatusProyectoType,
@@ -13,20 +14,42 @@ import { countProyectos, getProyectos } from "../controller/ProyectoController";
 import { countTareas, getTareas } from "../controller/TareaController";
 import { getExamenes } from "../controller/ExamenController";
 import { getPuntoExtra } from "../controller/PuntoExtraController";
+import { getAlumnos } from "../controller/AlumnosController";
+import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
+import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import { TypeExamenCalificacion, TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
+import { Student } from "@/app/types/alumnos/TypeStudents";
 
-const actionFetch = async (
-  idUsuario: number | undefined,
-  idMateria: number | undefined,
+const useActionFetch = async (
   idGrado: number | undefined,
   idGrupo: number | undefined,
+  idMateria: number | undefined,
+  idUsuario: number | undefined,
   fechaInicial: string | undefined,
   fechaFinal: string | undefined,
   noPeriodo: number | undefined,
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setParticipaciones: React.Dispatch<
+    React.SetStateAction<TypeParticipacionCalificacion[] | null>
+  >,
+  setTotalParticipaciones: React.Dispatch<React.SetStateAction<number>>,
+  setProyectos: React.Dispatch<
+    React.SetStateAction<TypeProyectoCalificacion[] | null>
+  >,
+  setTotalProyectos: React.Dispatch<React.SetStateAction<number>>,
+  setTareas: React.Dispatch<React.SetStateAction<TypeTareaCalificacion[] | null>>,
+  setTotalTareas: React.Dispatch<React.SetStateAction<number>>,
+  setExamenes: React.Dispatch<React.SetStateAction<TypeExamenCalificacion[] | null>>,
+  setPuntosExtra: React.Dispatch<
+    React.SetStateAction<TypePuntoExtraCalificacion[] | null>
+  >,
+  setAlumnos: React.Dispatch<React.SetStateAction<Student[] | null>>
 ) => {
   setIsLoading(true);
 
-  const result = await getParticipaciones(
+  await getParticipaciones(
     idUsuario,
     idMateria,
     idGrado,
@@ -34,8 +57,11 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusParticipacionType.OK
-  );
-  const countParticipacion = await countParticipaciones(
+  ).then((p) => {
+    setParticipaciones(p);
+  });
+
+  await countParticipaciones(
     idUsuario,
     idMateria,
     idGrado,
@@ -43,9 +69,11 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusParticipacionType.OK
-  );
+  ).then((tp) => {
+    setTotalParticipaciones(tp);
+  });
 
-  const resultProyectos = await getProyectos(
+  await getProyectos(
     idUsuario,
     idMateria,
     idGrado,
@@ -53,8 +81,11 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusProyectoType.OK
-  );
-  const countProyecto = await countProyectos(
+  ).then((p) => {
+    setProyectos(p);
+  });
+
+  await countProyectos(
     idUsuario,
     idMateria,
     idGrado,
@@ -62,10 +93,11 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusProyectoType.OK
-  );
+  ).then((p) => {
+    setTotalProyectos(p);
+  });
 
-
-  const resultTareas = await getTareas(
+  await getTareas(
     idUsuario,
     idMateria,
     idGrado,
@@ -73,8 +105,10 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusTareaType.OK
-  );
-  const countTarea = await countTareas(
+  ).then((t) => {
+    setTareas(t);
+  });
+  await countTareas(
     idUsuario,
     idMateria,
     idGrado,
@@ -82,17 +116,23 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusTareaType.OK
-  );
+  ).then((t) => {
+    setTotalTareas(t);
+  });
 
-  const resultExamen = await getExamenes(
+  await getExamenes(
     idUsuario,
     idMateria,
     idGrado,
     idGrupo,
     noPeriodo,
     EstatusExamenType.OK
-  );
-  const resultPuntosExtras = await getPuntoExtra(
+  ).then((e) => {
+    
+    setExamenes(e);
+  });
+
+  await getPuntoExtra(
     idUsuario,
     idMateria,
     idGrado,
@@ -100,9 +140,21 @@ const actionFetch = async (
     fechaInicial,
     fechaFinal,
     EstatusPuntoExtraType.OK
-  );
+  ).then((p) => {
+    setPuntosExtra(p);
+  });
+
+  await getAlumnos(
+    idUsuario,
+    EstatusAlumno.OK,
+    idGrado,
+    idGrupo,
+    idMateria
+  ).then((a) => {
+    setAlumnos(a);
+  });
 
   setIsLoading(false);
 };
 
-export default actionFetch;
+export default useActionFetch;

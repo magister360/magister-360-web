@@ -4,14 +4,24 @@ import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 import { useState } from "react";
 import useEncuadreCalificacionHook from "./hooks/useEncuadreCalificacionHook";
-import useParticipacion from "./hooks/useParticipacion";
 import { AuthCheck } from "@/app/hooks/AuthCheck";
 import Loading from "@/app/components/Loading";
 
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import usePeriodos from "./hooks/usePeriodos";
 import CardPeriodo from "@/app/components/CardPeriodo";
-import actionFetch from "./actions/ActionFetch";
+import useActionFetch from "./actions/ActionFetch";
+import TableAlumnoCalificacion from "./components/TableAlumnoCalificacion";
+import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import {
+  TypeExamenCalificacion,
+  TypeExamenPeriodo,
+} from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
+import { Student } from "@/app/types/alumnos/TypeStudents";
+import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
+import CardPeriodoTitulo from "@/app/components/CardPeriodoTitulo";
 
 export default function Estadisticas() {
   const {
@@ -19,50 +29,61 @@ export default function Estadisticas() {
     grado,
     grupo,
     materia,
+    idUsuario,
     idGrado,
     idGrupo,
     idMateria,
-    idUsuario,
   } = useSidebarContext();
 
-  const [participaciones, setParticipaciones] = useState({
+  const [participacionesChecked, setParticipacionesChecked] = useState({
     isChecked: false,
     value: 0,
   });
-  const [tareas, setTareas] = useState({ isChecked: false, value: 0 });
-  const [examenes, setExamenes] = useState({ isChecked: false, value: 0 });
-  const [proyectos, setProyectos] = useState({ isChecked: false, value: 0 });
-
-  const handleParticipacionesChange = (isChecked: boolean, value: number) => {
-    setParticipaciones({ isChecked, value });
-  };
+  const [tareasChecked, setTareasChecked] = useState({
+    isChecked: false,
+    value: 0,
+  });
+  const [examenesChecked, setExamenesChecked] = useState({
+    isChecked: false,
+    value: 0,
+  });
+  const [proyectosChecked, setProyectosChecked] = useState({
+    isChecked: false,
+    value: 0,
+  });
 
   const [isCheckedPuntosExtra, setIsCheckedPuntosExtra] = useState(false);
   const [isCheckedRedondear, setIsCheckedRedondear] = useState(false);
   const [id, setId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [periodos, setPeriodos] = useState<PeriodoEvaluacion[] | null>(null);
+
+  const [participaciones, setParticipaciones] = useState<
+    TypeParticipacionCalificacion[] | null
+  >(null);
+  const [totalParticipaciones, setTotalParticipaciones] = useState<number>(0);
+  const [proyectos, setProyectos] = useState<TypeProyectoCalificacion[] | null>(
+    null
+  );
+  const [totalProyectos, setTotalProyectos] = useState<number>(0);
+  const [tareas, setTareas] = useState<TypeTareaCalificacion[] | null>(null);
+  const [totalTareas, setTotalTareas] = useState<number>(0);
+  const [examenes, setExamenes] = useState<TypeExamenCalificacion[] | null>(
+    null
+  );
+  const [puntosExtra, setPuntosExtra] = useState<
+    TypePuntoExtraCalificacion[] | null
+  >(null);
+  const [alumnos, setAlumnos] = useState<Student[] | null>(null);
   const [selectPeriodo, setSelectPeriodo] = useState<PeriodoEvaluacion | null>(
     null
   );
 
-  const handleTareasChange = (isChecked: boolean, value: number) => {
-    setTareas({ isChecked, value });
-  };
-
-  const handleExamenesChange = (isChecked: boolean, value: number) => {
-    setExamenes({ isChecked, value });
-  };
-
-  const handleProyectosChange = (isChecked: boolean, value: number) => {
-    setProyectos({ isChecked, value });
-  };
-
   useEncuadreCalificacionHook(
-    setParticipaciones,
-    setTareas,
-    setExamenes,
-    setProyectos,
+    setParticipacionesChecked,
+    setTareasChecked,
+    setExamenesChecked,
+    setProyectosChecked,
     setIsCheckedPuntosExtra,
     setIsCheckedRedondear,
     setId,
@@ -71,30 +92,28 @@ export default function Estadisticas() {
 
   usePeriodos({ setIsLoading, setPeriodos });
 
-  useParticipacion(
-    idUsuario,
-    idMateria,
-    idGrado,
-    idGrupo,
-    undefined,
-    undefined,
-    // "inicioFinClases?.fechaInicial",
-    //"inicioFinClases?.fechaFinal",
-    setIsLoading
-  );
-
   const actionFetchEstadisticas = async (
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
-    await actionFetch(idUsuario,
-      idMateria,
+    await useActionFetch(
       idGrado,
       idGrupo,
+      idMateria,
+      idUsuario,
       periodoEvaluacion?.fechaInicial,
       periodoEvaluacion?.fechaFinal,
       periodoEvaluacion?.noPeriodo,
-      setIsLoading);
-
+      setIsLoading,
+      setParticipaciones,
+      setTotalParticipaciones,
+      setProyectos,
+      setTotalProyectos,
+      setTareas,
+      setTotalTareas,
+      setExamenes,
+      setPuntosExtra,
+      setAlumnos
+    );
   };
 
   if (idUsuario === undefined) {
@@ -123,6 +142,28 @@ export default function Estadisticas() {
           fetchFechas={actionFetchEstadisticas}
         />
       </div>
+      {selectPeriodo && (
+        <div className="mt-4">
+          <CardPeriodoTitulo titulo={`Trimestre ${selectPeriodo?.noPeriodo}`} />
+
+          <TableAlumnoCalificacion
+            alumnos={alumnos}
+            participaciones={participaciones}
+            totalParticipaciones={totalParticipaciones}
+            participacionesChecked={participacionesChecked}
+            tareas={tareas}
+            totalTareas={totalTareas}
+            tareasChecked={tareasChecked}
+            proyectos={proyectos}
+            totalProyectos={totalProyectos}
+            proyectosChecked={proyectosChecked}
+            examenes={examenes}
+            examenesChecked={examenesChecked}
+            puntosExtra={puntosExtra}
+            isCheckedPuntosExtra={isCheckedPuntosExtra}
+          />
+        </div>
+      )}
     </div>
   );
 }

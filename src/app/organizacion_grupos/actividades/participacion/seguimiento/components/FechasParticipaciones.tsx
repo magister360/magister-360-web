@@ -14,6 +14,7 @@ import {
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import { TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
 import CardCalificacion from "@/app/components/CardCalificacion";
+import CardPeriodoTitulo from "@/app/components/CardPeriodoTitulo";
 
 interface FechasParticipacionesProps {
   noPeriodo: number | undefined;
@@ -87,7 +88,6 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
         fetchFechasParticipacion(selectPeriodo);
         setSuccessMessage(save.message);
         setIsSuccessModalOpen(true);
-       
       } else {
         setErrorMessage(save.message);
         setIsErrorModalOpen(true);
@@ -199,11 +199,8 @@ const FechasParticipaciones: React.FC<FechasParticipacionesProps> = ({
 
   return (
     <>
-      <div className="bg-gradient-to-r from-blue-500 to-stone-900 rounded-lg shadow-lg p-6">
-        <h2 className="text-3xl font-bold text-center text-white cursor-default">
-          {titulo}
-        </h2>
-      </div>
+   
+      <CardPeriodoTitulo titulo={titulo} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {fechasParticipaciones?.map((fecha, index) => (

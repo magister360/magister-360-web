@@ -1,3 +1,8 @@
+export enum EstatusAlumno {
+  OK = 0,
+  ELIMININAR = 1,
+}
+
 export enum EstatusParticipacionType {
   OK = 0,
   ELIMININAR = 1,

@@ -6,7 +6,7 @@ export interface TypeExamenPeriodo {
   
   export interface TypeExamenCalificacion {
     id: string;
-    fecha: string;
+    noPeriodo: string;
     calificacion: number;
     noLista: number;
   }

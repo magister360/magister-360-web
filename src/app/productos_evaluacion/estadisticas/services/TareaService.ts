@@ -1,4 +1,4 @@
-import { TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+import { TypeTareaCalificacion, TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
 import { getApiUrl } from "../../../../../API";
 import axios from "axios";
 
@@ -10,9 +10,8 @@ export const getTareasApi = async (
   fechaInicial: string,
   fechaFinal: string,
   estatus: number
-): Promise<TypeTareaFecha[] | null> => {
+): Promise<TypeTareaCalificacion[] | null> => {
   const apiUrl = getApiUrl("/api/tarea/get_tareas");
-  console.log(fechaInicial, fechaFinal);
   const response = await axios
     .get(apiUrl, {
       params: {
@@ -27,8 +26,7 @@ export const getTareasApi = async (
     })
     .then((r) => {
       if (r.status === 200) {
-        console.log(r.data);
-        return r.data as TypeTareaFecha[];
+        return r.data as TypeTareaCalificacion[];
       } else {
         return null;
       }

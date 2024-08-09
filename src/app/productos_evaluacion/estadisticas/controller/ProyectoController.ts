@@ -1,4 +1,4 @@
-import { TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
+import { TypeProyectoCalificacion, TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
 import { countProyectosApi, getProyectosApi } from "../services/ProyectoService";
 
 export const getProyectos = async (
@@ -9,7 +9,7 @@ export const getProyectos = async (
     fechaInicial: string|undefined,
     fechaFinal: string|undefined,
     estatus: number
-  ): Promise<TypeProyectoFecha[] | null> => {
+  ): Promise<TypeProyectoCalificacion[] | null> => {
   
     if (
       idUsuario === undefined ||

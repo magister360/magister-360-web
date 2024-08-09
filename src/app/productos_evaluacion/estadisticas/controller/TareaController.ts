@@ -1,4 +1,4 @@
-import { TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+import { TypeTareaCalificacion, TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
 import { countTareasApi, getTareasApi } from "../services/TareaService";
 
 export const getTareas = async (
@@ -9,7 +9,7 @@ export const getTareas = async (
     fechaInicial: string|undefined,
     fechaFinal: string|undefined,
     estatus: number
-  ): Promise<TypeTareaFecha[] | null> => {
+  ): Promise<TypeTareaCalificacion[] | null> => {
   
     if (
       idUsuario === undefined ||

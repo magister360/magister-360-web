@@ -80,7 +80,7 @@ export async function get(
 
     const countDistinctDates = distinctDatesCount.length;
 
-    return res.status(200).json({ distinctDatesCount: countDistinctDates });
+    return res.status(200).json(countDistinctDates );
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error interno del servidor" });

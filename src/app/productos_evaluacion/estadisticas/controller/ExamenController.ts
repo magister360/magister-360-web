@@ -1,4 +1,4 @@
-import { TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
+import { TypeExamenCalificacion, TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
 import { getExamenesApi } from "../services/ExamenService";
 
 export const getExamenes = async (
@@ -8,7 +8,7 @@ export const getExamenes = async (
     idGrupo: number | undefined,
     noPeriodo:number| undefined,
     estatus: number
-  ): Promise<TypeExamenPeriodo[] | null> => {
+  ): Promise<TypeExamenCalificacion[] | null> => {
   
     if (
       idUsuario === undefined ||

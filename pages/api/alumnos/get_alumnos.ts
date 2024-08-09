@@ -14,7 +14,7 @@ async function main(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 }
 
 async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const { idUsuario, estatus, idGrado, idGrupo, idMateria, orderStudents } =
+  const { idUsuario, estatus, idGrado, idGrupo, idMateria } =
     req.query;
 
   const parseQueryParam = (param: string | string[] | undefined): number => {
@@ -37,10 +37,7 @@ async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   ) {
     return res.status(401).json({ error: "Invalido" });
   }
-  const sortOrder =
-    orderStudents === "asc" || orderStudents === "desc"
-      ? orderStudents
-      : undefined;
+
 
   try {
     const alumnos = await prisma.alumno.findMany({
@@ -67,7 +64,7 @@ async function get(req: NextApiRequest, res: NextApiResponse): Promise<void> {
         apellidoMaterno: true,
       },
       orderBy: {
-        noLista: sortOrder,
+        noLista: "asc",
       },
     });
 
