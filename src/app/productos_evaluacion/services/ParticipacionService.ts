@@ -1,5 +1,5 @@
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import axios from "axios";
 
 

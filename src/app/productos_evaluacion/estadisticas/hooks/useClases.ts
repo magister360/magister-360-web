@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import { InicioFinClases } from "@/app/types/inicio_fin_clases/TypeInicioFinClases";
-import { getFechaInicioFinClases } from "../controller/ClasesController";
+import { getFechaInicioFinClases } from "../../controller/ClasesController";
 
 type Props = {
   readonly setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;

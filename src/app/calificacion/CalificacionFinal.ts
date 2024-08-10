@@ -37,6 +37,7 @@ type Props = {
   };
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
   readonly isCheckedPuntosExtra: boolean;
+  readonly isCheckedRedondear?: boolean
 };
 
 export default function calculateCalificacionFinal({

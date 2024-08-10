@@ -1,4 +1,4 @@
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import axios from "axios";
 import { TypeExamenCalificacion, TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
 

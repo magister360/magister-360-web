@@ -18,7 +18,7 @@ import { getAlumnos } from "../controller/AlumnosController";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
 import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
-import { TypeExamenCalificacion, TypeExamenPeriodo } from "@/app/types/examen/TypeExamen";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
 import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { Student } from "@/app/types/alumnos/TypeStudents";
 

@@ -1,5 +1,5 @@
 import { TypeProyectoCalificacion, TypeProyectoFecha } from "@/app/types/proyecto/TypeProyecto";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import axios from "axios";
 
 

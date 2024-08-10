@@ -3,25 +3,25 @@ import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 
 import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 import { useState } from "react";
-import useEncuadreCalificacionHook from "./hooks/useEncuadreCalificacionHook";
 import { AuthCheck } from "@/app/hooks/AuthCheck";
 import Loading from "@/app/components/Loading";
 
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import usePeriodos from "./hooks/usePeriodos";
 import CardPeriodo from "@/app/components/CardPeriodo";
-import useActionFetch from "./actions/ActionFetch";
+import useActionFetch from "../actions/ActionFetch";
 import TableAlumnoCalificacion from "./components/TableAlumnoCalificacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
 import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
 import {
   TypeExamenCalificacion,
-  TypeExamenPeriodo,
+ 
 } from "@/app/types/examen/TypeExamen";
 import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { Student } from "@/app/types/alumnos/TypeStudents";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import CardPeriodoTitulo from "@/app/components/CardPeriodoTitulo";
+import useEncuadreCalificacionHook from "../hooks/useEncuadreCalificacionHook";
 
 export default function Estadisticas() {
   const {

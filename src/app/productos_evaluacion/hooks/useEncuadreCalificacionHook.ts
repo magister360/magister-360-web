@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { getEncuadreCalificacion } from "../controller/EncuadreCalificacionController";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
+import { getEncuadreCalificacion } from "../controller/EncuadreCalificacionController";
 
 const useEncuadreCalificacion = (
   setParticipaciones: React.Dispatch<

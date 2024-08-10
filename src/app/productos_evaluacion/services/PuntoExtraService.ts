@@ -1,6 +1,6 @@
 import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 import axios from "axios";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 
 export const getPuntosExtraApi = async (
     idUsuario: number,

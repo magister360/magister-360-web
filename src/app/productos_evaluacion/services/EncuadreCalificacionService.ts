@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 
 export const getEncuadreCalificacionApi = async (
     idGrado: number,

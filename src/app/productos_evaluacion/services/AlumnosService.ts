@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import { Student } from "@/app/types/alumnos/TypeStudents";
 
 export const getAlumnosApi = async (

@@ -1,5 +1,5 @@
 import { TypeTareaCalificacion, TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import axios from "axios";
 
 export const getTareasApi = async (

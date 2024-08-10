@@ -1,13 +1,62 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
+import { Student } from "@/app/types/alumnos/TypeStudents";
+import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
+import calculateCalificacionFinal from "@/app/calificacion/CalificacionFinal";
 
-interface HorizontalBarChartProps {
+type HorizontalBarChartProps = {
   titleText: string;
-}
+  readonly alumnos: Student[] | null;
+  readonly participaciones: TypeParticipacionCalificacion[] | null;
+  readonly totalParticipaciones: number;
+  readonly participacionesChecked: {
+    isChecked: boolean;
+    value: number;
+  };
+  readonly tareas: TypeTareaCalificacion[] | null;
+  readonly totalTareas: number;
+  readonly tareasChecked: {
+    isChecked: boolean;
+    value: number;
+  };
+  readonly proyectos: TypeProyectoCalificacion[] | null;
+  readonly totalProyectos: number;
+  readonly proyectosChecked: {
+    isChecked: boolean;
+    value: number;
+  };
+  readonly examenes: TypeExamenCalificacion[] | null;
+
+  readonly examenesChecked: {
+    isChecked: boolean;
+    value: number;
+  };
+  readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
+
+  readonly isCheckedPuntosExtra: boolean;
+};
 
 const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
   titleText,
+  alumnos,
+  participaciones,
+  totalParticipaciones,
+  participacionesChecked,
+  tareas,
+  totalTareas,
+  tareasChecked,
+  proyectos,
+  totalProyectos,
+  proyectosChecked,
+  examenes,
+  examenesChecked,
+  puntosExtra,
+  isCheckedPuntosExtra,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chart, setChart] = useState<echarts.ECharts | null>(null);
@@ -26,51 +75,46 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
             type: "shadow",
           },
         },
+        grid: {
+          left: "7%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
         xAxis: {
           type: "value",
         },
         yAxis: {
           type: "category",
-          data: [
-            "Manuel Lopez ",
-            "Martes",
-            "Miércoles",
-            "Jueves",
-            "Viernes",
-            "Jose Lopez",
-            "Martiz Perz",
-            "Manuel Lopez ",
-            "Martes",
-            "Miércoles",
-            "Jueves",
-            "Viernes",
-            "Jose Lopez",
-            "Martiz Perz",
-            "Manuel Lopez ",
-            "Martes",
-            "Miércoles",
-            "Jueves",
-            "Viernes",
-            "Jose Lopez",
-            "Martiz Perz",
-            "Jueves",
-            "Viernes",
-            "Jose Lopez",
-            "Martiz Perz",
-            "Manuel Lopez ",
-            "Martes",
-            "Miércoles",
-            "Jueves",
-          ],
+          data: getStudentInfo(alumnos),
+          axisLabel: {
+            fontSize: 12,
+            formatter: function (value: string) {
+              return value.length > 20 ? value.slice(0, 20) + "..." : value;
+            },
+          },
+          nameGap: 40,
         },
         series: [
           {
-            name: "Ventas",
+            name: "Calificación",
             type: "bar",
-            data: [
-              10, 9, 8, 9, 6, 10, 8, 10, 9, 8, 9, 6, 10, 8, 10, 9, 8, 9, 6, 10,
-              8, 10, 8, 10, 9, 8, 9, 6, 10,
-            ],
+            data: getCalificaciones(
+              alumnos,
+              participaciones,
+              totalParticipaciones,
+              participacionesChecked,
+              tareas,
+              totalTareas,
+              tareasChecked,
+              proyectos,
+              totalProyectos,
+              proyectosChecked,
+              examenes,
+              examenesChecked,
+              puntosExtra,
+              isCheckedPuntosExtra
+            ),
             label: {
               show: true,
               position: "right",
@@ -112,10 +156,75 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
         >
           Descargar gráfica imagen .png
         </button>
-      
       </div>
     </div>
   );
 };
+
+function getStudentInfo(alumnos: Student[] | null): string[] {
+  if (!alumnos) return [];
+
+  return alumnos
+    .map((student) => `${student.noLista}.- ${student.nombre}`)
+    .reverse();
+}
+
+function getCalificaciones(
+  alumnos: Student[] | null,
+  participaciones: TypeParticipacionCalificacion[] | null,
+  totalParticipaciones: number,
+  participacionesChecked: {
+    isChecked: boolean;
+    value: number;
+  },
+  tareas: TypeTareaCalificacion[] | null,
+  totalTareas: number,
+  tareasChecked: {
+    isChecked: boolean;
+    value: number;
+  },
+  proyectos: TypeProyectoCalificacion[] | null,
+  totalProyectos: number,
+  proyectosChecked: {
+    isChecked: boolean;
+    value: number;
+  },
+  examenes: TypeExamenCalificacion[] | null,
+
+  examenesChecked: {
+    isChecked: boolean;
+    value: number;
+  },
+  puntosExtra: TypePuntoExtraCalificacion[] | null,
+
+  isCheckedPuntosExtra: boolean
+): number[] {
+  if (!alumnos) return [];
+  const totalExamenes = 1;
+
+  return alumnos
+    .map((student) =>
+      parseFloat(
+        calculateCalificacionFinal({
+          noLista: student.noLista,
+          proyectos,
+          totalProyectos,
+          proyectosChecked,
+          participaciones,
+          totalParticipaciones,
+          participacionesChecked,
+          tareas,
+          totalTareas,
+          tareasChecked,
+          examenes,
+          totalExamenes,
+          examenesChecked,
+          puntosExtra,
+          isCheckedPuntosExtra,
+        }).toFixed(0)
+      )
+    )
+    .reverse();
+}
 
 export default HorizontalBarChart;

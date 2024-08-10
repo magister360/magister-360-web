@@ -1,5 +1,5 @@
 import { InicioFinClases } from "@/app/types/inicio_fin_clases/TypeInicioFinClases";
-import { getApiUrl } from "../../../../../API";
+import { getApiUrl } from "../../../../API";
 import axios from "axios";
 
 export const getFechaInicioFinClasesApi = async (
