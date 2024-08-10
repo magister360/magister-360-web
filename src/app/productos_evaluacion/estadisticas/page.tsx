@@ -13,15 +13,14 @@ import useActionFetch from "../actions/ActionFetch";
 import TableAlumnoCalificacion from "./components/TableAlumnoCalificacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
 import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
-import {
-  TypeExamenCalificacion,
- 
-} from "@/app/types/examen/TypeExamen";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
 import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { Student } from "@/app/types/alumnos/TypeStudents";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import CardPeriodoTitulo from "@/app/components/CardPeriodoTitulo";
 import useEncuadreCalificacionHook from "../hooks/useEncuadreCalificacionHook";
+import GenericButton from "@/app/components/GenericButton";
+import downloadExcel from "./actions/downloadExcel";
 
 export default function Estadisticas() {
   const {
@@ -116,6 +115,25 @@ export default function Estadisticas() {
     );
   };
 
+  const handleDescargarExcel = () => {
+    downloadExcel({
+      alumnos,
+      participaciones,
+      totalParticipaciones,
+      participacionesChecked,
+      tareas,
+      totalTareas,
+      tareasChecked,
+      proyectos,
+      totalProyectos,
+      proyectosChecked,
+      examenes,
+      examenesChecked,
+      puntosExtra,
+      isCheckedPuntosExtra,
+    });
+  };
+
   if (idUsuario === undefined) {
     return <AuthCheck />;
   }
@@ -143,8 +161,14 @@ export default function Estadisticas() {
         />
       </div>
       {selectPeriodo && (
-        <div className="mt-4">
+        <div className="mt-4 ">
           <CardPeriodoTitulo titulo={`Trimestre ${selectPeriodo?.noPeriodo}`} />
+
+          <GenericButton
+            onClick={handleDescargarExcel}
+            buttonText="Exportar excel"
+            additionalClassName="max-w-sm mb-4 mt-4"
+          />
 
           <TableAlumnoCalificacion
             alumnos={alumnos}

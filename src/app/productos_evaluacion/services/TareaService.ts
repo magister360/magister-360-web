@@ -1,4 +1,4 @@
-import { TypeTareaCalificacion, TypeTareaFecha } from "@/app/types/tarea/TypeTarea";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
 import { getApiUrl } from "../../../../API";
 import axios from "axios";
 

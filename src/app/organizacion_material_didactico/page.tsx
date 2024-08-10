@@ -334,14 +334,14 @@ export default function OrganizacionMaterialDidactico() {
               height={28}
               onClick={() => handlesetNewMaterialDidacticoOpen()}
             />
-            <label
-              htmlFor="lbl-nuevo"
+            <button
+             
               className="block mb-2 text-sm font-medium 
                     text-gray-900 dark:text-white"
               onClick={() => handlesetNewMaterialDidacticoOpen()}
             >
               Nuevo
-            </label>
+            </button>
           </div>
         </div>
 
