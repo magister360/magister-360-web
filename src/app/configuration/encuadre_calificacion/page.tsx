@@ -2,7 +2,7 @@
 import Loading from "@/app/components/Loading";
 
 import SubmitButton from "@/app/components/SubmitButton";
-import { FormEvent,useState } from "react";
+import { FormEvent, useState } from "react";
 import CheckboxWithSlider from "./conponenents/CheckboxWithSlider";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import ErrorModal from "@/app/components/ErrorModal ";
@@ -10,6 +10,7 @@ import SuccessModal from "@/app/components/SuccessModal";
 import { handleSubmitEncuadreCalificacion } from "./actions/handleSubmitEncuadreCalificacion";
 import { calculateSumEncuadre } from "./actions/sumEncuadreCalificacion";
 import useEncuadreCalificacionHook from "./hooks/useEncuadreCalificacionHook";
+import InfoCardDateGGM from "@/app/components/InfoCardDateGGM";
 
 export default function EncuadreCalificacion() {
   const {
@@ -154,41 +155,8 @@ export default function EncuadreCalificacion() {
         <h3 className="mt-2 block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2">
           Encuadre calificación
         </h3>
-
-        <div
-          className={` mr-4  pt-4 pb-4 pl-4 pr-4  rounded-lg shadow  
-                 sm:max-w-md  dark:bg-[#18181B] bg-[#ffffff]`}
-        >
-          <div className="flex space-x-2">
-            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-              <label
-                className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-                htmlFor="lbl-date-start-end"
-              >
-                Grado: <span className="font-normal text-sm"> {grado}</span>
-              </label>
-            </div>
-
-            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-              <label
-                className="block text-gray-700 dark:text-gray-200 font-bold 
-                        text-md mb-2"
-                htmlFor="lbl-date-start-end"
-              >
-                Grupo: <span className="font-normal text-sm"> {grupo}</span>
-              </label>
-            </div>
-
-            <div className=" px-5 py-2.5 rounded-lg dark:bg-[#1a2c32] bg-[#93c8cd]">
-              <label
-                className="block text-gray-700 dark:text-gray-200 font-bold text-md mb-2"
-                htmlFor="lbl-date-start-end"
-              >
-                Materia: <span className="font-normal text-sm"> {materia}</span>
-              </label>
-            </div>
-          </div>
-         
+        <div className="mb-4">
+          <InfoCardDateGGM grado={grado} grupo={grupo} materia={materia} />
         </div>
 
         <div

@@ -41,6 +41,7 @@ type Props = {
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
 
   readonly isCheckedPuntosExtra: boolean;
+  readonly isCheckedRedondear:boolean;
 };
 
 export default function TableAlumnoCalificacion({
@@ -58,6 +59,7 @@ export default function TableAlumnoCalificacion({
   examenesChecked,
   puntosExtra,
   isCheckedPuntosExtra,
+  isCheckedRedondear
 }: Props) {
   let totalExamenes = 1;
   return (
@@ -203,6 +205,7 @@ export default function TableAlumnoCalificacion({
                     examenesChecked,
                     puntosExtra,
                     isCheckedPuntosExtra,
+                    isCheckedRedondear
                   }).toFixed(2)}
                 </td>
               )}

@@ -37,7 +37,7 @@ type Props = {
   };
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
   readonly isCheckedPuntosExtra: boolean;
-  readonly isCheckedRedondear?: boolean
+  readonly isCheckedRedondear?: boolean;
 };
 
 export default function calculateCalificacionFinal({
@@ -56,6 +56,7 @@ export default function calculateCalificacionFinal({
   examenesChecked,
   puntosExtra,
   isCheckedPuntosExtra,
+  isCheckedRedondear,
 }: Props): number {
   let calificacionParticipacion: number = 0.0;
   if (participacionesChecked.isChecked) {
@@ -110,9 +111,13 @@ export default function calculateCalificacionFinal({
     calificacionProyecto +
     calificacionExamen +
     calificacionPuntosExtra;
-    if(sumaCalificacion > 10){
-        return 10;
-    }
+  if (isCheckedRedondear) {
+    sumaCalificacion = Math.round(sumaCalificacion);
+  }
+
+  if (sumaCalificacion > 10) {
+    return 10;
+  }
 
   return sumaCalificacion;
 }

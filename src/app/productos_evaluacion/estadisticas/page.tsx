@@ -20,7 +20,11 @@ import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypePar
 import CardPeriodoTitulo from "@/app/components/CardPeriodoTitulo";
 import useEncuadreCalificacionHook from "../hooks/useEncuadreCalificacionHook";
 import GenericButton from "@/app/components/GenericButton";
-import downloadExcel from "./actions/downloadExcel";
+
+import ErrorModal from "@/app/components/ErrorModal ";
+import { downloadExcel } from "./actions/downloadExcel";
+
+import DocumentButton from "./components/DocumentButton";
 
 export default function Estadisticas() {
   const {
@@ -77,6 +81,12 @@ export default function Estadisticas() {
   const [selectPeriodo, setSelectPeriodo] = useState<PeriodoEvaluacion | null>(
     null
   );
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
 
   useEncuadreCalificacionHook(
     setParticipacionesChecked,
@@ -115,8 +125,8 @@ export default function Estadisticas() {
     );
   };
 
-  const handleDescargarExcel = () => {
-    downloadExcel({
+  const handleDescargarExcel = async () => {
+    const result = await downloadExcel({
       alumnos,
       participaciones,
       totalParticipaciones,
@@ -131,7 +141,13 @@ export default function Estadisticas() {
       examenesChecked,
       puntosExtra,
       isCheckedPuntosExtra,
+      trimestre: selectPeriodo?.noPeriodo,
+      isCheckedRedondear,
     });
+    if (!result.success) {
+      setErrorMessage(result.message);
+      setIsErrorModalOpen(true);
+    }
   };
 
   if (idUsuario === undefined) {
@@ -140,6 +156,16 @@ export default function Estadisticas() {
 
   if (isLoading) {
     return <Loading isLoading={isLoading} />;
+  }
+  if (isErrorModalOpen) {
+    return (
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+      />
+    );
   }
 
   return (
@@ -163,12 +189,34 @@ export default function Estadisticas() {
       {selectPeriodo && (
         <div className="mt-4 ">
           <CardPeriodoTitulo titulo={`Trimestre ${selectPeriodo?.noPeriodo}`} />
+          <div className="flex gap-4">
+            <GenericButton
+              onClick={handleDescargarExcel}
+              buttonText="Exportar excel"
+              additionalClassName="max-w-sm mb-4 mt-4"
+            />
 
-          <GenericButton
-            onClick={handleDescargarExcel}
-            buttonText="Exportar excel"
-            additionalClassName="max-w-sm mb-4 mt-4"
-          />
+            <DocumentButton
+              alumnos={alumnos}
+              participaciones={participaciones}
+              totalParticipaciones={totalParticipaciones}
+              participacionesChecked={participacionesChecked}
+              tareas={tareas}
+              totalTareas={totalTareas}
+              tareasChecked={tareasChecked}
+              proyectos={proyectos}
+              totalProyectos={totalProyectos}
+              proyectosChecked={proyectosChecked}
+              examenes={examenes}
+              examenesChecked={examenesChecked}
+              puntosExtra={puntosExtra}
+              isCheckedPuntosExtra={isCheckedPuntosExtra}
+              isCheckedRedondear={isCheckedRedondear}
+              selectPeriodo={selectPeriodo}
+              setIsErrorModalOpen={setIsErrorModalOpen}
+              setErrorMessage={setErrorMessage}
+            />
+          </div>
 
           <TableAlumnoCalificacion
             alumnos={alumnos}
@@ -185,6 +233,7 @@ export default function Estadisticas() {
             examenesChecked={examenesChecked}
             puntosExtra={puntosExtra}
             isCheckedPuntosExtra={isCheckedPuntosExtra}
+            isCheckedRedondear={isCheckedRedondear}
           />
         </div>
       )}

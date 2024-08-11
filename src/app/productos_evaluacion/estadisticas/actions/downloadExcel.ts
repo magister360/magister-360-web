@@ -36,9 +36,11 @@ type Props = {
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
 
   readonly isCheckedPuntosExtra: boolean;
+  readonly trimestre: number | undefined;
+  readonly isCheckedRedondear?: boolean
 };
 
-export default async function downloadExcel({
+export const downloadExcel = async ({
   alumnos,
   participaciones,
   totalParticipaciones,
@@ -53,56 +55,63 @@ export default async function downloadExcel({
   examenesChecked,
   puntosExtra,
   isCheckedPuntosExtra,
-}: Props) {
+  trimestre,
+  isCheckedRedondear
+}: Props): Promise<{ success: boolean; message: string }> => {
   let totalExamenes = 1.0;
 
-  if (alumnos) {
-    const calificaciones = alumnos.map((student) =>
-      parseFloat(
-        calculateCalificacionFinal({
-          noLista: student.noLista,
-          proyectos,
-          totalProyectos,
-          proyectosChecked,
-          participaciones,
-          totalParticipaciones,
-          participacionesChecked,
-          tareas,
-          totalTareas,
-          tareasChecked,
-          examenes,
-          totalExamenes,
-          examenesChecked,
-          puntosExtra,
-          isCheckedPuntosExtra,
-        }).toFixed(0)
-      )
-    );
-
-    const nombres = getNombresInfo(alumnos);
-    const noLista = getNoListaInfo(alumnos);
-    const response = await downloadExcelApiCall(
-      noLista,
-      nombres,
-      calificaciones
-    );
-    if (response) {
-      const url = window.URL.createObjectURL(new Blob([response]));
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "calificaciones.xlsx");
-
-      document.body.appendChild(link);
-      link.click();
-
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } else {
-      console.error("No se pudo generar el archivo Excel");
-    }
+  if (!alumnos) {
+    return { success: false, message: "Archivo invalido" };
   }
-}
+
+  const calificaciones = alumnos.map((student) =>
+    parseFloat(
+      calculateCalificacionFinal({
+        noLista: student.noLista,
+        proyectos,
+        totalProyectos,
+        proyectosChecked,
+        participaciones,
+        totalParticipaciones,
+        participacionesChecked,
+        tareas,
+        totalTareas,
+        tareasChecked,
+        examenes,
+        totalExamenes,
+        examenesChecked,
+        puntosExtra,
+        isCheckedPuntosExtra,
+        isCheckedRedondear
+      }).toFixed(0)
+    )
+  );
+
+  const nombres = getNombresInfo(alumnos);
+  const noLista = getNoListaInfo(alumnos);
+  const response = await downloadExcelApiCall(noLista, nombres, calificaciones);
+  if (response) {
+    const url = window.URL.createObjectURL(new Blob([response]));
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      "REGISTRO_DE_EVALUACION_TRIMESTRE" + trimestre + ".xlsx"
+    );
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } else {
+    console.error("No se pudo generar el archivo Excel");
+    return { success: false, message: "Datos incompletos o inválidos" };
+  }
+
+  return { success: true, message: "" };
+};
 
 function getNombresInfo(alumnos: Student[] | null): string[] {
   if (!alumnos) return [];

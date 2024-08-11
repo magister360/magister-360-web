@@ -39,6 +39,7 @@ type HorizontalBarChartProps = {
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
 
   readonly isCheckedPuntosExtra: boolean;
+  readonly isCheckedRedondear?: boolean;
 };
 
 const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
@@ -57,6 +58,7 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
   examenesChecked,
   puntosExtra,
   isCheckedPuntosExtra,
+  isCheckedRedondear,
 }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chart, setChart] = useState<echarts.ECharts | null>(null);
@@ -113,7 +115,8 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({
               examenes,
               examenesChecked,
               puntosExtra,
-              isCheckedPuntosExtra
+              isCheckedPuntosExtra,
+              isCheckedRedondear
             ),
             label: {
               show: true,
@@ -197,7 +200,8 @@ function getCalificaciones(
   },
   puntosExtra: TypePuntoExtraCalificacion[] | null,
 
-  isCheckedPuntosExtra: boolean
+  isCheckedPuntosExtra: boolean,
+  isCheckedRedondear?: boolean
 ): number[] {
   if (!alumnos) return [];
   const totalExamenes = 1;
@@ -221,6 +225,7 @@ function getCalificaciones(
           examenesChecked,
           puntosExtra,
           isCheckedPuntosExtra,
+          isCheckedRedondear,
         }).toFixed(0)
       )
     )
