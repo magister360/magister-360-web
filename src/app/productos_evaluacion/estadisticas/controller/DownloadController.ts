@@ -5,6 +5,9 @@ import {
 } from "../services/DownloadService";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 
 export const downloadExcelApiCall = async (
   noLista: number[],
@@ -23,13 +26,20 @@ export const downloadDocumentApiCall = async (
   proyectos: TypeProyectoCalificacion[] | null,
   fechasProyectos: string[],
   totalProyectos: number,
-  valueEncuadreProyecto: number
+  valueEncuadreProyecto: number,
+  tareas: TypeTareaCalificacion[] | null,
+  fechasTareas: string[],
+  totalTareas: number,
+  valueEncuadreTarea: number,
+  examenes: TypeExamenCalificacion[] | null,
+  noPeriodo:number|undefined,
+  valueEncuadreExamen: number,
+  puntosExtra: TypePuntoExtraCalificacion[] | null
 ): Promise<any> => {
   if (!alumnos) {
     return null;
   }
 
-  
   return downloadDocumentApi(
     alumnos,
     participaciones,
@@ -39,6 +49,14 @@ export const downloadDocumentApiCall = async (
     proyectos,
     fechasProyectos,
     totalProyectos,
-    valueEncuadreProyecto
+    valueEncuadreProyecto,
+    tareas,
+    fechasTareas,
+    totalTareas,
+    valueEncuadreTarea,
+    examenes,
+    noPeriodo,
+    valueEncuadreExamen,
+    puntosExtra
   );
 };

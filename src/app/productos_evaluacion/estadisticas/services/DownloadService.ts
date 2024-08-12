@@ -2,6 +2,9 @@ import { Student } from "@/app/types/alumnos/TypeStudents";
 import apiSpringBoot from "../../../../../APISpringBoot";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 
 export const downloadExcelApi = async (
   noLista: number[],
@@ -38,7 +41,15 @@ export const downloadDocumentApi = async (
   proyectos: TypeProyectoCalificacion[] | null,
   fechasProyectos: string[],
   totalProyectos: number,
-  valueEncuadreProyecto: number
+  valueEncuadreProyecto: number,
+  tareas: TypeTareaCalificacion[] | null,
+  fechasTareas: string[],
+  totalTareas: number,
+  valueEncuadreTarea: number,
+  examenes: TypeExamenCalificacion[] | null,
+  noPeriodo: number | undefined,
+  valueEncuadreExamen: number,
+  puntosExtra: TypePuntoExtraCalificacion[] | null
 ) => {
   const endpoint = "document_calificaciones";
 
@@ -47,11 +58,19 @@ export const downloadDocumentApi = async (
     participaciones: participaciones,
     fechasParticipaciones: fechasParticipaciones,
     totalParticipaciones: totalParticipaciones,
-    valueEncuadreParticipacion:valueEncuadreParticipacion,
+    valueEncuadreParticipacion: valueEncuadreParticipacion,
     proyectos: proyectos,
     fechasProyectos: fechasProyectos,
     totalProyectos: totalProyectos,
-    valueEncuadreProyecto: valueEncuadreProyecto
+    valueEncuadreProyecto: valueEncuadreProyecto,
+    tareas: tareas,
+    fechasTareas: fechasTareas,
+    totalTareas: totalTareas,
+    valueEncuadreTarea: valueEncuadreTarea,
+    examenes: examenes,
+    noPeriodo: noPeriodo,
+    valueEncuadreExamen: valueEncuadreExamen,
+    puntosExtra:puntosExtra
   };
 
   const response = await apiSpringBoot

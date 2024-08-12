@@ -10,6 +10,7 @@ import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosE
 import { getParticipacionFechas } from "@/app/controller/ParticipacionController";
 import { useSidebarContext } from "@/app/sidebar/SidebarContext";
 import { getProyectoFechas } from "@/app/controller/ProyectoController";
+import { getTareaFechas } from "@/app/controller/TareaController";
 
 type Props = {
   readonly alumnos: Student[] | null;
@@ -41,7 +42,7 @@ type Props = {
 
   readonly isCheckedPuntosExtra: boolean;
   readonly isCheckedRedondear: boolean;
-  selectPeriodo: PeriodoEvaluacion | null;
+  readonly selectPeriodo: PeriodoEvaluacion | null;
   readonly setIsErrorModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -88,7 +89,14 @@ export default function DocumentButton({
       selectPeriodo?.fechaInicial,
       selectPeriodo?.fechaFinal
     );
-   
+    const fechasTareas = await getTareaFechas(
+      idGrado,
+      idGrupo,
+      idMateria,
+      idUsuario,
+      selectPeriodo?.fechaInicial,
+      selectPeriodo?.fechaFinal
+    );
 
     const result = await downloadDocument({
       alumnos,
@@ -102,6 +110,15 @@ export default function DocumentButton({
       fechasProyectos,
       totalProyectos,
       valueEncuadreProyecto: proyectosChecked.value,
+      tareas,
+      fechasTareas,
+      totalTareas,
+      valueEncuadreTarea: tareasChecked.value,
+      examenes,
+      noPeriodo: selectPeriodo?.noPeriodo,
+      valueEncuadreExamen: examenesChecked.value,
+      puntosExtra
+
     });
     if (!result.success) {
       setErrorMessage(result.message);

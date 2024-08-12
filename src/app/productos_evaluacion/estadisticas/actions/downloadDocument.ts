@@ -2,6 +2,9 @@ import { Student } from "@/app/types/alumnos/TypeStudents";
 import { downloadDocumentApiCall } from "../controller/DownloadController";
 import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
+import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
+import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
+import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 
 type Props = {
   readonly alumnos: Student[] | null;
@@ -14,6 +17,14 @@ type Props = {
   readonly fechasProyectos: string[];
   readonly totalProyectos: number;
   readonly valueEncuadreProyecto: number;
+  readonly tareas: TypeTareaCalificacion[] | null;
+  readonly fechasTareas: string[];
+  readonly totalTareas: number;
+  readonly valueEncuadreTarea: number;
+  readonly examenes: TypeExamenCalificacion[] | null;
+  readonly noPeriodo: number|undefined;
+  readonly valueEncuadreExamen: number;
+  readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
 };
 export const downloadDocument = async ({
   alumnos,
@@ -26,6 +37,14 @@ export const downloadDocument = async ({
   fechasProyectos,
   totalProyectos,
   valueEncuadreProyecto,
+  tareas,
+  fechasTareas,
+  totalTareas,
+  valueEncuadreTarea,
+  examenes,
+  noPeriodo,
+  valueEncuadreExamen,
+  puntosExtra
 }: Props): Promise<{ success: boolean; message: string }> => {
   const response = await downloadDocumentApiCall(
     alumnos,
@@ -36,7 +55,15 @@ export const downloadDocument = async ({
     proyectos,
     fechasProyectos,
     totalProyectos,
-    valueEncuadreProyecto
+    valueEncuadreProyecto,
+    tareas,
+    fechasTareas,
+    totalTareas,
+    valueEncuadreTarea,
+    examenes,
+    noPeriodo,
+    valueEncuadreExamen,
+    puntosExtra
   );
   if (response) {
     const url = window.URL.createObjectURL(new Blob([response]));
@@ -58,5 +85,4 @@ export const downloadDocument = async ({
   } else {
     return { success: false, message: "Datos incompletos o inválidos" };
   }
-  
 };
