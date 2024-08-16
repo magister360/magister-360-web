@@ -28,3 +28,18 @@ export default function calculateProyecto({
   let encuadre = (proyectosChecked.value * promedio) / 100;
   return Number(encuadre);
 }
+export function sumCalificacionProyecto(
+  proyectos: TypeProyectoCalificacion[]
+): number {
+  return proyectos.reduce((suma, tarea) => suma + tarea.calificacion, 0);
+}
+
+export function calcularEncuadreProyecto(
+  totalProyectos: number,
+  suma: number,
+  valueProyecto: number
+): number {
+  let promedio = suma / totalProyectos;
+  let encuadre = (valueProyecto * promedio) / 100;
+  return Number(encuadre);
+}

@@ -27,3 +27,19 @@ export default function calculateExamen({
   let encuadre = (examenesChecked.value * promedio) / 100;
   return Number(encuadre);
 }
+
+export function sumCalificacionExamen(
+  examenes: TypeExamenCalificacion[]
+): number {
+  return examenes.reduce((suma, examen) => suma + examen.calificacion, 0);
+}
+
+export function calcularEncuadreExamen(
+  totalExamenes: number,
+  suma: number,
+  valueExamen: number
+): number {
+  let promedio = suma / totalExamenes;
+  let encuadre = (valueExamen * promedio) / 100;
+  return Number(encuadre);
+}

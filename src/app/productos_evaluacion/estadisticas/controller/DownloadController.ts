@@ -34,11 +34,13 @@ export const downloadDocumentApiCall = async (
   examenes: TypeExamenCalificacion[] | null,
   noPeriodo:number|undefined,
   valueEncuadreExamen: number,
-  puntosExtra: TypePuntoExtraCalificacion[] | null
+  puntosExtra: TypePuntoExtraCalificacion[] | null,
+  isCheckedRedondear: boolean
 ): Promise<any> => {
   if (!alumnos) {
     return null;
   }
+  
 
   return downloadDocumentApi(
     alumnos,
@@ -57,6 +59,7 @@ export const downloadDocumentApiCall = async (
     examenes,
     noPeriodo,
     valueEncuadreExamen,
-    puntosExtra
+    puntosExtra,
+    isCheckedRedondear
   );
 };

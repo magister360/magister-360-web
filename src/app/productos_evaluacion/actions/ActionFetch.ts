@@ -22,7 +22,7 @@ import { TypeExamenCalificacion } from "@/app/types/examen/TypeExamen";
 import { TypePuntoExtraCalificacion } from "@/app/types/puntos_extra/TypePuntoExtra";
 import { Student } from "@/app/types/alumnos/TypeStudents";
 
-const useActionFetch = async (
+const actionFetch = async (
   idGrado: number | undefined,
   idGrupo: number | undefined,
   idMateria: number | undefined,
@@ -157,4 +157,4 @@ const useActionFetch = async (
   setIsLoading(false);
 };
 
-export default useActionFetch;
+export default actionFetch;

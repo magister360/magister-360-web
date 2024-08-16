@@ -22,9 +22,11 @@ type Props = {
   readonly totalTareas: number;
   readonly valueEncuadreTarea: number;
   readonly examenes: TypeExamenCalificacion[] | null;
-  readonly noPeriodo: number|undefined;
+  readonly noPeriodo: number | undefined;
   readonly valueEncuadreExamen: number;
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
+  readonly isCheckedRedondear: boolean;
+  
 };
 export const downloadDocument = async ({
   alumnos,
@@ -44,7 +46,8 @@ export const downloadDocument = async ({
   examenes,
   noPeriodo,
   valueEncuadreExamen,
-  puntosExtra
+  puntosExtra,
+  isCheckedRedondear,
 }: Props): Promise<{ success: boolean; message: string }> => {
   const response = await downloadDocumentApiCall(
     alumnos,
@@ -63,7 +66,8 @@ export const downloadDocument = async ({
     examenes,
     noPeriodo,
     valueEncuadreExamen,
-    puntosExtra
+    puntosExtra,
+    isCheckedRedondear
   );
   if (response) {
     const url = window.URL.createObjectURL(new Blob([response]));

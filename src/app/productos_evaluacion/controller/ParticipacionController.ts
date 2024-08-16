@@ -1,4 +1,4 @@
-import { TypeParticipacionCalificacion, TypeParticipacionFecha } from "@/app/types/participacion/TypeParticipacion";
+import { TypeParticipacionCalificacion } from "@/app/types/participacion/TypeParticipacion";
 import {
   countParticipacionesApi,
   getParticipacionesApi,

@@ -49,7 +49,8 @@ export const downloadDocumentApi = async (
   examenes: TypeExamenCalificacion[] | null,
   noPeriodo: number | undefined,
   valueEncuadreExamen: number,
-  puntosExtra: TypePuntoExtraCalificacion[] | null
+  puntosExtra: TypePuntoExtraCalificacion[] | null,
+  isCheckedRedondear: boolean
 ) => {
   const endpoint = "document_calificaciones";
 
@@ -70,7 +71,8 @@ export const downloadDocumentApi = async (
     examenes: examenes,
     noPeriodo: noPeriodo,
     valueEncuadreExamen: valueEncuadreExamen,
-    puntosExtra:puntosExtra
+    puntosExtra: puntosExtra,
+    isCheckedRedondear: isCheckedRedondear ? 0 : 1,
   };
 
   const response = await apiSpringBoot

@@ -21,3 +21,7 @@ export default function calculatePuntoExtra({
 
   return calificacion;
 }
+
+export function sumCalificacionPuntoExtra(puntosExtra: TypePuntoExtraCalificacion[]): number {
+  return puntosExtra.reduce((suma, puntoExtra) => suma + puntoExtra.calificacion, 0);
+}

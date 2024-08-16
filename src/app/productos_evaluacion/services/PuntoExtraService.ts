@@ -12,7 +12,6 @@ export const getPuntosExtraApi = async (
     estatus: number
   ): Promise<TypePuntoExtraCalificacion[] | null> => {
     const apiUrl = getApiUrl("/api/punto_extra/get_punto_extra");
-    console.log(fechaInicial, fechaFinal);
     const response = await axios
       .get(apiUrl, {
         params: {
@@ -34,7 +33,6 @@ export const getPuntosExtraApi = async (
         }
       })
       .catch((e) => {
-        console.log(e);
         return null;
       });
     return response;

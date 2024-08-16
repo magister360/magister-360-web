@@ -45,6 +45,7 @@ type Props = {
   readonly selectPeriodo: PeriodoEvaluacion | null;
   readonly setIsErrorModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   readonly setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  readonly setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function DocumentButton({
@@ -66,12 +67,14 @@ export default function DocumentButton({
   selectPeriodo,
   setIsErrorModalOpen,
   setErrorMessage,
+  setIsLoading
 }: Props) {
   const { idUsuario, idGrado, idGrupo, idMateria } = useSidebarContext();
 
   let totalExamenes = 1;
 
   const handleDescargarDocument = async () => {
+    setIsLoading(true)
     const fechasParticipaciones = await getParticipacionFechas(
       idGrado,
       idGrupo,
@@ -117,13 +120,15 @@ export default function DocumentButton({
       examenes,
       noPeriodo: selectPeriodo?.noPeriodo,
       valueEncuadreExamen: examenesChecked.value,
-      puntosExtra
+      puntosExtra,
+      isCheckedRedondear
 
     });
     if (!result.success) {
       setErrorMessage(result.message);
       setIsErrorModalOpen(true);
     }
+    setIsLoading(false)
   };
 
   return (

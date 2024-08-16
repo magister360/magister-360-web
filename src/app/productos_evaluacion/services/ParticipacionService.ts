@@ -13,7 +13,7 @@ export const getParticipacionesApi = async (
   estatus:number,
   ): Promise<TypeParticipacionCalificacion[] | null> => {
     const apiUrl = getApiUrl("/api/participacion/get_participaciones");
-  console.log(fechaInicial, fechaFinal)
+
     const response = await axios
       .get(apiUrl, {
         params: {
@@ -35,7 +35,7 @@ export const getParticipacionesApi = async (
         }
       })
       .catch((e) => {
-        console.log(e)
+  
         return null;
       });
     return response;

@@ -41,7 +41,7 @@ type Props = {
   readonly puntosExtra: TypePuntoExtraCalificacion[] | null;
 
   readonly isCheckedPuntosExtra: boolean;
-  readonly isCheckedRedondear:boolean;
+  readonly isCheckedRedondear: boolean;
 };
 
 export default function TableAlumnoCalificacion({
@@ -59,7 +59,7 @@ export default function TableAlumnoCalificacion({
   examenesChecked,
   puntosExtra,
   isCheckedPuntosExtra,
-  isCheckedRedondear
+  isCheckedRedondear,
 }: Props) {
   let totalExamenes = 1;
   return (
@@ -108,11 +108,10 @@ export default function TableAlumnoCalificacion({
                 Punto extra
               </th>
             )}
-            {isCheckedPuntosExtra && (
-              <th scope="col" className="px-6 py-3 min-w-[15px]">
-                Promedio final
-              </th>
-            )}
+
+            <th scope="col" className="px-6 py-3 min-w-[15px]">
+              Promedio final
+            </th>
           </tr>
         </thead>
 
@@ -187,28 +186,27 @@ export default function TableAlumnoCalificacion({
                   }).toFixed(2)}
                 </td>
               )}
-              {isCheckedPuntosExtra && (
-                <td className="px-6 py-4 min-w-[20px] font-bold dark:text-white">
-                  {calculateCalificacionFinal({
-                    noLista: alumno.noLista,
-                    proyectos,
-                    totalProyectos,
-                    proyectosChecked,
-                    participaciones,
-                    totalParticipaciones,
-                    participacionesChecked,
-                    tareas,
-                    totalTareas,
-                    tareasChecked,
-                    examenes,
-                    totalExamenes,
-                    examenesChecked,
-                    puntosExtra,
-                    isCheckedPuntosExtra,
-                    isCheckedRedondear
-                  }).toFixed(2)}
-                </td>
-              )}
+
+              <td className="px-6 py-4 min-w-[20px] font-bold dark:text-white">
+                {calculateCalificacionFinal({
+                  noLista: alumno.noLista,
+                  proyectos,
+                  totalProyectos,
+                  proyectosChecked,
+                  participaciones,
+                  totalParticipaciones,
+                  participacionesChecked,
+                  tareas,
+                  totalTareas,
+                  tareasChecked,
+                  examenes,
+                  totalExamenes,
+                  examenesChecked,
+                  puntosExtra,
+                  isCheckedPuntosExtra,
+                  isCheckedRedondear,
+                }).toFixed(2)}
+              </td>
             </tr>
           ))}
         </tbody>

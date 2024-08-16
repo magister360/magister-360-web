@@ -9,7 +9,7 @@ import Loading from "@/app/components/Loading";
 import { PeriodoEvaluacion } from "@/app/types/periodos_evaluacion/TypePeriodosEvaluacion";
 import usePeriodos from "./hooks/usePeriodos";
 import CardPeriodo from "@/app/components/CardPeriodo";
-import useActionFetch from "../actions/ActionFetch";
+import actionFetch from "../actions/ActionFetch";
 import TableAlumnoCalificacion from "./components/TableAlumnoCalificacion";
 import { TypeProyectoCalificacion } from "@/app/types/proyecto/TypeProyecto";
 import { TypeTareaCalificacion } from "@/app/types/tarea/TypeTarea";
@@ -104,7 +104,7 @@ export default function Estadisticas() {
   const actionFetchEstadisticas = async (
     periodoEvaluacion: PeriodoEvaluacion | null
   ) => {
-    await useActionFetch(
+    await actionFetch(
       idGrado,
       idGrupo,
       idMateria,
@@ -143,6 +143,7 @@ export default function Estadisticas() {
       isCheckedPuntosExtra,
       trimestre: selectPeriodo?.noPeriodo,
       isCheckedRedondear,
+      setIsLoading
     });
     if (!result.success) {
       setErrorMessage(result.message);
@@ -174,7 +175,7 @@ export default function Estadisticas() {
               ${isMenuVisible ? "ml-72" : "ml-4"}`}
     >
       <h3 className="mt-2  block text-gray-700 dark:text-gray-200 font-bold text-xl mb-2">
-        Estadisticas
+        Estadisticas grupal
       </h3>
       <div className="mb-4">
         <InfoCardDateGGM grado={grado} grupo={grupo} materia={materia} />
@@ -215,6 +216,7 @@ export default function Estadisticas() {
               selectPeriodo={selectPeriodo}
               setIsErrorModalOpen={setIsErrorModalOpen}
               setErrorMessage={setErrorMessage}
+              setIsLoading={setIsLoading}
             />
           </div>
 

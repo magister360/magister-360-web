@@ -37,7 +37,8 @@ type Props = {
 
   readonly isCheckedPuntosExtra: boolean;
   readonly trimestre: number | undefined;
-  readonly isCheckedRedondear?: boolean
+  readonly isCheckedRedondear?: boolean;
+  readonly setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const downloadExcel = async ({
@@ -56,8 +57,10 @@ export const downloadExcel = async ({
   puntosExtra,
   isCheckedPuntosExtra,
   trimestre,
-  isCheckedRedondear
+  isCheckedRedondear,
+  setIsLoading,
 }: Props): Promise<{ success: boolean; message: string }> => {
+  setIsLoading(true);
   let totalExamenes = 1.0;
 
   if (!alumnos) {
@@ -82,7 +85,7 @@ export const downloadExcel = async ({
         examenesChecked,
         puntosExtra,
         isCheckedPuntosExtra,
-        isCheckedRedondear
+        isCheckedRedondear,
       }).toFixed(0)
     )
   );
@@ -109,7 +112,7 @@ export const downloadExcel = async ({
     console.error("No se pudo generar el archivo Excel");
     return { success: false, message: "Datos incompletos o inválidos" };
   }
-
+  setIsLoading(false);
   return { success: true, message: "" };
 };
 

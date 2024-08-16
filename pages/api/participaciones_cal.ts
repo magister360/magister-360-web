@@ -23,13 +23,6 @@ export async function get(
     return Array.isArray(param) ? parseInt(param[0], 10) : parseInt(param, 10);
   };
 
-  const parseDateParam = (
-    param: string | string[] | undefined
-  ): Date | null => {
-    if (param === undefined) return null;
-    const dateStr = Array.isArray(param) ? param[0] : param;
-    return new Date(dateStr);
-  };
 
   const idUsuarioNum = parseQueryParam(idUsuario);
   const idMateriaNum = parseQueryParam(idMateria);
